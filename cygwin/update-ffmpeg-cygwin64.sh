@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script to install and update ffmpeg on Cygwin x86_64
-# Author: asdo92@duck.com
+# Author: dmesg00@duck.com
 # Require: unzip, wget and curl installed.
 
 mkdir -p /etc/root 2> /dev/null

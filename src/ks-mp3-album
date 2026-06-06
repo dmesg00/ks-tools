@@ -3,8 +3,8 @@
 ######################################################################
 # ks-mp3-album (ks-tools) - Convert folder album to MP3 Audio Format #
 # Date: 10-11-2023                                                   #
-# Author: asdo92                                                     #
-# Contact: asdo92@duck.com                                           #
+# Author: dmesg00                                                     #
+# Contact: dmesg00@duck.com                                           #
 ######################################################################
 VERSION="9.2"
 M_DATE="101125"

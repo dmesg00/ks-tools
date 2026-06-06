@@ -3,8 +3,8 @@
 #################################################################################
 # ks-mp4s-folder (ks-tools) - Convert videos from folder to MP4 format (Series) #
 # Date: 24-09-2025                                                              #
-# Author: asdo92                                                                #
-# Contact: asdo92@duck.com                                                      #
+# Author: dmesg00                                                                #
+# Contact: dmesg00@duck.com                                                      #
 #################################################################################
 VERSION="9.2"
 M_DATE="240925"

@@ -3,8 +3,8 @@
 ##############################################################################
 # ks-upr (ks-tools) - Upload recursively file(s) to server with scp or rsync #
 # Date: 02-11-2023                                                           #
-# Author: asdo92                                                             #
-# Contact: asdo92@duck.com                                                   #
+# Author: dmesg00                                                             #
+# Contact: dmesg00@duck.com                                                   #
 ##############################################################################
 VERSION="9.2"
 M_DATE="021123"

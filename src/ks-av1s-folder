@@ -3,8 +3,8 @@
 ###################################################################################
 # ks-av1s-folder (ks-tools) - Convert videos from folder to AV1 (Codec)  (Series) #
 # Date: 26-09-2025                                                                #
-# Author: asdo92                                                                  #
-# Contact: asdo92@duck.com                                                        #
+# Author: dmesg00                                                                  #
+# Contact: dmesg00@duck.com                                                        #
 ###################################################################################
 VERSION="9.2"
 M_DATE="260925"

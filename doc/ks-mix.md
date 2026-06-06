@@ -104,10 +104,10 @@ _Note: After executing the command, an assistant will ask us from what hour, min
     * [Default: n] Finish the mix when one of the two (video or audio) finishes first? (y/n): y
 
     * Starting mix of:`
-      - Video: /home/asdo92/.torrent/Conv/video.mkv
-      - Audio: /home/asdo92/.torrent/Conv/audio.mka
+      - Video: /home/dmesg00/.torrent/Conv/video.mkv
+      - Audio: /home/dmesg00/.torrent/Conv/audio.mka
 
-      Output file: /home/asdo92/.torrent/Conv/output.mkv
+      Output file: /home/dmesg00/.torrent/Conv/output.mkv
     ````
     
 ### Back to README.md

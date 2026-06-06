@@ -69,11 +69,11 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install ffmpeg using this script (use [BtbN Builds](https://github.com/BtbN/FFmpeg-Builds)):
     
-          curl -L "https://asdo92.yougeek.dev/ffmpeg/scripts/update-ffmpeg-linux64.sh" | sudo bash
+          curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-linux64.sh" | sudo bash
       
     * Install ks-tools cloning the repository:
     
-          git clone https://github.com/asdo92/ks-tools
+          git clone https://github.com/dmesg00/ks-tools
           cd ks-tools
           sudo make install
 
@@ -88,11 +88,11 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
           lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
           install apt-cyg /bin
           apt-cyg install git make expect rsync openssh sshpass grep coreutils binutils bc wget curl unzip
-          curl -L "https://asdo92.yougeek.dev/ffmpeg/scripts/update-ffmpeg-cygwin64.sh" | bash
+          curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-cygwin64.sh" | bash
       
     * Install ks-tools cloning the repository:
 
-          git clone https://github.com/asdo92/ks-tools
+          git clone https://github.com/dmesg00/ks-tools
           cd ks-tools
           make -f Makefile.Cygwin
       
@@ -101,11 +101,11 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * Install dependencies:
     
           sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils bc wgt curl tar
-          curl -L "https://asdo92.yougeek.dev/ffmpeg/scripts/update-ffmpeg-wsl.sh" | sudo bash
+          curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-wsl.sh" | sudo bash
       
     * Install ks-tools cloning the repository:
     
-          git clone https://github.com/asdo92/ks-tools
+          git clone https://github.com/dmesg00/ks-tools
           cd ks-tools
           sudo make install
       
@@ -119,13 +119,13 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
       
     * Install ks-tools cloning the repository **(for MacOS Intel)**:
     
-          git clone https://github.com/asdo92/ks-tools
+          git clone https://github.com/dmesg00/ks-tools
           cd ks-tools
           sudo make -f Makefile.macbrew
 
     * Install ks-tools cloning the repository **(for MacOS ARM)**:
     
-          git clone https://github.com/asdo92/ks-tools
+          git clone https://github.com/dmesg00/ks-tools
           cd ks-tools
           sudo make -f Makefile.macbrew.arm
 
