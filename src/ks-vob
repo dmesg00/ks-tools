@@ -35,7 +35,7 @@ check_dependencies() {
   error_dependence=$?
   if [[ -z "$which_dependence" ]] || (( error_dependence > 0 )); then
     echo ""
-    echo "* ks-mp4 (ks-tools) v${VERSION} (${M_DATE})"
+    echo "* ks-vob (ks-tools) v${VERSION} (${M_DATE})"
     echo ""
     echo "* Dependency not found: ${1}"
     echo ""

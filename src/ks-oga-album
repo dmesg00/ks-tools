@@ -73,7 +73,7 @@ check_dependencies() {
   error_dependence=$?
   if [[ -z "$which_dependence" ]] || (( error_dependence > 0 )); then
     echo ""
-    echo "* ks-oga (ks-tools) v${VERSION} (${M_DATE})"
+    echo "* ks-oga-album (ks-tools) v${VERSION} (${M_DATE})"
     echo ""
     echo "* Dependency not found: ${1}"
     echo ""
