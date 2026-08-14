@@ -35,7 +35,7 @@ fi
 
 # Function to remove spaces and symbols
 # Syntax: convertText "<text>"
-function convertText() {
+convertText() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
@@ -62,7 +62,7 @@ function convertText() {
 
 # Function to list the files of a directory.
 # Syntax: listArchives <directory>
-function listArchives() {
+listArchives() {
   fail=1
   formatFiles=""
   videoFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob"
@@ -126,14 +126,14 @@ function listArchives() {
 }
 
 # Function to count the found files.
-function countArchives() {
+countArchives() {
   totalArchives=$(cat ${dirTemp}/${listCompTemp} | wc -l)
   echo ${totalArchives}
 }
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
-function showFileWithSpace() {
+showFileWithSpace() {
   FileName=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
   FileNoExtension=$(echo $FileName | cut -d "." -f 1)
   echo $FileNoExtension > ${dirTemp}/name.tmp
@@ -145,14 +145,14 @@ function showFileWithSpace() {
 
 # Function to show the name of the file.
 # Syntax: showFile <file number>
-function showFile() {
+showFile() {
   archive=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
   echo ${archive}
 }
 
 # Function to send file to server.
 # Syntax: sendFile <password> <file path> <user> <server> <server path> [file name]
-function sendFile() {
+sendFile() {
   toolSelected=$(cat ${dirConfig}/ks-upload-tool)
   portSelected=$(cat ${dirConfig}/ks-upload-port)
   if [[ "${cygwin}" == "yes" ]] ; then
@@ -267,7 +267,7 @@ EOF
 
 # Function for recursive checksum.
 # # Syntax: recursive_checksum <password> <file path> <user> <server> <server path>
-function recursive_checksum() {
+recursive_checksum() {
   toolSelected=$(cat ${dirConfig}/ks-upload-tool)
   portSelected=$(cat ${dirConfig}/ks-upload-port)
   echo "# Generating checksum for files on ${dirLocal} directory"
@@ -361,7 +361,7 @@ function recursive_checksum() {
 }
 
 # Generate random codes 
-function generate_codes() {
+generate_codes() {
   chars="abcdefghijklmnopqrstywxz1234567890ABCDEFHIJKLMNOPQRSTYWXZ@/"
   long_code="${1}"
   for i in {1} ; do
@@ -371,7 +371,7 @@ function generate_codes() {
 
 # Function to encrypt pass on config file
 # Syntax: encrypt_kstools <password>
-function encrypt_kstools() {
+encrypt_kstools() {
   raw_pass="${1}"
   characters_pass_raw=$(echo ${raw_pass} | wc -m)
   characters_pass=$(expr ${characters_pass_raw} - 1)
@@ -406,7 +406,7 @@ function encrypt_kstools() {
 
 # Function to decrypt pass on config file
 # Syntax: decrypt_kstools <password>
-function decrypt_kstools() {
+decrypt_kstools() {
   raw_pass_encrypted="${1}"
   total_characters=1
   codes_seq=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null)
@@ -425,7 +425,7 @@ function decrypt_kstools() {
 }
 
 # Function to generate certificate on remote machine
-function gen_pem_ssh() {
+gen_pem_ssh() {
   userhost="${USER}"
   name_host="${HOSTNAME}"
   echo "" && echo "* Generating .pem file to connect to this machine (${userhost})."
@@ -449,7 +449,7 @@ function gen_pem_ssh() {
 }
 
 # Function to show config
-function showConfig() {
+showConfig() {
   configAvailable=0
   echo ""
   echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
@@ -505,7 +505,7 @@ function showConfig() {
 }
 
 # Function to edit the configuration file
-function editConfig() {
+editConfig() {
   editConfig=0
   while (( editConfig == 0 )) ; do
     clear
@@ -648,7 +648,7 @@ function editConfig() {
 }
 
 # Function to create initial config file.
-function createConfig() {
+createConfig() {
 # Start script
   clear
   echo ""
@@ -736,7 +736,7 @@ function createConfig() {
 }
 
 # Function to show version
-function showVersion() {
+showVersion() {
   echo ""
   echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -744,7 +744,7 @@ function showVersion() {
 }
 
 # Function to show help
-function showHelp() {
+showHelp() {
   echo ""
   echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -768,7 +768,7 @@ function showHelp() {
 
 # Function to check if all the necessary tools
 # for the execution are installed.
-function checkDependencies() {
+checkDependencies() {
   path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
   dependencies="sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan ssh-keygen"
   dependencies_found=""

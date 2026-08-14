@@ -97,7 +97,7 @@ else
 fi
 
 # Function to show zero before numbers
-function zero_number() {
+zero_number() {
   if (( ${1} <= 9 )) ; then
     numberwithZero=$(echo "0${1}")
   else
@@ -107,7 +107,7 @@ function zero_number() {
 }
 
 # Function to show menu again when Syntax is wrong
-function show_menu() {
+show_menu() {
   echo ""
   echo "* ks-mix (ks-tools) v${VERSION} (${M_DATE})"
   echo ""

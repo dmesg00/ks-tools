@@ -18,7 +18,7 @@ if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
 fi
 
 # Check and create configuration file for ks-mp4
-function check_create_conf_ks_mp4() {
+check_create_conf_ks_mp4() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-mp4
   rel_size="1280x534"
@@ -86,7 +86,7 @@ function check_create_conf_ks_mp4() {
 }
 
 # Check and create configuration file for ks-mp4s
-function check_create_conf_ks_mp4s() {
+check_create_conf_ks_mp4s() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-mp4s
   rel_size="720x480"
@@ -154,7 +154,7 @@ function check_create_conf_ks_mp4s() {
 }
 
 # Check and create configuration file for ks-mp4k
-function check_create_conf_ks_mp4k() {
+check_create_conf_ks_mp4k() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-mp4k
   rel_size="3840x2160"
@@ -222,7 +222,7 @@ function check_create_conf_ks_mp4k() {
 }
 
 # Check and create configuration file for ks-avi
-function check_create_conf_ks_avi() {
+check_create_conf_ks_avi() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-avi
   rel_size="720x480"
@@ -290,7 +290,7 @@ function check_create_conf_ks_avi() {
 }
 
 # Check and create configuration file for ks-av1
-function check_create_conf_ks_av1() {
+check_create_conf_ks_av1() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-av1
   rel_size="1280x534"
@@ -358,7 +358,7 @@ function check_create_conf_ks_av1() {
 }
 
 # Check and create configuration file for ks-av1s
-function check_create_conf_ks_av1s() {
+check_create_conf_ks_av1s() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-av1s
   rel_size="720x480"
@@ -426,7 +426,7 @@ function check_create_conf_ks_av1s() {
 }
 
 # Check and create configuration file for ks-mp3/ks-mp3-album
-function check_create_conf_ks_mp3() {
+check_create_conf_ks_mp3() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-mp3
   acodec="libmp3lame"
@@ -464,7 +464,7 @@ function check_create_conf_ks_mp3() {
 }
 
 # Check and create configuration file for ks-oga/ks-oga-album
-function check_create_conf_ks_oga() {
+check_create_conf_ks_oga() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-oga
   acodec="libvorbis"

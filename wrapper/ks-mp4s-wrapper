@@ -59,7 +59,7 @@ fi
 
 # Funcion to show the name of file/folder from full path
 # Syntax: extractFolderOrFile <full/path/file.txt>
-function extractFolderOrFile() {
+extractFolderOrFile() {
   pathToExtract="${1}/"
   findFolder=0
   count=1
@@ -79,7 +79,7 @@ function extractFolderOrFile() {
 
 # Function to remove extension from file
 # Syntax: removeExtension "<text>"
-function removeExtension() {
+removeExtension() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
@@ -103,7 +103,7 @@ function removeExtension() {
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
-function showFileWithSpace() {
+showFileWithSpace() {
   echo "${1}" > ${dirTemp}/name.tmp
   sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
@@ -113,7 +113,7 @@ function showFileWithSpace() {
 
 # Show info tracks of input video video file.
 # Syntax: showInfo <video_file>
-function showInfo() {
+showInfo() {
   echo ""
   echo "* Information of ${1}:"
   echo ""
@@ -131,7 +131,7 @@ function showInfo() {
 
 # Show the video track default
 # Syntax: showVideoDefault <video_file>
-function showVideoDefault() {
+showVideoDefault() {
   # Check de video track by default
   video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [[ -z "${video_default}" ]] ; then
@@ -149,7 +149,7 @@ function showVideoDefault() {
 
 # Show the audio track default
 # Syntax: showAudioDefault <video_file>
-function showAudioDefault() {
+showAudioDefault() {
   # Check the audio track by default
   audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [[ -z "${audio_default}" ]] ; then
@@ -177,7 +177,7 @@ function showAudioDefault() {
 
 # Show the subtitle track default
 # Syntax: showSubtitleDefault <video_file>
-function showSubtitleDefault() {
+showSubtitleDefault() {
   # Check the subtitle track by default
   subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [[ -z "${subtitle_default}" ]] ; then
@@ -215,20 +215,20 @@ function showSubtitleDefault() {
 
 # Show default resolution
 # Syntax: showResolutionDefault
-function showResolutionDefault() {
+showResolutionDefault() {
   echo "${rel_size}"
 }
 
 # Show default year (METADATA)
 # Syntax: showResolutionDefault
-function showYearDefault() {
+showYearDefault() {
   current_date=$(date +%Y)
   echo "${current_date}"
 }
 
 # Show the name title default (MEDATA)
 # Syntax: showNameDefault <video_file>
-function showNameDefault() {
+showNameDefault() {
   # Prepare name title by default
   FullPath="${1}"
   name_title_default=$(extractFolderOrFile "${FullPath}")
@@ -239,12 +239,12 @@ function showNameDefault() {
 
 # Show the genre default (MEDATA)
 # Syntax: showGenreDefault
-function showGenreDefault() {
+showGenreDefault() {
   echo "Unknown"
 }
 
 # Show help
-function showHelp() {
+showHelp() {
   echo ""
   echo "* ks-mp4s-wrapper (ks-tools) v${VERSION} (${M_DATE})"
   echo ""

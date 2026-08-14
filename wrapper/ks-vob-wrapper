@@ -51,7 +51,7 @@ fi
 
 # Show info tracks of input video video file.
 # Syntax: showInfo <video_file>
-function showInfo() {
+showInfo() {
   echo ""
   echo "* Information of ${1}:"
   echo ""
@@ -66,7 +66,7 @@ function showInfo() {
 
 # Show the video track default
 # Syntax: showVideoDefault <video_file>
-function showVideoDefault() {
+showVideoDefault() {
   # Check de video track by default
   video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [[ -z "${video_default}" ]] ; then
@@ -84,7 +84,7 @@ function showVideoDefault() {
 
 # Show the audio track default
 # Syntax: showAudioDefault <video_file>
-function showAudioDefault() {
+showAudioDefault() {
   # Check the audio track by default
   audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [[ -z "${audio_default}" ]] ; then
@@ -112,12 +112,12 @@ function showAudioDefault() {
 
 # Show default resolution
 # Syntax: showResolutionDefault
-function showResolutionDefault() {
+showResolutionDefault() {
   echo "${rel_size}"
 }
 
 # Show help
-function showHelp() {
+showHelp() {
   echo ""
   echo "* ks-vob-wrapper (ks-tools) v${VERSION} (${M_DATE})"
   echo ""

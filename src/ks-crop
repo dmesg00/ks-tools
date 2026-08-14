@@ -90,7 +90,7 @@ fi
 
 # Function to remove extension from file
 # Syntax: removeExtension "<text>"
-function removeExtension() {
+removeExtension() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
@@ -114,7 +114,7 @@ function removeExtension() {
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
-function showFileWithSpace() {
+showFileWithSpace() {
   echo "${1}" > ${dirTemp}/name.tmp
   sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
@@ -123,7 +123,7 @@ function showFileWithSpace() {
 }
 
 # Function to show menu again when syntax is wrong
-function show_menu() {
+show_menu() {
   echo ""
   echo "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -166,7 +166,7 @@ function show_menu() {
 
 # Function to show error reading file
 # Syntax: errorReadingFile <file>
-function errorReadingFile() {
+errorReadingFile() {
   echo ""
   echo "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -241,7 +241,7 @@ else
 fi
 
 # Function to crop videos
-function crop_video() {
+crop_video() {
   echo ""
   echo "* Information of ${inputFile}:"
   echo ""

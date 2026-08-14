@@ -54,7 +54,7 @@ else
 fi
 
 # Show help
-function show_help() {
+show_help() {
   echo ""
   echo "* ks-utfs (ks-tools) v${VERSION} (${M_DATE})"
   echo ""

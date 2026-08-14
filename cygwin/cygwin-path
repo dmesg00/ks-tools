@@ -17,7 +17,7 @@ CygPathTempFolder="/tmp/cygwin-path"
 
 # Function to convert Windows path to Cygwin path
 # Sintax: convertCygwin "<text>"
-function convertCygwin() {
+convertCygwin() {
 	wordToConvert=${1}
 	CygPathSedFile="${CygPathTempFolder}/cygwin-path-${RANDOM}.txt"
 	mkdir -p ${CygPathTempFolder} && chmod 777 -R ${CygPathTempFolder} 2> /dev/null
@@ -58,7 +58,7 @@ function convertCygwin() {
 
 # Function to convert Cygwin path to Windows path
 # Sintax: convertWindows "<text>"
-function convertWindows() {
+convertWindows() {
 	wordToConvert=${1}
 	CygPathSedFile="${CygPathTempFolder}/cygwin-path-${RANDOM}.txt"
 	mkdir -p ${CygPathTempFolder} && chmod 777 -R ${CygPathTempFolder} 2> /dev/null

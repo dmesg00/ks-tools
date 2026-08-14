@@ -58,7 +58,7 @@ fi
 
 # Setting the correct resolution for the video file
 # Sintaxis: set_resolution <resolution> <file>
-function set_resolution() {
+set_resolution() {
   check_bc_app_directories="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
   set_rel="${1}"
   input_video_file="${2}"
@@ -181,7 +181,7 @@ fi
 
 # Funcion to show the name of file/folder from full path
 # Syntax: extractFolderOrFile <full/path/file.txt>
-function extractFolderOrFile() {
+extractFolderOrFile() {
   pathToExtract="${1}/"
   findFolder=0
   count=1
@@ -201,7 +201,7 @@ function extractFolderOrFile() {
 
 # Function to remove extension from file
 # Syntax: removeExtension "<text>"
-function removeExtension() {
+removeExtension() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
@@ -225,7 +225,7 @@ function removeExtension() {
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
-function showFileWithSpace() {
+showFileWithSpace() {
   echo "${1}" > ${dirTemp}/name.tmp
   sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
