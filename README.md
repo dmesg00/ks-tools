@@ -51,19 +51,19 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies **(for Arch Linux)**:
     
-          sudo pacman -Syu git make expect rsync openssh sshpass grep coreutils binutils bc
+          sudo pacman -Syu git zsh make expect rsync openssh sshpass grep coreutils binutils bc
 
     * Install dependencies **(for Ubuntu/Debian)**:
     
-          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils bc
+          sudo apt install git zsh make expect rsync openssh-client openssh-server sshpass grep binutils bc
       
     * Install dependencies **(for Fedora)**:
     
-          sudo dnf install git make expect rsync openssh sshpass grep coreutils binutils bc
+          sudo dnf install git zsh make expect rsync openssh sshpass grep coreutils binutils bc
 
     * Install dependencies **(for Linux Homebrew)**:
 
-          brew install git make expect rsync openssh grep binutils ffmpeg bc
+          brew install git zsh make expect rsync openssh grep binutils ffmpeg bc
           curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
           brew install sshpass.rb
   
@@ -87,7 +87,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     
           lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
           install apt-cyg /bin
-          apt-cyg install git make expect rsync openssh sshpass grep coreutils binutils bc wget curl unzip
+          apt-cyg install git zsh make expect rsync openssh sshpass grep coreutils binutils bc wget curl unzip
           curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-cygwin64.sh" | bash
       
     * Install ks-tools cloning the repository:
@@ -100,7 +100,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies:
     
-          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils bc wgt curl tar
+          sudo apt install git zsh make expect rsync openssh-client openssh-server sshpass grep binutils bc wgt curl tar
           curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-wsl.sh" | sudo bash
       
     * Install ks-tools cloning the repository:
@@ -113,7 +113,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies:
     
-          brew install git make expect rsync openssh grep binutils ffmpeg bc
+          brew install git zsh make expect rsync openssh grep binutils ffmpeg bc
           curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
           brew install sshpass.rb 
       
@@ -137,6 +137,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   * [Cygwin homepage](https://www.cygwin.com/)
   * [xterm homepage](https://invisible-island.net/xterm/)
   * [Coreutils homepage](https://www.gnu.org/software/coreutils/coreutils.html)
+  * [Zsh homepage](https://www.zsh.org/)
   * [Bash homepage](https://www.gnu.org/software/bash/)
   * [Grep homepage](https://www.gnu.org/software/grep/)
   
