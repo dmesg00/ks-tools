@@ -56,15 +56,15 @@ fi
 # Setting the correct resolution for the video file
 # Sintaxis: set_resolution <resolution> <file>
 set_resolution() {
-  check_bc_app_directories="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
   set_rel="${1}"
   input_video_file="${2}"
-  bc_found="1"
-  for file in ${check_bc_app_directories} ; do
-    if [[ -f ${file}/bc ]] ; then
-      bc_found=0
-    fi
-  done
+  scan_bc_dependence=$(which bc)
+  error_bc_dependence=$?
+  if [[ -z "${scan_bc_dependence}" ]] || (( ${error_bc_dependence} > 0 )); then
+    bc_found=1
+  else
+    bc_found=0
+  fi
   if (( bc_found == 0 )) ; then
     file_rel=$(ffmpeg -i "${2}" 2>&1 | grep Stream | grep Video: | grep -Po '\d{3,5}x\d{3,5}' 2> /dev/null | head -1)
     if [[ -z "${file_rel}" ]] ; then
