@@ -20,38 +20,25 @@ else
   cygwin="no"
 fi
 
-# Check if commands are installed
-path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
+# Function for check dependencies
+check_dependencies() {
+  which_dependence=$(which ${1})
+  error_dependence=$?
+  if [[ -z "$which_dependence" ]] || (( error_dependence > 0 )); then
+    echo ""
+    echo "* ks-utfs (ks-tools) v${VERSION} (${M_DATE})"
+    echo ""
+    echo "* Dependency not found: ${1}"
+    echo ""
+    exit 1
+  fi 
+}
+
+# Check dependencies
 dependencies="grep sed cut"
-dependencies_found=""
-dependencies_not_found=""
-for checkPath in ${path_check} ; do
-  for checkDependencies in ${dependencies} ; do
-    if [[ -f ${checkPath}/${checkDependencies} ]] ; then
-      dependencies_found="${dependencies_found} ${checkDependencies}"
-    fi
-  done
+for scan_dependency in ${dependencies} ; do
+  check_dependencies "${scan_dependency}"
 done
-for notFound in ${dependencies} ; do
-  check_found_one=$(echo ${dependencies_found} | grep " ${notFound}")
-  check_found_two=$(echo ${dependencies_found} | grep "${notFound} ")
-  if_not_found="${check_found_one}${check_found_two}"
-  if [[ -z "${if_not_found}" ]] ; then
-    dependencies_not_found="${dependencies_not_found} ${notFound}"
-  fi
-done
-# Show if all tools are installed
-if [[ -z "${dependencies_not_found}" ]] ; then
-  echo > /dev/null
-else
-  echo ""
-  echo "* ks-utfs (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "* Some required tools are not installed:${dependencies_not_found}"
-  echo "* The process has been stopped"
-  echo ""
-  exit
-fi
 
 # Show help
 show_help() {
