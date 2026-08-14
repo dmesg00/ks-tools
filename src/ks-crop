@@ -59,7 +59,7 @@ fi
 check_dependencies() {
   which_dependence=$(which ${1})
   error_dependence=$?
-  if [[ -z "$which_dependence" ]] || (( error_dependence > 0 )); then
+  if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
     echo ""
     echo "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
     echo ""
