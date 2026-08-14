@@ -1,13 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+
+setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
 
 ###############################################################
 # ks-av1-wrapper (ks-tools) - Wrapper for ks-av1              #
-# Date: 10-11-2025                                            #
-# Author: dmesg00                                              #
-# Contact: dmesg00@duck.com                                    #
+# Date: 14-08-2026                                            #
+# Author: dmesg00                                             #
+# Contact: dmesg00@duck.com                                   #
 ###############################################################
 VERSION="9.2"
-M_DATE="101125"
+M_DATE="140826"
 
 # Conversion parameters
 p_ffmpeg="ffmpeg -i"
@@ -23,8 +25,8 @@ listTemp="ks-tools.list"
 ksToolsTempFolder="/tmp/ks-tools"
 
 # Check cygwin alias (for Windows)
-if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
-  shopt -s expand_aliases
+if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+  setopt ALIASES
   cygwin="yes"
   source "/usr/bin/cygwin-alias.sh"
 else
@@ -34,7 +36,7 @@ fi
 # Check if ffmpeg is installed
 ffmpeg_test=$(ffmpeg --help 2>&1)
 error_ffmpeg=$?
-if [ ${error_ffmpeg} -ne 0 ] ; then
+if (( error_ffmpeg != 0 )) ; then
   echo ""
   echo "* ks-av1-wrapper (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -46,7 +48,7 @@ fi
 # Check if ks-av1 is installed
 wrap_test=$(ks-av1 &> /dev/null)
 error_wrap=$?
-if [ ${error_wrap} -ne 0 ] ; then
+if (( error_wrap != 0 )) ; then
   echo ""
   echo "* ks-av1-wrapper (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -63,9 +65,9 @@ function extractFolderOrFile() {
   count=1
   nameFolder=$(echo ${pathToExtract} | cut -d "/" -f ${count})
   count=$(expr $count + 1)
-  while [ ${findFolder} -eq 0 ] ; do
+  while (( findFolder == 0 )) ; do
     nameFolderTemp=$(echo ${pathToExtract} | cut -d "/" -f ${count})
-    if [ -z "${nameFolderTemp}" ] ; then
+    if [[ -z "${nameFolderTemp}" ]] ; then
       findFolder=1
     else
       nameFolder="${nameFolderTemp}"
@@ -132,11 +134,11 @@ function showInfo() {
 function showVideoDefault() {
   # Check de video track by default
   video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-  if [ -z "${video_default}" ] ; then
+  if [[ -z "${video_default}" ]] ; then
     video_default="0:0"
   else
     video_default_patch=$(echo ${video_default} | cut -c4)
-    if [ "${video_default_patch}" == ":" ] ; then
+    if [[ "${video_default_patch}" == ":" ]] ; then
       video_default=$(echo ${video_default} | cut -c1-3)
     else
       video_default="${video_default}"
@@ -150,13 +152,13 @@ function showVideoDefault() {
 function showAudioDefault() {
   # Check the audio track by default
   audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-  if [ -z "${audio_default}" ] ; then
+  if [[ -z "${audio_default}" ]] ; then
     audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-    if [ -z "${audio_default}" ] ; then
+    if [[ -z "${audio_default}" ]] ; then
       audio_default="0:1"
     else
       audio_default_patch=$(echo ${audio_default} | cut -c4)
-      if [ "${audio_default_patch}" == ":" ] ; then
+      if [[ "${audio_default_patch}" == ":" ]] ; then
         audio_default=$(echo ${audio_default} | cut -c1-3)
       else
         audio_default="${audio_default}"
@@ -164,7 +166,7 @@ function showAudioDefault() {
     fi
   else
     audio_default_patch=$(echo ${audio_default} | cut -c4)
-    if [ "${audio_default_patch}" == ":" ] ; then
+    if [[ "${audio_default_patch}" == ":" ]] ; then
       audio_default=$(echo ${audio_default} | cut -c1-3)
     else
       audio_default="${audio_default}"
@@ -178,15 +180,15 @@ function showAudioDefault() {
 function showSubtitleDefault() {
   # Check the subtitle track by default
   subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-  if [ -z "${subtitle_default}" ] ; then
+  if [[ -z "${subtitle_default}" ]] ; then
     subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-    if [ -z "${subtitle_default}" ] ; then
+    if [[ -z "${subtitle_default}" ]] ; then
       subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-      if [ -z "${subtitle_default}" ] ; then
+      if [[ -z "${subtitle_default}" ]] ; then
         subtitle_default="0:3"
       else
         subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
-        if [ "${subtitle_default_patch}" == ":" ] ; then
+        if [[ "${subtitle_default_patch}" == ":" ]] ; then
           subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
         else
           subtitle_default="${subtitle_default}"
@@ -194,7 +196,7 @@ function showSubtitleDefault() {
       fi
     else
       subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
-      if [ "${subtitle_default_patch}" == ":" ] ; then
+      if [[ "${subtitle_default_patch}" == ":" ]] ; then
         subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
       else
         subtitle_default="${subtitle_default}"
@@ -202,7 +204,7 @@ function showSubtitleDefault() {
     fi
   else
     subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
-    if [ "${subtitle_default_patch}" == ":" ] ; then
+    if [[ "${subtitle_default_patch}" == ":" ]] ; then
       subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
     else
       subtitle_default="${subtitle_default}"
@@ -289,7 +291,7 @@ function showHelp() {
   echo ""
   echo " + The option 'patch' apply the '-thread_queue_size 2048' patch to ffmpeg."
   echo " + If you specify a path or file with spaces, you must use quotes."
-  if [ "${cygwin}" == "yes" ] ; then
+  if [[ "${cygwin}" == "yes" ]] ; then
     echo " + In Cygwin, you should always use relative paths with this tool."
   fi
   echo ""
@@ -297,11 +299,11 @@ function showHelp() {
 }
 
 # Run the parameters
-if [ -z "${1}" ] ; then
+if [[ -z "${1}" ]] ; then
   showHelp
-elif [ "${1}" == "--show-info" ] ; then
+elif [[ "${1}" == "--show-info" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
+  if [[ -f "${2}" ]] ; then
     showInfo "${2}"
   else
     echo ""
@@ -309,9 +311,9 @@ elif [ "${1}" == "--show-info" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--show-video-default" ] ; then
+elif [[ "${1}" == "--show-video-default" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
+  if [[ -f "${2}" ]] ; then
     showVideoDefault "${2}"
   else
     echo ""
@@ -319,9 +321,9 @@ elif [ "${1}" == "--show-video-default" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--show-audio-default" ] ; then
+elif [[ "${1}" == "--show-audio-default" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
+  if [[ -f "${2}" ]] ; then
     showAudioDefault "${2}"
   else
     echo ""
@@ -329,9 +331,9 @@ elif [ "${1}" == "--show-audio-default" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--show-subtitle-default" ] ; then
+elif [[ "${1}" == "--show-subtitle-default" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
+  if [[ -f "${2}" ]] ; then
     showSubtitleDefault "${2}"
   else
     echo ""
@@ -339,11 +341,11 @@ elif [ "${1}" == "--show-subtitle-default" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--show-resolution-default" ] ; then
+elif [[ "${1}" == "--show-resolution-default" ]] ; then
   showResolutionDefault
-elif [ "${1}" == "--show-name-title-default" ] ; then
+elif [[ "${1}" == "--show-name-title-default" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
+  if [[ -f "${2}" ]] ; then
     showNameDefault "${2}"
   else
     echo ""
@@ -351,14 +353,14 @@ elif [ "${1}" == "--show-name-title-default" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--show-year-default" ] ; then
+elif [[ "${1}" == "--show-year-default" ]] ; then
   showYearDefault
-elif [ "${1}" == "--show-genre-default" ] ; then
+elif [[ "${1}" == "--show-genre-default" ]] ; then
   showGenreDefault
-elif [ "${1}" == "--conv" ] ; then
+elif [[ "${1}" == "--conv" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
-    if [ "${10}" == "patch" ] ; then
+  if [[ -f "${2}" ]] ; then
+    if [[ "${10}" == "patch" ]] ; then
       echo -e "${4}\n${5}\nn\nn\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-av1 "${2}" "${3}"
     else
       echo -e "${4}\n${5}\nn\nn\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-av1 "${2}" "${3}"
@@ -369,10 +371,10 @@ elif [ "${1}" == "--conv" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--conv-widescreen" ] ; then
+elif [[ "${1}" == "--conv-widescreen" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
-    if [ "${10}" == "patch" ] ; then
+  if [[ -f "${2}" ]] ; then
+    if [[ "${10}" == "patch" ]] ; then
       echo -e "${4}\n${5}\nn\ny\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-av1 "${2}" "${3}"
     else
       echo -e "${4}\n${5}\nn\ny\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-av1 "${2}" "${3}"
@@ -383,10 +385,10 @@ elif [ "${1}" == "--conv-widescreen" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--conv-with-sub" ] ; then
+elif [[ "${1}" == "--conv-with-sub" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
-    if [ "${11}" == "patch" ] ; then
+  if [[ -f "${2}" ]] ; then
+    if [[ "${11}" == "patch" ]] ; then
       echo -e "${4}\n${5}\ny\n${6}\nn\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-av1 "${2}" "${3}"
     else
       echo -e "${4}\n${5}\ny\n${6}\nn\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-av1 "${2}" "${3}"
@@ -397,10 +399,10 @@ elif [ "${1}" == "--conv-with-sub" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--conv-with-sub-widescreen" ] ; then
+elif [[ "${1}" == "--conv-with-sub-widescreen" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
-    if [ "${11}" == "patch" ] ; then
+  if [[ -f "${2}" ]] ; then
+    if [[ "${11}" == "patch" ]] ; then
       echo -e "${4}\n${5}\ny\n${6}\ny\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-av1 "${2}" "${3}"
     else
       echo -e "${4}\n${5}\ny\n${6}\ny\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-av1 "${2}" "${3}"

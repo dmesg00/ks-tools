@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+
+setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
 
 ####################################################################
 # cygwin-path - Convert Windows paths in Cywin paths & vice versa  #
 # Date: 28-03-2020                                                 #
-# Author: dmesg00                                                   #
-# Contact: dmesg00@duck.com                                         #
+# Author: dmesg00                                                  #
+# Contact: dmesg00@duck.com                                        #
 ####################################################################
 VERSION="1.0"
 M_DATE="280320"
@@ -95,7 +97,7 @@ function convertWindows() {
 }
 
 # Show help
-if [ -z "${1}" ] ; then
+if [[ -z "${1}" ]] ; then
 	echo ""
 	echo "* cygwin-path v${VERSION} (${M_DATE})"
 	echo ""
@@ -113,9 +115,9 @@ if [ -z "${1}" ] ; then
 	echo ""
 	exit
 else
-	if [ "${1}" == "-c" ] ; then
+	if [[ "${1}" == "-c" ]] ; then
 		convertCygwin "${2}"
-	elif [ "${1}" == "-w" ] ; then
+	elif [[ "${1}" == "-w" ]] ; then
 		convertWindows "${2}"
 	else
 		# Show help if sintax is wrong

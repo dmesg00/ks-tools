@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+
+setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
 
 # Cygwin alias (for Windows)
-# shopt -s expand_aliases
+# setopt ALIASES
 alias cat="/usr/bin/cat"
 alias clear="/usr/bin/clear"
 alias cut="/usr/bin/cut"

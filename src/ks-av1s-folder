@@ -1,13 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+
+setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
 
 ###################################################################################
 # ks-av1s-folder (ks-tools) - Convert videos from folder to AV1 (Codec)  (Series) #
 # Date: 26-09-2025                                                                #
-# Author: dmesg00                                                                  #
-# Contact: dmesg00@duck.com                                                        #
+# Author: dmesg00                                                                 #
+# Contact: dmesg00@duck.com                                                       #
 ###################################################################################
 VERSION="9.2"
-M_DATE="260925"
+M_DATE="140826"
 
 # Variables
 tempFile="/tmp/ks-av1s-folder.txt"
@@ -15,8 +17,8 @@ tempFileTest="/tmp/ks-av1s-folder-test.txt"
 formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
 
 # Check cygwin alias (for Windows)
-if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
-  shopt -s expand_aliases
+if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+  setopt ALIASES
   source "/usr/bin/cygwin-alias.sh"
 fi
 
@@ -27,7 +29,7 @@ dependencies_found=""
 dependencies_not_found=""
 for checkPath in ${path_check} ; do
   for checkDependencies in ${dependencies} ; do
-    if [ -f ${checkPath}/${checkDependencies} ] ; then
+    if [[ -f ${checkPath}/${checkDependencies} ]] ; then
       dependencies_found="${dependencies_found} ${checkDependencies}"
     fi
   done
@@ -36,12 +38,12 @@ for notFound in ${dependencies} ; do
   check_found_one=$(echo ${dependencies_found} | grep " ${notFound}")
   check_found_two=$(echo ${dependencies_found} | grep "${notFound} ")
   if_not_found="${check_found_one}${check_found_two}"
-  if [ -z "${if_not_found}" ] ; then
+  if [[ -z "${if_not_found}" ]] ; then
     dependencies_not_found="${dependencies_not_found} ${notFound}"
   fi
 done
 # Show if all tools are installed
-if [ -z "${dependencies_not_found}" ] ; then
+if [[ -z "${dependencies_not_found}" ]] ; then
   echo > /dev/null
 else
   echo ""
@@ -54,7 +56,7 @@ else
 fi
 
 # Show help when folder is empty
-if [ -z "${1}" ] ; then
+if [[ -z "${1}" ]] ; then
   echo ""
   echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -79,7 +81,7 @@ if [ -z "${1}" ] ; then
 fi
 
 # Check if folder exist
-if [ -d "${1}" ] ; then
+if [[ -d "${1}" ]] ; then
   echo null > /dev/null
 else
   echo ""
@@ -102,7 +104,7 @@ echo ""
 rm -rf ${tempFile} && touch ${tempFile}
 for format in ${formatFiles} ; do
   find "${1}"/*.${format} &> ${tempFileTest}
-  if [ $? -ne 0 ] ; then
+  if (( $? != 0 )) ; then
     echo "null" > /dev/null
   else
     echo "+ Video file(s) in .${format} found!"
@@ -115,7 +117,7 @@ done
 
 # Init the conversion files
 num_files=$(cat ${tempFile} | wc -l)
-if [ ${num_files} -eq 0 ] ; then
+if (( num_files == 0 )) ; then
   echo ""
   echo "+ No video file(s) found in folder '${1}'"
   echo ""
@@ -124,15 +126,15 @@ else
   echo ""
   echo "* Files to convert (${1}):"
   convert_files=1
-  if [ "${2}" == "subs" ] ; then
+  if [[ "${2}" == "subs" ]] ; then
     widescreen_enabled=0
     subtitles_enabled=1
     subtitles_show="with subtitles"
-  elif [ "${2}" == "widescreen" ] ; then
+  elif [[ "${2}" == "widescreen" ]] ; then
     widescreen_enabled=1
     subtitles_enabled=0
     subtitles_show="without subtitles but forcing widescreen"
-  elif [ "${2}" == "subs-widescreen" ] ; then
+  elif [[ "${2}" == "subs-widescreen" ]] ; then
     widescreen_enabled=1
     subtitles_enabled=1
     subtitles_show="with subtitles and forcing widescreen"
@@ -141,7 +143,7 @@ else
     subtitles_enabled=0
     subtitles_show="without subtitles"
   fi
-  while [ ${convert_files} -le ${num_files} ] ; do
+  while (( convert_files <= num_files )) ; do
     show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
     echo "  + ${show_file} (${subtitles_show})"
     convert_files=$(expr ${convert_files} + 1)
@@ -151,15 +153,15 @@ else
   # Execute commands for conversion
   echo ""
   echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-  if [ "${run_commands_ffmpeg}" == "n" ] ; then
+  if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
     exit
   else
     convert_files=1
     cd "${1}" && mkdir -p to-av1 && rm -rf to-av1/*
-    while [ ${convert_files} -le ${num_files} ] ; do
+    while (( convert_files <= num_files )) ; do
       show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
-      if [ ${subtitles_enabled} -eq 1 ] ; then
-        if [ ${widescreen_enabled} -eq 1 ] ; then
+      if (( subtitles_enabled == 1 )) ; then
+        if (( widescreen_enabled == 1 )) ; then
           fname=$(echo "${show_file}" | cut -d "." -f 1)
           ks-av1s-wrapper --conv-with-sub-widescreen "${show_file}" "to-av1/${fname}"
         else
@@ -167,7 +169,7 @@ else
           ks-av1s-wrapper --conv-with-sub "${show_file}" "to-av1/${fname}"
         fi
       else
-        if [ ${widescreen_enabled} -eq 1 ] ; then
+        if (( widescreen_enabled == 1 )) ; then
           fname=$(echo "${show_file}" | cut -d "." -f 1)
           ks-av1s-wrapper --conv-widescreen "${show_file}" "to-av1/${fname}"
         else

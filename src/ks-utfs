@@ -1,17 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+
+setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
 
 #############################################################################
 # ks-utfs (ks-tools) - Patch UTF-8 subtitles files replacing bad characters #
-# Date: 09-11-2025                                                          #
-# Author: dmesg00                                                            #
-# Contact: dmesg00@duck.com                                                  #
+# Date: 14-08-2026                                                          #
+# Author: dmesg00                                                           #
+# Contact: dmesg00@duck.com                                                 #
 #############################################################################
 VERSION="9.2"
-M_DATE="091125"
+M_DATE="140826"
 
 # Check cygwin alias (for Windows)
-if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
-  shopt -s expand_aliases
+if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+  setopt ALIASES
   cygwin="yes"
   source "/usr/bin/cygwin-alias.sh"
 else
@@ -25,7 +27,7 @@ dependencies_found=""
 dependencies_not_found=""
 for checkPath in ${path_check} ; do
   for checkDependencies in ${dependencies} ; do
-    if [ -f ${checkPath}/${checkDependencies} ] ; then
+    if [[ -f ${checkPath}/${checkDependencies} ]] ; then
       dependencies_found="${dependencies_found} ${checkDependencies}"
     fi
   done
@@ -34,12 +36,12 @@ for notFound in ${dependencies} ; do
   check_found_one=$(echo ${dependencies_found} | grep " ${notFound}")
   check_found_two=$(echo ${dependencies_found} | grep "${notFound} ")
   if_not_found="${check_found_one}${check_found_two}"
-  if [ -z "${if_not_found}" ] ; then
+  if [[ -z "${if_not_found}" ]] ; then
     dependencies_not_found="${dependencies_not_found} ${notFound}"
   fi
 done
 # Show if all tools are installed
-if [ -z "${dependencies_not_found}" ] ; then
+if [[ -z "${dependencies_not_found}" ]] ; then
   echo > /dev/null
 else
   echo ""
@@ -60,7 +62,7 @@ function show_help() {
   echo ""
   echo "+ Syntax: "
   echo ""
-  if [ "${cygwin}" == "yes" ] ; then
+  if [[ "${cygwin}" == "yes" ]] ; then
     echo "  $ ks-utfs <relative/path/subtitle.srt>"
     echo ""
     echo " + Example: ks-utfs movies/Spiderman.srt"
@@ -77,10 +79,10 @@ function show_help() {
 }
 
 # Replace bad characters if file exist
-if [ -z "${1}" ] ; then
+if [[ -z "${1}" ]] ; then
   show_help
 else
-  if [ -f "${1}" ] ; then
+  if [[ -f "${1}" ]] ; then
     # Replace UTF-8 bad characters
     sed -i 's/Ã¡/á/g' "${1}"
     sed -i 's/Ã©/é/g' "${1}"

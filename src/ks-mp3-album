@@ -1,13 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+
+setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
 
 ######################################################################
 # ks-mp3-album (ks-tools) - Convert folder album to MP3 Audio Format #
 # Date: 10-11-2023                                                   #
-# Author: dmesg00                                                     #
-# Contact: dmesg00@duck.com                                           #
+# Author: dmesg00                                                    #
+# Contact: dmesg00@duck.com                                          #
 ######################################################################
 VERSION="9.2"
-M_DATE="101125"
+M_DATE="140826"
 
 # Variables
 tempFile="/tmp/ks-mp4s-folder.txt"
@@ -30,33 +32,33 @@ artist_init="Artist"
 default_lang_audio="spa"
 
 # Check cygwin alias (for Windows)
-if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
-  shopt -s expand_aliases
+if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+  setopt ALIASES
   source "/usr/bin/cygwin-alias.sh"
 fi
 
 # Create inicial config file
 mkdir -p ${configFolder}
-if [ -f ${configFile} ] ; then
+if [[ -f ${configFile} ]] ; then
   exist_acodec=$(cat ${configFile} | grep "acodec" | cut -c2 | cut -d "_" -f 1) 
   exist_b_acodec=$(cat ${configFile} | grep "b_acodec=") 
   exist_default_lang_audio=$(cat ${configFile} | grep "default_lang_audio=") 
   exist_v_ext=$(cat ${configFile} | grep "v_ext=")
-  if [ -z ${exist_acodec} ] ; then
+  if [[ -z ${exist_acodec} ]] ; then
     echo "acodec=${acodec}" >> ${configFile}
   fi
-  if [ -z ${exist_b_acodec} ] ; then
+  if [[ -z ${exist_b_acodec} ]] ; then
     echo "b_acodec=${b_acodec}" >> ${configFile}
   fi
-  if [ -z ${exist_default_lang_audio} ] ; then
+  if [[ -z ${exist_default_lang_audio} ]] ; then
     echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
   fi
-  if [ -z ${exist_v_ext} ] ; then
+  if [[ -z ${exist_v_ext} ]] ; then
     echo "v_ext=${v_ext}" >> ${configFile}
   fi
   source ${configFile}
 else
-  echo "#!/bin/bash" > ${configFile}
+  echo "#!/usr/bin/env zsh" > ${configFile}
   echo "" >> ${configFile}
   echo "acodec=${acodec}" >> ${configFile}
   echo "b_acodec=${b_acodec}" >> ${configFile}
@@ -72,7 +74,7 @@ dependencies_found=""
 dependencies_not_found=""
 for checkPath in ${path_check} ; do
   for checkDependencies in ${dependencies} ; do
-    if [ -f ${checkPath}/${checkDependencies} ] ; then
+    if [[ -f ${checkPath}/${checkDependencies} ]] ; then
       dependencies_found="${dependencies_found} ${checkDependencies}"
     fi
   done
@@ -81,12 +83,12 @@ for notFound in ${dependencies} ; do
   check_found_one=$(echo ${dependencies_found} | grep " ${notFound}")
   check_found_two=$(echo ${dependencies_found} | grep "${notFound} ")
   if_not_found="${check_found_one}${check_found_two}"
-  if [ -z "${if_not_found}" ] ; then
+  if [[ -z "${if_not_found}" ]] ; then
     dependencies_not_found="${dependencies_not_found} ${notFound}"
   fi
 done
 # Show if all tools are installed
-if [ -z "${dependencies_not_found}" ] ; then
+if [[ -z "${dependencies_not_found}" ]] ; then
   echo > /dev/null
 else
   echo ""
@@ -106,9 +108,9 @@ function extractFolderOrFile() {
   count=1
   nameFolder=$(echo ${pathToExtract} | cut -d "/" -f ${count})
   count=$(expr $count + 1)
-  while [ ${findFolder} -eq 0 ] ; do
+  while (( findFolder == 0 )) ; do
     nameFolderTemp=$(echo ${pathToExtract} | cut -d "/" -f ${count})
-    if [ -z "${nameFolderTemp}" ] ; then
+    if [[ -z "${nameFolderTemp}" ]] ; then
       findFolder=1
     else
       nameFolder="${nameFolderTemp}"
@@ -126,15 +128,15 @@ function showFileWithSpace() {
   DisplayName=$(cat ${dirTemp}/name.tmp)
   rm -rf ${dirTemp}/name.tmp
   cutDisplayName=$(echo ${DisplayName} | cut -c1)
-  if [ "${cutDisplayName}" == "-" ] ; then
+  if [[ "${cutDisplayName}" == "-" ]] ; then
     DisplayName=$(echo ${DisplayName} | cut -c2-100)
   else
     cutDisplayName=$(echo ${DisplayName} | cut -c2)
-    if [ "${cutDisplayName}" == "-" ] ; then
+    if [[ "${cutDisplayName}" == "-" ]] ; then
       DisplayName=$(echo ${DisplayName} | cut -c3-100)
     else
       cutDisplayName=$(echo ${DisplayName} | cut -c3)
-      if [ "${cutDisplayName}" == "-" ] ; then
+      if [[ "${cutDisplayName}" == "-" ]] ; then
         DisplayName=$(echo ${DisplayName} | cut -c4-100)
       fi
     fi
@@ -176,7 +178,7 @@ function removeExtension() {
 }
 
 # Syntax: ks-mp3-album </absolute/path/album/
-if [ -z "${1}" ] ; then
+if [[ -z "${1}" ]] ; then
   echo ""
   echo "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -198,7 +200,7 @@ if [ -z "${1}" ] ; then
 fi
 
 # Check if folder exist
-if [ -d "${1}" ] ; then
+if [[ -d "${1}" ]] ; then
   echo null > /dev/null
 else
   echo ""
@@ -221,7 +223,7 @@ echo ""
 rm -rf ${tempFile} && touch ${tempFile}
 for format in ${formatFiles} ; do
   find "${1}"/*.${format} &> ${tempFileTest}
-  if [ $? -ne 0 ] ; then
+  if (( $? != 0 )) ; then
     echo "null" > /dev/null
   else
     echo "+ Video file(s) in .${format} found!"
@@ -238,19 +240,19 @@ echo ""
 echo "* Common METADATA configuration:"
 echo ""
 echo -n "* (Default: Album-Disc) Type name of album: " ; read album_file
-if [ -z "${album_file}" ] ; then
+if [[ -z "${album_file}" ]] ; then
   album_title="Album-Disc"
 else
   album_title="${album_file}"
 fi
 echo -n "* (Default: ${current_date}) Type the year of album: " ; read year_file
-if [ -z "${year_file}" ] ; then
+if [[ -z "${year_file}" ]] ; then
   year_num="${current_date}"
 else
   year_num="${year_file}"
 fi
 echo -n "* (Default: Pop) Type the genre of album: " ; read genre_file
-if [ -z "${genre_file}" ] ; then
+if [[ -z "${genre_file}" ]] ; then
   genre_file="Pop"
 else
   genre_file="${genre_file}"
@@ -259,7 +261,7 @@ fi
 # Init the conversion files
 convert_files=1
 num_files=$(cat ${tempFile} | wc -l)
-if [ ${num_files} -eq 0 ] ; then
+if (( num_files == 0 )) ; then
   echo ""
   echo "+ No video/audio file(s) found in folder '${1}"
   echo ""
@@ -268,7 +270,7 @@ else
   echo ""
   echo "* List of files:"
   echo ""
-  while [ ${convert_files} -le ${num_files} ] ; do
+  while (( convert_files <= num_files )) ; do
     show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
     echo "  + ${show_file}"
     convert_files=$(expr ${convert_files} + 1)
@@ -278,12 +280,12 @@ else
   # Execute commands for conversion
   echo ""
   echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-  if [ "${run_commands_ffmpeg}" == "n" ] ; then
+  if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
     exit
   else
     convert_files=1
     cd "${1}" && mkdir -p to-mp3 && rm -rf to-mp3/*
-    while [ ${convert_files} -le ${num_files} ] ; do
+    while (( convert_files <= num_files )) ; do
       show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
       fname=$(echo "${show_file}" | cut -d "." -f 1)
       name_title_default=$(removeExtension "${show_file}")
@@ -303,13 +305,13 @@ else
       echo ""
       # Check the audio track by default
       audio_default=$(ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-      if [ -z "${audio_default}" ] ; then
+      if [[ -z "${audio_default}" ]] ; then
         audio_default=$(ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-        if [ -z "${audio_default}" ] ; then
+        if [[ -z "${audio_default}" ]] ; then
           audio_default="0:1"
         else
           audio_default_patch=$(echo ${audio_default} | cut -c4)
-          if [ "${audio_default_patch}" == ":" ] ; then
+          if [[ "${audio_default_patch}" == ":" ]] ; then
             audio_default=$(echo ${audio_default} | cut -c1-3)
           else
             audio_default="${audio_default}"
@@ -317,7 +319,7 @@ else
         fi
       else
         audio_default_patch=$(echo ${audio_default} | cut -c4)
-        if [ "${audio_default_patch}" == ":" ] ; then
+        if [[ "${audio_default_patch}" == ":" ]] ; then
           audio_default=$(echo ${audio_default} | cut -c1-3)
         else
           audio_default="${audio_default}"
@@ -325,25 +327,25 @@ else
       fi
       # Ask for audio
       echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
-      if [ -z "${audio_track}" ] ; then
+      if [[ -z "${audio_track}" ]] ; then
         audio_track="${audio_default}"
       else
         audio_track="${audio_track}"
       fi
       echo -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
-      if [ -z "${name_title}" ] ; then
+      if [[ -z "${name_title}" ]] ; then
         name_title="${name_title_default}"
       else
         name_title="${name_title}"
       fi
       echo -n "* (Default: ${track_init}) Type number of track: " ; read track_file
-      if [ -z "${track_file}" ] ; then
+      if [[ -z "${track_file}" ]] ; then
         track_num="${track_init}"
       else
         track_num="${track_file}"
       fi
       echo -n "* (Default: ${artist_init}) Type name of artist: " ; read artist_file
-      if [ -z "${artist_file}" ] ; then
+      if [[ -z "${artist_file}" ]] ; then
         artist_title="${artist_init}"
       else
         artist_title="${artist_file}"
@@ -353,7 +355,7 @@ else
       audio_5_7_1=$(${p_ffmpeg} "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "5.1")
       audio_5_7_1_2=$(${p_ffmpeg} "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")
       audio_5_7_1="${audio_5_7_1}${audio_5_7_1_2}"
-      if [ -z "${audio_5_7_1}" ] ; then
+      if [[ -z "${audio_5_7_1}" ]] ; then
         stereo_params="-ac 2"
       else
         stereo_params="-ac 2 -clev 3dB -slev -6dB"

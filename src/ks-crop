@@ -1,13 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+
+setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
 
 ###############################################################
 # ks-crop (ks-tools) - Crop or change aspect ratio of a video #
-# Date: 10-11-2025                                            #
-# Author: dmesg00                                              #
-# Contact: dmesg00@duck.com                                    #
+# Date: 14-08-2026                                            #
+# Author: dmesg00                                             #
+# Contact: dmesg00@duck.com                                   #
 ###############################################################
 VERSION="9.2"
-M_DATE="101125"
+M_DATE="140826"
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
@@ -15,10 +17,10 @@ IFS="abcdefghijklmnopqrstyvwxzABCDEFHIJKLMNOPQRSTYVWXZ@/()"
 ffmpeg_version=$(echo ${ffmpeg_version})
 IFS=$' \t\n'
 unset IFS
-if [ -z "${ffmpeg_version}" ] ; then
+if [[ -z "${ffmpeg_version}" ]] ; then
   video_sync="vsync"
 else
-  if [ ${ffmpeg_version} -lt 5 ] 2> /dev/null ; then
+  if (( ffmpeg_version < 5 )) 2> /dev/null ; then
     video_sync="vsync"
   else
     video_sync="fps_mode"
@@ -48,8 +50,8 @@ modeCrop=null
 inputFile="${2}"
 
 # Check cygwin alias (for Windows)
-if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
-  shopt -s expand_aliases
+if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+  setopt ALIASES
   source "/usr/bin/cygwin-alias.sh"
 fi
 
@@ -60,7 +62,7 @@ dependencies_found=""
 dependencies_not_found=""
 for checkPath in ${path_check} ; do
   for checkDependencies in ${dependencies} ; do
-    if [ -f ${checkPath}/${checkDependencies} ] ; then
+    if [[ -f ${checkPath}/${checkDependencies} ]] ; then
       dependencies_found="${dependencies_found} ${checkDependencies}"
     fi
   done
@@ -69,12 +71,12 @@ for notFound in ${dependencies} ; do
   check_found_one=$(echo ${dependencies_found} | grep " ${notFound}")
   check_found_two=$(echo ${dependencies_found} | grep "${notFound} ")
   if_not_found="${check_found_one}${check_found_two}"
-  if [ -z "${if_not_found}" ] ; then
+  if [[ -z "${if_not_found}" ]] ; then
     dependencies_not_found="${dependencies_not_found} ${notFound}"
   fi
 done
 # Show if all tools are installed
-if [ -z "${dependencies_not_found}" ] ; then
+if [[ -z "${dependencies_not_found}" ]] ; then
   echo > /dev/null
 else
   echo ""
@@ -187,10 +189,10 @@ yuv420p10le=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" 
 hevc_main10=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "Main 10")
 hevc_profile_10bit="${yuv420p10le}${hevc_main10}"
 codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
-if [ -z "${codec_h265_hevc}" ] ; then
+if [[ -z "${codec_h265_hevc}" ]] ; then
   p_conversion="-c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
 else
-  if [ -z "${hevc_profile_10bit}" ] ; then
+  if [[ -z "${hevc_profile_10bit}" ]] ; then
     p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
   else
     #p_conversion="-c:v ${vcodec} -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
@@ -199,24 +201,24 @@ else
 fi
 
 # Show menu with bad syntax
-if [ "${1}" == "-16:9-crop" ] ; then
+if [[ "${1}" == "-16:9-crop" ]] ; then
   echo > /dev/null
-elif [ "${1}" == "-4:3-crop" ] ; then
+elif [[ "${1}" == "-4:3-crop" ]] ; then
   echo > /dev/null
-elif [ "${1}" == "-5:4-crop" ] ; then
+elif [[ "${1}" == "-5:4-crop" ]] ; then
   echo > /dev/null
-elif [ "${1}" == "-imax-crop" ] ; then
+elif [[ "${1}" == "-imax-crop" ]] ; then
   echo > /dev/null
-elif [ "${1}" == "-16:9-aspect" ] ; then
+elif [[ "${1}" == "-16:9-aspect" ]] ; then
   echo > /dev/null
-elif [ "${1}" == "-4:3-aspect" ] ; then
+elif [[ "${1}" == "-4:3-aspect" ]] ; then
   echo > /dev/null
-elif [ "${1}" == "-5:4-aspect" ] ; then
+elif [[ "${1}" == "-5:4-aspect" ]] ; then
   echo > /dev/null
 else
   show_menu
 fi
-if [ -f "${2}" ] ; then
+if [[ -f "${2}" ]] ; then
   echo "detected" > /dev/null
 else
   errorReadingFile "${2}"
@@ -232,7 +234,7 @@ calculate_crop=$(expr ${resolution_height} / 4 2> /tmp/ks-tools.error)
 expr ${calculate_crop} + 1 &> /tmp/ks-tools.error
 ih_error="$?"
 
-if [ ${ih_error} -eq 0 ] ; then
+if (( ih_error == 0 )) ; then
   ih_size="${calculate_crop}"
 else
   ih_size="0"
@@ -251,11 +253,11 @@ function crop_video() {
   echo ""
   # Check de video track by default
   video_default=$(${p_ffmpeg} "${inputFile}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-  if [ -z "${video_default}" ] ; then
+  if [[ -z "${video_default}" ]] ; then
     video_default="0:0"
   else
     video_default_patch=$(echo ${video_default} | cut -c4)
-    if [ "${video_default_patch}" == ":" ] ; then
+    if [[ "${video_default_patch}" == ":" ]] ; then
       video_default=$(echo ${video_default} | cut -c1-3)
     else
       video_default="${video_default}"
@@ -263,20 +265,20 @@ function crop_video() {
   fi
   # Ask for video
   echo -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
-  if [ -z "${video_track}" ] ; then
+  if [[ -z "${video_track}" ]] ; then
     video_track="${video_default}"
   else
     video_track="${video_track}"
   fi
   # Check the audio track by default
   audio_default=$(${p_ffmpeg} "${inputFile}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-  if [ -z "${audio_default}" ] ; then
+  if [[ -z "${audio_default}" ]] ; then
     audio_default=$(${p_ffmpeg} "${inputFile}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-    if [ -z "${audio_default}" ] ; then
+    if [[ -z "${audio_default}" ]] ; then
       audio_default="0:1"
     else
       audio_default_patch=$(echo ${audio_default} | cut -c4)
-      if [ "${audio_default_patch}" == ":" ] ; then
+      if [[ "${audio_default_patch}" == ":" ]] ; then
         audio_default=$(echo ${audio_default} | cut -c1-3)
       else
         audio_default="${audio_default}"
@@ -284,7 +286,7 @@ function crop_video() {
     fi
   else
     audio_default_patch=$(echo ${audio_default} | cut -c4)
-    if [ "${audio_default_patch}" == ":" ] ; then
+    if [[ "${audio_default_patch}" == ":" ]] ; then
       audio_default=$(echo ${audio_default} | cut -c1-3)
     else
       audio_default="${audio_default}"
@@ -292,7 +294,7 @@ function crop_video() {
   fi
   # Ask for audio
   echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
-  if [ -z "${audio_track}" ] ; then
+  if [[ -z "${audio_track}" ]] ; then
     audio_track="${audio_default}"
   else
     audio_track="${audio_track}"
@@ -300,16 +302,16 @@ function crop_video() {
   # Ask for bitrate video
   bitrate_default="${b_vcodec}"
   echo -n "* (Default: ${b_vcodec}) Type the bitrate (${vcodec}): " ; read bitrate_video
-  if [ -z "${bitrate_video}" ] ; then
+  if [[ -z "${bitrate_video}" ]] ; then
     b_vcodec="${bitrate_default}"
   else
     b_vcodec="${bitrate_video}"
   fi
   # Reload p_conversion variable
-  if [ -z "${codec_h265_hevc}" ] ; then
+  if [[ -z "${codec_h265_hevc}" ]] ; then
     p_conversion="-c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
   else
-    if [ -z "${hevc_profile_10bit}" ] ; then
+    if [[ -z "${hevc_profile_10bit}" ]] ; then
       p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
     else
       #p_conversion="-c:v ${vcodec} -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
@@ -318,14 +320,14 @@ function crop_video() {
   fi
   # Ask for patched
   echo -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
-  if [ "${patch_thread}" == "y" ] ; then
+  if [[ "${patch_thread}" == "y" ]] ; then
     patch_thread="y"
   else
     patch_thread="n"
   fi
 
   # Check diferent modes
-  if [ "${modeCrop}" == "16:9-crop" ] ; then
+  if [[ "${modeCrop}" == "16:9-crop" ]] ; then
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     echo ""
@@ -333,8 +335,8 @@ function crop_video() {
     echo ""
     inputFileSave="${inputFile}"
     ih_sizeSave="${ih_size}"
-    if [ ${ih_size} -eq 0 ] ; then
-      if [ "${patch_thread}" == "y" ] ; then
+    if (( ih_size == 0 )) ; then
+      if [[ "${patch_thread}" == "y" ]] ; then
         echo "  # Error detecting file resolution. The generic solution is applied (slower)"
         echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -s 1920x1440 ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-resize.${v_ext}\""
         echo ""
@@ -351,7 +353,7 @@ function crop_video() {
       echo "  # File detected with resolution" ${resolution_detected} "(ih ${ih_size})"
     fi
     echo "  # Crop '${inputFile}' from 4:3/IMAX to 16:9 (1.77:1)"
-    if [ "${patch_thread}" == "y" ] ; then
+    if [[ "${patch_thread}" == "y" ]] ; then
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-${ih_size}\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
     else
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-${ih_size}\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
@@ -359,14 +361,14 @@ function crop_video() {
     # Execute commands for conversion
     echo ""
     echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-    if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
       inputFile="${inputFileSave}"
       ih_size="${ih_sizeSave}"
       inputFileOut=$(removeExtension ${inputFile})
-      if [ ${ih_size} -eq 0 ] ; then
-        if [ "${patch_thread}" == "y" ] ; then
+      if (( ih_size == 0 )) ; then
+        if [[ "${patch_thread}" == "y" ]] ; then
           ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -s 1920x1440 ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-resize.${v_ext}"
           inputFile="${inputFileOut}-resize.${v_ext}"
           ih_size="360"
@@ -376,13 +378,13 @@ function crop_video() {
           ih_size="360"
         fi
       fi
-      if [ "${patch_thread}" == "y" ] ; then
+      if [[ "${patch_thread}" == "y" ]] ; then
         ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-${ih_size}" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
       else
         ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-${ih_size}" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
       fi
     fi
-  elif [ "${modeCrop}" == "4:3-crop" ] ; then
+  elif [[ "${modeCrop}" == "4:3-crop" ]] ; then
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     echo ""
@@ -390,7 +392,7 @@ function crop_video() {
     echo ""
     echo "  # File detected with resolution" ${resolution_detected}
     echo "  # Crop '${inputFile}' from 16:9 to 4:3 (1.33:1)"
-    if [ "${patch_thread}" == "y" ] ; then
+    if [[ "${patch_thread}" == "y" ]] ; then
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/3*4:ih\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
     else
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/3*4:ih\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
@@ -398,16 +400,16 @@ function crop_video() {
     # Execute commands for conversion
     echo ""
     echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-    if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
-      if [ "${patch_thread}" == "y" ] ; then
+      if [[ "${patch_thread}" == "y" ]] ; then
         ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/3*4:ih" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
       else
         ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/3*4:ih" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
       fi
     fi
-  elif [ "${modeCrop}" == "5:4-crop" ] ; then
+  elif [[ "${modeCrop}" == "5:4-crop" ]] ; then
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     echo ""
@@ -415,7 +417,7 @@ function crop_video() {
     echo ""
     echo "  # File detected with resolution" ${resolution_detected}
     echo "  # Crop '${inputFile}' from 16:9 to 5:4 (1.25:1)"
-    if [ "${patch_thread}" == "y" ] ; then
+    if [[ "${patch_thread}" == "y" ]] ; then
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/4*5:ih\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
     else
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/4*5:ih\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
@@ -423,16 +425,16 @@ function crop_video() {
     # Execute commands for conversion
     echo ""
     echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-    if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
-      if [ "${patch_thread}" == "y" ] ; then
+      if [[ "${patch_thread}" == "y" ]] ; then
         ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/4*5:ih" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
       else
         ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/4*5:ih" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
       fi
     fi
-  elif [ "${modeCrop}" == "imax-crop" ] ; then
+  elif [[ "${modeCrop}" == "imax-crop" ]] ; then
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     echo ""
@@ -440,7 +442,7 @@ function crop_video() {
     echo ""
     echo "  # File detected with resolution" ${resolution_detected}
     echo "  # Crop '${inputFile}' from 16:9 to IMAX (1.43:1)"
-    if [ "${patch_thread}" == "y" ] ; then
+    if [[ "${patch_thread}" == "y" ]] ; then
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/2.79*4:ih\" -s ${resolution} ${f_conversion_crop} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
     else
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/2.79*4:ih\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
@@ -448,16 +450,16 @@ function crop_video() {
     # Execute commands for conversion
     echo ""
     echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-    if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
-      if [ "${patch_thread}" == "y" ] ; then
+      if [[ "${patch_thread}" == "y" ]] ; then
         ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/2.79*4:ih" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
       else
         ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/2.79*4:ih" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
       fi
     fi
-  elif [ "${modeCrop}" == "16:9-aspect" ] ; then
+  elif [[ "${modeCrop}" == "16:9-aspect" ]] ; then
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     echo ""
@@ -465,7 +467,7 @@ function crop_video() {
     echo ""
     echo "  # File detected with resolution" ${resolution_detected}
     echo "  # Change '${inputFile}' aspect to 16:9 (stretched)"
-    if [ "${patch_thread}" == "y" ] ; then
+    if [[ "${patch_thread}" == "y" ]] ; then
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 16:9 -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-aspect.${v_ext}\""
     else
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 16:9 -s ${resolution} ${p_conversion} \"${inputFileOut}-aspect.${v_ext}\""
@@ -473,16 +475,16 @@ function crop_video() {
     # Execute commands for conversion
     echo ""
     echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-    if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
-      if [ "${patch_thread}" == "y" ] ; then
+      if [[ "${patch_thread}" == "y" ]] ; then
         ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 16:9 -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-aspect.${v_ext}"
       else
         ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 16:9 -s ${resolution} ${p_conversion} "${inputFileOut}-aspect.${v_ext}"
       fi
     fi
-  elif [ "${modeCrop}" == "4:3-aspect" ] ; then
+  elif [[ "${modeCrop}" == "4:3-aspect" ]] ; then
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     echo ""
@@ -490,7 +492,7 @@ function crop_video() {
     echo ""
     echo "  # File detected with resolution" ${resolution_detected}
     echo "  # Change '${inputFile}' aspect to 4:3 (stretched)"
-    if [ "${patch_thread}" == "y" ] ; then
+    if [[ "${patch_thread}" == "y" ]] ; then
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 4:3 -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-aspect.${v_ext}\""
     else
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 4:3 -s ${resolution} ${p_conversion} \"${inputFileOut}-aspect.${v_ext}\""
@@ -498,16 +500,16 @@ function crop_video() {
     # Execute commands for conversion
     echo ""
     echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-    if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
-      if [ "${patch_thread}" == "y" ] ; then
+      if [[ "${patch_thread}" == "y" ]] ; then
         ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 4:3 -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-aspect.${v_ext}"
       else
         ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 4:3 -s ${resolution} ${p_conversion} "${inputFileOut}-aspect.${v_ext}"
       fi
     fi
-  elif [ "${modeCrop}" == "5:4-aspect" ] ; then
+  elif [[ "${modeCrop}" == "5:4-aspect" ]] ; then
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     echo ""
@@ -515,7 +517,7 @@ function crop_video() {
     echo ""
     echo "  # File detected with resolution" ${resolution_detected}
     echo "  # Change '${inputFile}' aspect to 5:4 (stretched)"
-    if [ "${patch_thread}" == "y" ] ; then
+    if [[ "${patch_thread}" == "y" ]] ; then
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 5:4 -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-aspect.${v_ext}\""
     else
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 5:4 -s ${resolution} ${p_conversion} \"${inputFileOut}-aspect.${v_ext}\""
@@ -523,10 +525,10 @@ function crop_video() {
     # Execute commands for conversion
     echo ""
     echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-    if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
-      if [ "${patch_thread}" == "y" ] ; then
+      if [[ "${patch_thread}" == "y" ]] ; then
         ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 5:4 -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-aspect.${v_ext}"
       else
         ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 5:4 -s ${resolution} ${p_conversion} "${inputFileOut}-aspect.${v_ext}"
@@ -538,42 +540,42 @@ function crop_video() {
 }
 
 # Syntax: ks-crop <option> </absolute/path/video.mkv>
-if [ -z "${1}" ] ; then
+if [[ -z "${1}" ]] ; then
   show_menu
   exit
 fi
-if [ -f "${2}" ] ; then
+if [[ -f "${2}" ]] ; then
   echo "detected" > /dev/null
 else
   errorReadingFile "${2}"
 fi
 
 # Define variables for crop_video function
-if [ "${1}" == "-16:9-crop" ] ; then
+if [[ "${1}" == "-16:9-crop" ]] ; then
   modeCrop="16:9-crop"
   resolution="${to16_9}"
   crop_video
-elif [ "${1}" == "-4:3-crop" ] ; then
+elif [[ "${1}" == "-4:3-crop" ]] ; then
   modeCrop="4:3-crop"
   resolution="${to4_3}"
   crop_video
-elif [ "${1}" == "-5:4-crop" ] ; then
+elif [[ "${1}" == "-5:4-crop" ]] ; then
   modeCrop="5:4-crop"
   resolution="${to5_4}"
   crop_video
-elif [ "${1}" == "-imax-crop" ] ; then
+elif [[ "${1}" == "-imax-crop" ]] ; then
   modeCrop="imax-crop"
   resolution="${toImax}"
   crop_video
-elif [ "${1}" == "-16:9-aspect" ] ; then
+elif [[ "${1}" == "-16:9-aspect" ]] ; then
   modeCrop="16:9-aspect"
   resolution="${to16_9}"
   crop_video
-elif [ "${1}" == "-4:3-aspect" ] ; then
+elif [[ "${1}" == "-4:3-aspect" ]] ; then
   modeCrop="4:3-aspect"
   resolution="${to4_3}"
   crop_video
-elif [ "${1}" == "-5:4-aspect" ] ; then
+elif [[ "${1}" == "-5:4-aspect" ]] ; then
   modeCrop="5:4-aspect"
   resolution="${to5_4}"
   crop_video

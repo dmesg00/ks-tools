@@ -1,13 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+
+setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
 
 ###############################################################
 # ks-vob-wrapper (ks-tools) - Wrapper for ks-vob              #
-# Date: 02-11-2023                                            #
-# Author: dmesg00                                              #
-# Contact: dmesg00@duck.com                                    #
+# Date: 14-08-2026                                            #
+# Author: dmesg00                                             #
+# Contact: dmesg00@duck.com                                   #
 ###############################################################
 VERSION="9.2"
-M_DATE="021123"
+M_DATE="140826"
 
 # Conversion parameters
 p_ffmpeg="ffmpeg -i"
@@ -15,8 +17,8 @@ p_ffmpeg_patched="-max_muxing_queue_size 9999"
 rel_size="720x480"
 
 # Check cygwin alias (for Windows)
-if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
-  shopt -s expand_aliases
+if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+  setopt ALIASES
   cygwin="yes"
   source "/usr/bin/cygwin-alias.sh"
 else
@@ -26,7 +28,7 @@ fi
 # Check if ffmpeg is installed
 ffmpeg_test=$(ffmpeg --help 2>&1)
 error_ffmpeg=$?
-if [ ${error_ffmpeg} -ne 0 ] ; then
+if (( error_ffmpeg != 0 )) ; then
   echo ""
   echo "* ks-vob-wrapper (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -38,7 +40,7 @@ fi
 # Check if ks-vob is installed
 wrap_test=$(ks-vob &> /dev/null)
 error_wrap=$?
-if [ ${error_wrap} -ne 0 ] ; then
+if (( error_wrap != 0 )) ; then
   echo ""
   echo "* ks-vob-wrapper (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
@@ -67,11 +69,11 @@ function showInfo() {
 function showVideoDefault() {
   # Check de video track by default
   video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-  if [ -z "${video_default}" ] ; then
+  if [[ -z "${video_default}" ]] ; then
     video_default="0:0"
   else
     video_default_patch=$(echo ${video_default} | cut -c4)
-    if [ "${video_default_patch}" == ":" ] ; then
+    if [[ "${video_default_patch}" == ":" ]] ; then
       video_default=$(echo ${video_default} | cut -c1-3)
     else
       video_default="${video_default}"
@@ -85,13 +87,13 @@ function showVideoDefault() {
 function showAudioDefault() {
   # Check the audio track by default
   audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-  if [ -z "${audio_default}" ] ; then
+  if [[ -z "${audio_default}" ]] ; then
     audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-    if [ -z "${audio_default}" ] ; then
+    if [[ -z "${audio_default}" ]] ; then
       audio_default="0:1"
     else
       audio_default_patch=$(echo ${audio_default} | cut -c4)
-      if [ "${audio_default_patch}" == ":" ] ; then
+      if [[ "${audio_default_patch}" == ":" ]] ; then
         audio_default=$(echo ${audio_default} | cut -c1-3)
       else
         audio_default="${audio_default}"
@@ -99,7 +101,7 @@ function showAudioDefault() {
     fi
   else
     audio_default_patch=$(echo ${audio_default} | cut -c4)
-    if [ "${audio_default_patch}" == ":" ] ; then
+    if [[ "${audio_default_patch}" == ":" ]] ; then
       audio_default=$(echo ${audio_default} | cut -c1-3)
     else
       audio_default="${audio_default}"
@@ -147,7 +149,7 @@ function showHelp() {
   echo ""
   echo " + The option 'patch' apply the '-thread_queue_size 2048' patch to ffmpeg."
   echo " + If you specify a path or file with spaces, you must use quotes."
-  if [ "${cygwin}" == "yes" ] ; then
+  if [[ "${cygwin}" == "yes" ]] ; then
     echo " + In Cygwin, you should always use relative paths with this tool."
   fi
   echo ""
@@ -155,11 +157,11 @@ function showHelp() {
 }
 
 # Run the parameters
-if [ -z "${1}" ] ; then
+if [[ -z "${1}" ]] ; then
   showHelp
-elif [ "${1}" == "--show-info" ] ; then
+elif [[ "${1}" == "--show-info" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
+  if [[ -f "${2}" ]] ; then
     showInfo "${2}"
   else
     echo ""
@@ -167,9 +169,9 @@ elif [ "${1}" == "--show-info" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--show-video-default" ] ; then
+elif [[ "${1}" == "--show-video-default" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
+  if [[ -f "${2}" ]] ; then
     showVideoDefault "${2}"
   else
     echo ""
@@ -177,9 +179,9 @@ elif [ "${1}" == "--show-video-default" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--show-audio-default" ] ; then
+elif [[ "${1}" == "--show-audio-default" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
+  if [[ -f "${2}" ]] ; then
     showAudioDefault "${2}"
   else
     echo ""
@@ -187,12 +189,12 @@ elif [ "${1}" == "--show-audio-default" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--show-resolution-default" ] ; then
+elif [[ "${1}" == "--show-resolution-default" ]] ; then
   showResolutionDefault
-elif [ "${1}" == "--conv" ] ; then
+elif [[ "${1}" == "--conv" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
-    if [ "${10}" == "patch" ] ; then
+  if [[ -f "${2}" ]] ; then
+    if [[ "${10}" == "patch" ]] ; then
       echo -e "${4}\n${5}\n${6}\ny\ny\n" | ks-vob "${2}" "${3}"
     else
       echo -e "${4}\n${5}\n${6}\nn\ny\n" | ks-vob "${2}" "${3}"
@@ -203,10 +205,10 @@ elif [ "${1}" == "--conv" ] ; then
     echo ""
     exit
   fi
-elif [ "${1}" == "--conv-with-sub" ] ; then
+elif [[ "${1}" == "--conv-with-sub" ]] ; then
   # Check if file exist
-  if [ -f "${2}" ] ; then
-    if [ "${11}" == "patch" ] ; then
+  if [[ -f "${2}" ]] ; then
+    if [[ "${11}" == "patch" ]] ; then
       echo -e "${4}\n${5}\ny\n${6}\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-vob "${2}" "${3}"
     else
       echo -e "${4}\n${5}\ny\n${6}\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-vob "${2}" "${3}"
