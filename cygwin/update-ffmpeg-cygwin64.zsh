@@ -1,14 +1,14 @@
 #!/usr/bin/env zsh
 
-setopt SH_WORD_SPLIT NO_NOMATCH
-
 # Script to install and update ffmpeg on Cygwin x86_64
 # Author: dmesg00@duck.com
 # Require: unzip, wget and curl installed.
 
+SH_WORD_SPLIT NO_NOMATCH
+
 mkdir -p /etc/root 2> /dev/null
 rootperm=$?
-if (( rootperm == 0 )) ; then
+if (( $rootperm == 0 )) ; then
   rm -rf /etc/root
 else
   echo "Root permission is required to run this script"
@@ -50,7 +50,7 @@ if [[ "${version_ffmpeg}" != "${version_ffmpeg_current}" ]] ; then
   echo "New ffmpeg version detected"
   install_ffmpeg_gen
   error_install=$?
-  if (( error_install == 0 )) ; then
+  if (( ${error_install} == 0 )) ; then
     echo "${version_ffmpeg}" > /etc/ffmpeg_version.conf
   fi
 else
