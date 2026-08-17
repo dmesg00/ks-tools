@@ -21,10 +21,10 @@ default_lang_audio="spa"
 v_ext="vob"
 
 # Check cygwin alias (for Windows)
-if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
   setopt ALIASES
   cygwin="yes"
-  source "/usr/bin/cygwin-alias.sh"
+  source "/usr/bin/cygwin-alias.zsh"
 else
   cygwin="no"
 fi

@@ -50,9 +50,9 @@ modeCrop=null
 inputFile="${2}"
 
 # Check cygwin alias (for Windows)
-if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
   setopt ALIASES
-  source "/usr/bin/cygwin-alias.sh"
+  source "/usr/bin/cygwin-alias.zsh"
 fi
 
 # Function for check dependencies

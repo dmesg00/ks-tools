@@ -17,10 +17,10 @@ p_ffmpeg_patched="-max_muxing_queue_size 9999"
 rel_size="720x480"
 
 # Check cygwin alias (for Windows)
-if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
   setopt ALIASES
   cygwin="yes"
-  source "/usr/bin/cygwin-alias.sh"
+  source "/usr/bin/cygwin-alias.zsh"
 else
   cygwin="no"
 fi

@@ -32,9 +32,9 @@ artist_init="Artist"
 default_lang_audio="spa"
 
 # Check cygwin alias (for Windows)
-if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
   setopt ALIASES
-  source "/usr/bin/cygwin-alias.sh"
+  source "/usr/bin/cygwin-alias.zsh"
 fi
 
 # Create inicial config file

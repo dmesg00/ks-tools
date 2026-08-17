@@ -48,10 +48,10 @@ default_lang_subt="spa"
 v_ext="avi"
 
 # Check cygwin alias (for Windows)
-if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
   setopt ALIASES
   cygwin="yes"
-  source "/usr/bin/cygwin-alias.sh"
+  source "/usr/bin/cygwin-alias.zsh"
 else
   cygwin="no"
 fi

@@ -17,9 +17,9 @@ tempFileTest="/tmp/ks-mp4s-folder-test.txt"
 formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
 
 # Check cygwin alias (for Windows)
-if [[ -f "/usr/bin/cygwin-alias.sh" ]] ; then
+if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
   setopt ALIASES
-  source "/usr/bin/cygwin-alias.sh"
+  source "/usr/bin/cygwin-alias.zsh"
 fi
 
 # Function for check dependencies
