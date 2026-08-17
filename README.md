@@ -69,7 +69,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install ffmpeg using this script (use [BtbN Builds](https://github.com/BtbN/FFmpeg-Builds)):
     
-          curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-linux64.sh" | sudo bash
+          curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-linux64.zsh" | sudo zsh
       
     * Install ks-tools cloning the repository:
     
@@ -88,7 +88,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
           lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
           install apt-cyg /bin
           apt-cyg install git zsh make expect rsync openssh sshpass grep coreutils binutils bc wget curl unzip
-          curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-cygwin64.sh" | bash
+          curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-cygwin64.zsh" | zsh
       
     * Install ks-tools cloning the repository:
 
@@ -101,7 +101,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * Install dependencies:
     
           sudo apt install git zsh make expect rsync openssh-client openssh-server sshpass grep binutils bc wgt curl tar
-          curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-wsl.sh" | sudo bash
+          curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-wsl.zsh" | sudo zsh
       
     * Install ks-tools cloning the repository:
     
