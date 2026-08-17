@@ -260,15 +260,15 @@ EOF
         OUTPUT=$?
       elif [[ "${toolSelected}" == "rsync-rsa" ]] ; then
         rsync --progress -azL --rsh="sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
-        sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         OUTPUT=$?
+        sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
       elif [[ "${toolSelected}" == "scp-rsa" ]] ; then
         sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
       elif [[ "${toolSelected}" == "rsync-pem" ]] ; then
         rsync --progress -azL --rsh="ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
-        ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         OUTPUT=$?
+        ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
       elif [[ "${toolSelected}" == "scp-pem" ]] ; then
         scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
@@ -277,7 +277,7 @@ EOF
         OUTPUT=$?
       fi
     fi
-    if (( OUTPUT != 0 )) ; then
+    if (( ${OUTPUT} != 0 )) ; then
       echo "Failure to send ${2}"
       echo "Retrying..."
       sleep 5
