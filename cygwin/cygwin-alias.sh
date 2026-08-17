@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
+setopt SH_WORD_SPLIT NO_NOMATCH
 
 # Cygwin alias (for Windows)
 # setopt ALIASES

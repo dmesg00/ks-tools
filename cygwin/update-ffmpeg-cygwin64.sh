@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
+setopt SH_WORD_SPLIT NO_NOMATCH
 
 # Script to install and update ffmpeg on Cygwin x86_64
 # Author: dmesg00@duck.com

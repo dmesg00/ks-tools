@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-setopt SH_WORD_SPLIT NO_NOMATCH BSD_ECHO
+setopt SH_WORD_SPLIT NO_NOMATCH
 
 ###################################################################################
 # ks-av1s-folder (ks-tools) - Convert videos from folder to AV1 (Codec)  (Series) #
