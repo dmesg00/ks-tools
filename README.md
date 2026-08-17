@@ -63,9 +63,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
 
     * Install dependencies **(for Linux Homebrew)**:
 
-          brew install git zsh make expect rsync openssh grep binutils ffmpeg bc
-          curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
-          brew install sshpass.rb
+          brew install git zsh make expect rsync openssh grep binutils ffmpeg bc sshpass
   
     * Install ffmpeg using this script (use [BtbN Builds](https://github.com/BtbN/FFmpeg-Builds)):
     
@@ -113,9 +111,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies:
     
-          brew install git zsh make expect rsync openssh grep binutils ffmpeg bc
-          curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
-          brew install sshpass.rb 
+          brew install git zsh make expect rsync openssh grep binutils ffmpeg bc sshpass
       
     * Install ks-tools cloning the repository **(for MacOS Intel)**:
     
