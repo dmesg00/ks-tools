@@ -140,13 +140,3 @@ sed -i "s/.TH \"\" \"\" \"\" \"\" \"\"/.TH \"ks-upv\" \"1\" \"${date_name}\" \"$
 sed -i "s/.TH \"\" \"\" \"\" \"\"/.TH \"ks-upv\" \"1\" \"${date_name}\" \"Upload videos file(s) to server with scp or rsync\"/g" ks-upv.1
 sed -i 's/Back to README.md/Manual/g' ks-upv.1
 sed -i 's/Go back/This tool is part of ks-tools/g' ks-upv.1
-pandoc -s ../doc/ks-vob.md -t man -o ks-vob.1
-sed -i "s/.TH \"\" \"\" \"\" \"\" \"\"/.TH \"ks-vob\" \"1\" \"${date_name}\" \"${date_number}\" \"Convert video file to VOB (DVD splitet) format\"/g" ks-vob.1
-sed -i "s/.TH \"\" \"\" \"\" \"\"/.TH \"ks-vob\" \"1\" \"${date_name}\" \"Convert video file to VOB (DVD splitet) format\"/g" ks-vob.1
-sed -i 's/Back to README.md/Manual/g' ks-vob.1
-sed -i 's/Go back/This tool is part of ks-tools/g' ks-vob.1
-pandoc -s ../doc/ks-vob-wrapper.md -t man -o ks-vob-wrapper.1
-sed -i "s/.TH \"\" \"\" \"\" \"\" \"\"/.TH \"ks-vob-wrapper\" \"1\" \"${date_name}\" \"${date_number}\" \"Wrapper for ks-vob to create graphical interfaces\"/g" ks-vob-wrapper.1
-sed -i "s/.TH \"\" \"\" \"\" \"\"/.TH \"ks-vob-wrapper\" \"1\" \"${date_name}\" \"Wrapper for ks-vob to create graphical interfaces\"/g" ks-vob-wrapper.1
-sed -i 's/Back to README.md/Manual/g' ks-vob-wrapper.1
-sed -i 's/Go back/This tool is part of ks-tools/g' ks-vob-wrapper.1
