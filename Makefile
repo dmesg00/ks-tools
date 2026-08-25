@@ -25,8 +25,6 @@ install:
 	chmod +x $(PREFIX)/bin/ks-mp4s-folder
 	cp -rf src/ks-av1s-folder $(PREFIX)/bin/ks-av1s-folder
 	chmod +x $(PREFIX)/bin/ks-av1s-folder
-	cp -rf src/ks-vob $(PREFIX)/bin/ks-vob
-	chmod +x $(PREFIX)/bin/ks-vob
 	cp -rf src/ks-av1 $(PREFIX)/bin/ks-av1
 	chmod +x $(PREFIX)/bin/ks-av1
 	cp -rf src/ks-av1s $(PREFIX)/bin/ks-av1s
@@ -55,8 +53,6 @@ install:
 	chmod +x $(PREFIX)/bin/ks-mp4s-wrapper
 	cp -rf wrapper/ks-avi-wrapper $(PREFIX)/bin/ks-avi-wrapper
 	chmod +x $(PREFIX)/bin/ks-avi-wrapper
-	cp -rf wrapper/ks-vob-wrapper $(PREFIX)/bin/ks-vob-wrapper
-	chmod +x $(PREFIX)/bin/ks-vob-wrapper
 	cp -rf wrapper/ks-av1-wrapper $(PREFIX)/bin/ks-av1-wrapper
 	chmod +x $(PREFIX)/bin/ks-av1-wrapper
 	cp -rf wrapper/ks-av1s-wrapper $(PREFIX)/bin/ks-av1s-wrapper
@@ -64,7 +60,11 @@ install:
 	cp -rf cygwin/cygwin-path $(PREFIX)/bin/cygwin-path
 	chmod +x $(PREFIX)/bin/cygwin-path
 	cp -rf man/*.1 $(PREFIX)/share/man/man1/
-	
+	rm -rf $(PREFIX)/bin/ks-vob
+	rm -rf $(PREFIX)/bin/ks-vob-wrapper
+	rm -rf $(PREFIX)/share/man/man1/ks-vob.1
+	rm -rf $(PREFIX)/share/man/man1/ks-vob-wrapper.1
+
 uninstall:
 	rm -rf $(PREFIX)/bin/ks-upv
 	rm -rf $(PREFIX)/bin/ks-upa
@@ -76,7 +76,6 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-mp4s
 	rm -rf $(PREFIX)/bin/ks-mp4s-folder
 	rm -rf $(PREFIX)/bin/ks-av1s-folder
-	rm -rf $(PREFIX)/bin/ks-vob
 	rm -rf $(PREFIX)/bin/ks-av1
 	rm -rf $(PREFIX)/bin/ks-av1s
 	rm -rf $(PREFIX)/bin/ks-oga
@@ -91,7 +90,6 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-mp4k-wrapper
 	rm -rf $(PREFIX)/bin/ks-mp4s-wrapper
 	rm -rf $(PREFIX)/bin/ks-avi-wrapper
-	rm -rf $(PREFIX)/bin/ks-vob-wrapper
 	rm -rf $(PREFIX)/bin/ks-av1-wrapper
 	rm -rf $(PREFIX)/bin/ks-av1s-wrapper
 	rm -rf $(PREFIX)/bin/cygwin-path
