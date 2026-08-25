@@ -4,12 +4,12 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 
 #############################################################################
 # ks-utfs (ks-tools) - Patch UTF-8 subtitles files replacing bad characters #
-# Date: 14-08-2026                                                          #
+# Date: 25-08-2026                                                          #
 # Author: dmesg00                                                           #
 # Contact: dmesg00@duck.com                                                 #
 #############################################################################
-VERSION="9.4"
-M_DATE="140826"
+VERSION="9.5"
+M_DATE="250826"
 
 # Check cygwin alias (for Windows)
 if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then

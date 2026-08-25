@@ -8,8 +8,8 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 # Author: dmesg00                                                    #
 # Contact: dmesg00@duck.com                                          #
 ######################################################################
-VERSION="9.4"
-M_DATE="140826"
+VERSION="9.5"
+M_DATE="250826"
 
 # Variables
 tempFile="/tmp/ks-mp4s-folder.txt"

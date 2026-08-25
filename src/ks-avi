@@ -4,12 +4,12 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 
 ###############################################################
 # ks-avi (ks-tools) - Convert video to AVI format             #
-# Date: 14-08-2026                                            #
+# Date: 25-08-2026                                            #
 # Author: dmesg00                                             #
 # Contact: dmesg00@duck.com                                   #
 ###############################################################
-VERSION="9.4"
-M_DATE="140826"
+VERSION="9.5"
+M_DATE="250826"
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)

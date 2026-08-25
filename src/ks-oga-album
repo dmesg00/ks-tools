@@ -4,12 +4,12 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 
 ############################################################################
 # ks-oga-album (ks-tools) - Convert folder album to OGA (OGG Audio) Format #
-# Date: 14-08-2026                                                         #
+# Date: 25-08-2026                                                         #
 # Author: dmesg00                                                          #
 # Contact: dmesg00@duck.com                                                #
 ############################################################################
-VERSION="9.4"
-M_DATE="140826"
+VERSION="9.5"
+M_DATE="250826"
 
 # Variables
 tempFile="/tmp/ks-mp4s-folder.txt"

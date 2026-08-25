@@ -4,12 +4,12 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 
 ##############################################################################
 # ks-upr (ks-tools) - Upload recursively file(s) to server with scp or rsync #
-# Date: 14-08-2026                                                           #
+# Date: 25-08-2026                                                           #
 # Author: dmesg00                                                            #
 # Contact: dmesg00@duck.com                                                  #
 ##############################################################################
-VERSION="9.4"
-M_DATE="140826"
+VERSION="9.5"
+M_DATE="250826"
 
 # Global parameters.
 dirTemp="/tmp"
