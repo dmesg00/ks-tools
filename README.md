@@ -16,7 +16,6 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-mp4s](/doc/ks-mp4s.md) - Convert video file to compact and efficient MP4 (Series).
     * [ks-mp4s-folder](/doc/ks-mp4s-folder.md) - Convert videos from folder to MP4 format (Series).
     * [ks-avi](/doc/ks-avi.md) - Convert video file to compact and efficient AVI (libxvid + mp3).
-    * [ks-vob](/doc/ks-vob.md) - Convert video file to VOB (DVD splitet) format.
     * [ks-av1](/doc/ks-av1.md) - Convert video file to compact and efficient AV1 codec (libsvtav1 + libvorbis).
     * [ks-av1s](/doc/ks-av1s.md) - Convert video file to compact and efficient AV1 codec (Series).
     * [ks-av1s-folder](/doc/ks-av1s-folder.md) - Convert videos from folder to AV1 codec (Series).
@@ -39,7 +38,6 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-mp4k-wrapper](/doc/ks-mp4k-wrapper.md) - Wrapper for ks-mp4k to create graphical interfaces.
     * [ks-mp4s-wrapper](/doc/ks-mp4s-wrapper.md) - Wrapper for ks-mp4s to create graphical interfaces.
     * [ks-avi-wrapper](/doc/ks-avi-wrapper.md) - Wrapper for ks-avi to create graphical interfaces.
-    * [ks-vob-wrapper](/doc/ks-vob-wrapper.md) - Wrapper for ks-vob to create graphical interfaces.
     * [ks-av1-wrapper](/doc/ks-av1-wrapper.md) - Wrapper for ks-av1 to create graphical interfaces.
     * [ks-av1s-wrapper](/doc/ks-av1s-wrapper.md) - Wrapper for ks-av1s to create graphical interfaces.
     * [ks-utfs](doc/ks-utfs.md) - Patch UTF-8 subtitles file(s) replacing bad caracters.
