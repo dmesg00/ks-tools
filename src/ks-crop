@@ -13,10 +13,16 @@ M_DATE=("250826")
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
+ffmpeg_version=${ffmpeg_version//[^0-9]/}
+ffmpeg_version=$(print ${ffmpeg_version} | cut -c 1-3)
 if [[ -z "${ffmpeg_version}" ]] ; then
-  video_sync=("vsync")
-else
   video_sync=("fps_mode")
+else
+  if (( ${ffmpeg_version} < 5 )) 2> /dev/null ; then
+    video_sync=("vsync")
+  else
+    video_sync=("fps_mode")
+  fi
 fi
 
 # Global parameters
