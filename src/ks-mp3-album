@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-setopt SH_WORD_SPLIT NO_NOMATCH
+setopt NO_NOMATCH
 
 ######################################################################
 # ks-mp3-album (ks-tools) - Convert folder album to MP3 Audio Format #
@@ -8,28 +8,28 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 # Author: dmesg00                                                    #
 # Contact: dmesg00@duck.com                                          #
 ######################################################################
-VERSION="9.5"
-M_DATE="250826"
+VERSION=("9.5")
+M_DATE=("250826")
 
 # Variables
-tempFile="/tmp/ks-mp4s-folder.txt"
-tempFileTest="/tmp/ks-mp4s-folder-test.txt"
-formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ogg oga mp3 mp2 aac ac3 flac opus wav"
+tempFile=("/tmp/ks-mp4s-folder.txt")
+tempFileTest=("/tmp/ks-mp4s-folder-test.txt")
+formatFiles=(mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ogg oga mp3 mp2 aac ac3 flac opus wav)
 
 # Global parameters
-dirTemp="/tmp"
-listTemp="ks-tools.list"
-ksToolsTempFolder="/tmp/ks-tools"
+dirTemp=("/tmp")
+listTemp=("ks-tools.list")
+ksToolsTempFolder=("/tmp/ks-tools")
 configFolder=${HOME}/.ks-tools 
 configFile=${configFolder}/ks-mp3
 
 # Basic parameters
-acodec="libmp3lame"
-b_acodec="128k"
-v_ext="mp3"
-track_init="1"
-artist_init="Artist"
-default_lang_audio="spa"
+acodec=("libmp3lame")
+b_acodec=("128k")
+v_ext=("mp3")
+track_init=("1")
+artist_init=("Artist")
+default_lang_audio=("spa")
 
 # Check cygwin alias (for Windows)
 if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
@@ -82,15 +82,15 @@ check_dependencies() {
 }
 
 # Check dependencies
-dependencies="ffmpeg grep sed grep cut head tail tr cat"
-for scan_dependency in ${dependencies} ; do
+dependencies=(ffmpeg grep sed grep cut head tail tr cat)
+for scan_dependency in "${dependencies[@]}" ; do
   check_dependencies "${scan_dependency}"
 done
 
 # Funcion to show the name of file/folder from full path
 # Syntax: extractFolderOrFile <full/path/file.txt>
 extractFolderOrFile() {
-  pathToExtract="${1}/"
+  pathToExtract=("${1}/")
   findFolder=0
   count=1
   nameFolder=$(print ${pathToExtract} | cut -d "/" -f ${count})
@@ -100,7 +100,7 @@ extractFolderOrFile() {
     if [[ -z "${nameFolderTemp}" ]] ; then
       findFolder=1
     else
-      nameFolder="${nameFolderTemp}"
+      nameFolder=("${nameFolderTemp}")
       count=$(expr $count + 1)
     fi
   done
@@ -135,7 +135,7 @@ showFileWithSpace() {
 # Syntax: removeExtension "<text>"
 removeExtension() {
   wordToConvert=${1}
-  ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
+  ksToolsSedFile=("${ksToolsTempFolder}/ks-tools-${RANDOM}.txt")
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
   print "${wordToConvert}" > ${ksToolsSedFile}
   # Remove extensions
@@ -208,7 +208,7 @@ print ""
 print -n "* Scanning ${1} "
 print ""
 rm -rf ${tempFile} && touch ${tempFile}
-for format in ${formatFiles} ; do
+for format in "${formatFiles[@]}" ; do
   find "${1}"/*.${format} &> ${tempFileTest}
   if (( $? != 0 )) ; then
     print "null" > /dev/null
@@ -228,21 +228,21 @@ print "* Common METADATA configuration:"
 print ""
 print -n "* (Default: Album-Disc) Type name of album: " ; read album_file
 if [[ -z "${album_file}" ]] ; then
-  album_title="Album-Disc"
+  album_title=("Album-Disc")
 else
-  album_title="${album_file}"
+  album_title=("${album_file}")
 fi
 print -n "* (Default: ${current_date}) Type the year of album: " ; read year_file
 if [[ -z "${year_file}" ]] ; then
-  year_num="${current_date}"
+  year_num=("${current_date}")
 else
-  year_num="${year_file}"
+  year_num=("${year_file}")
 fi
 print -n "* (Default: Pop) Type the genre of album: " ; read genre_file
 if [[ -z "${genre_file}" ]] ; then
-  genre_file="Pop"
+  genre_file=("Pop")
 else
-  genre_file="${genre_file}"
+  genre_file=("${genre_file}")
 fi
 
 # Init the conversion files
@@ -295,13 +295,13 @@ else
       if [[ -z "${audio_default}" ]] ; then
         audio_default=$(ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
         if [[ -z "${audio_default}" ]] ; then
-          audio_default="0:1"
+          audio_default=("0:1")
         else
           audio_default_patch=$(print ${audio_default} | cut -c4)
           if [[ "${audio_default_patch}" == ":" ]] ; then
             audio_default=$(print ${audio_default} | cut -c1-3)
           else
-            audio_default="${audio_default}"
+            audio_default=("${audio_default}")
           fi
         fi
       else
@@ -309,45 +309,45 @@ else
         if [[ "${audio_default_patch}" == ":" ]] ; then
           audio_default=$(print ${audio_default} | cut -c1-3)
         else
-          audio_default="${audio_default}"
+          audio_default=("${audio_default}")
         fi
       fi
       # Ask for audio
       print -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
       if [[ -z "${audio_track}" ]] ; then
-        audio_track="${audio_default}"
+        audio_track=("${audio_default}")
       else
-        audio_track="${audio_track}"
+        audio_track=("${audio_track}")
       fi
       print -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
       if [[ -z "${name_title}" ]] ; then
-        name_title="${name_title_default}"
+        name_title=("${name_title_default}")
       else
-        name_title="${name_title}"
+        name_title=("${name_title}")
       fi
       print -n "* (Default: ${track_init}) Type number of track: " ; read track_file
       if [[ -z "${track_file}" ]] ; then
-        track_num="${track_init}"
+        track_num=("${track_init}")
       else
-        track_num="${track_file}"
+        track_num=("${track_file}")
       fi
       print -n "* (Default: ${artist_init}) Type name of artist: " ; read artist_file
       if [[ -z "${artist_file}" ]] ; then
-        artist_title="${artist_init}"
+        artist_title=("${artist_init}")
       else
-        artist_title="${artist_file}"
-        artist_init="${artist_file}"
+        artist_title=("${artist_file}")
+        artist_init=("${artist_file}")
       fi
       # Check audio 5.1 or 7.1
-      audio_5_7_1=$(${p_ffmpeg} "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "5.1")
-      audio_5_7_1_2=$(${p_ffmpeg} "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")
-      audio_5_7_1="${audio_5_7_1}${audio_5_7_1_2}"
+      audio_5_7_1=$("${p_ffmpeg[@]}" "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "5.1")
+      audio_5_7_1_2=$("${p_ffmpeg[@]}" "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")
+      audio_5_7_1=("${audio_5_7_1}${audio_5_7_1_2}")
       if [[ -z "${audio_5_7_1}" ]] ; then
-        stereo_params="-ac 2"
+        stereo_params=(-ac 2)
       else
-        stereo_params="-ac 2 -clev 3dB -slev -6dB"
+        stereo_params=(-ac 2 -clev 3dB -slev -6dB)
       fi
-      ffmpeg -i "${show_file}" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_num}" -metadata genre="${genre_file}" -metadata album="${album_title}" -metadata artist="${artist_title}" -metadata track="${track_num}" "to-mp3/${fname}.${v_ext}"
+      ffmpeg -i "${show_file}" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} "${stereo_params[@]}" -metadata title="${name_title}" -metadata date="${year_num}" -metadata genre="${genre_file}" -metadata album="${album_title}" -metadata artist="${artist_title}" -metadata track="${track_num}" "to-mp3/${fname}.${v_ext}"
       # Increment variables
       convert_files=$(expr ${convert_files} + 1)
       track_init=$(expr ${track_num} + 1)

@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-setopt SH_WORD_SPLIT NO_NOMATCH
+setopt NO_NOMATCH
 
 #############################################################################
 # ks-utfs (ks-tools) - Patch UTF-8 subtitles files replacing bad characters #
@@ -8,16 +8,16 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 # Author: dmesg00                                                           #
 # Contact: dmesg00@duck.com                                                 #
 #############################################################################
-VERSION="9.5"
-M_DATE="250826"
+VERSION=("9.5")
+M_DATE=("250826")
 
 # Check cygwin alias (for Windows)
 if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
   setopt ALIASES
-  cygwin="yes"
+  cygwin=("yes")
   source "/usr/bin/cygwin-alias.zsh"
 else
-  cygwin="no"
+  cygwin=("no")
 fi
 
 # Function for check dependencies
@@ -35,8 +35,8 @@ check_dependencies() {
 }
 
 # Check dependencies
-dependencies="grep sed cut"
-for scan_dependency in ${dependencies} ; do
+dependencies=(grep sed cut)
+for scan_dependency in "${dependencies[@]}" ; do
   check_dependencies "${scan_dependency}"
 done
 

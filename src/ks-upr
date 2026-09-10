@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-setopt SH_WORD_SPLIT NO_NOMATCH
+setopt NO_NOMATCH
 
 ##############################################################################
 # ks-upr (ks-tools) - Upload recursively file(s) to server with scp or rsync #
@@ -8,24 +8,24 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 # Author: dmesg00                                                            #
 # Contact: dmesg00@duck.com                                                  #
 ##############################################################################
-VERSION="9.5"
-M_DATE="250826"
+VERSION=("9.5")
+M_DATE=("250826")
 
 # Global parameters.
-dirTemp="/tmp"
-listCompTemp="ks-tools.list-full"
-listCompTempTest="ks-tools.list-full.test"
-listTemp="ks-tools.list"
-dirConfig="${HOME}/.ks-tools"
-ksToolsTempFolder="/tmp/ks-tools"
+dirTemp=("/tmp")
+listCompTemp=("ks-tools.list-full")
+listCompTempTest=("ks-tools.list-full.test")
+listTemp=("ks-tools.list")
+dirConfig=("${HOME}/.ks-tools")
+ksToolsTempFolder=("/tmp/ks-tools")
 
 # Check cygwin alias (for Windows)
 if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
   setopt ALIASES
-  cygwin="yes"
+  cygwin=("yes")
   source "/usr/bin/cygwin-alias.zsh"
 else
-  cygwin="no"
+  cygwin=("no")
 fi
 
 # Set the correct permissions to the pem file
@@ -37,14 +37,17 @@ fi
 # Syntax: convertText "<text>"
 convertText() {
   wordToConvert=${1}
-  ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
+  ksToolsSedFile=("${ksToolsTempFolder}/ks-tools-${RANDOM}.txt")
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
   print "${wordToConvert}" > ${ksToolsSedFile}
   # Borrar espacios
   sed -i 's/ /_/g' "${ksToolsSedFile}" &> /dev/null
   # Borrar simbolos
-  symbolsList="[ ] @ { } | \ / ~ # $ % & ? ¿ = ( ) < > ! ¡"
-  for findSymbol in ${symbolsList} ; do
+  symbolsList=(
+  "[" "]" "@" "{" "}" "|" "\\" "/" "~" "#" "$" 
+  "%" "&" "?" "¿" "=" "(" ")" "<" ">" "!" "¡"
+  )
+  for findSymbol in "${symbolsList[@]}" ; do
     sed -i "s/${findSymbol}//g" "${ksToolsSedFile}" &> /dev/null
   done
   # Borrar el resto de simbolos
@@ -64,25 +67,16 @@ convertText() {
 # Syntax: listArchives <directory>
 listArchives() {
   fail=1
-  formatFiles=""
-  videoFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob"
-  formatFiles="${formatFiles} ${videoFiles}"
-  audioFiles="mp3 wma ogg wav flac midi acc oga opus mp2 ra m4a mka"
-  formatFiles="${formatFiles} ${audioFiles}"
-  compressFiles="zip rar 7z bz2 gz xz tar bzip2 gzip"
-  formatFiles="${formatFiles} ${compressFiles}"
-  open_libreOfficeFiles="odt ods odp odb odg"
-  formatFiles="${formatFiles} ${open_libreOfficeFiles}"
-  OfficeFiles="doc docx dotx dot docm dic thmx xlsx ppt pps pst mbd accdb msg"
-  formatFiles="${formatFiles} ${OfficeFiles}"
-  documentFiles="txt pdf rtf html php xml json css"
-  formatFiles="${formatFiles} ${documentFiles}"
-  pictureFiles="png jpg jpeg gif bmp raw xcf ppm pnm tiff ico tga pbm pgm svg psd"
-  formatFiles="${formatFiles} ${pictureFiles}"
-  executableFiles="exe msi run bin elf dmg deb rpm tgz ebuild flatpakref snap sh bash cmd bat AppImage jar"
-  formatFiles="${formatFiles} ${executableFiles}"
-  otherFiles="desktop lnk blend db c cpp cxx cc py rb dll so link network service ko list java"
-  formatFiles="${formatFiles} ${otherFiles}"
+  formatFiles=(
+  mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob 
+  mp3 wma ogg wav flac midi acc oga opus mp2 ra m4a mka 
+  zip rar 7z bz2 gz xz tar bzip2 gzip 
+  odt ods odp odb odg doc docx dotx dot docm dic thmx xlsx ppt pps pst mbd accdb
+  msg txt pdf rtf html php xml json css png jpg jpeg gif bmp raw xcf ppm pnm tiff 
+  ico tga pbm pgm svg psd exe msi run bin elf dmg deb rpm tgz ebuild flatpakref 
+  snap sh bash cmd bat AppImage jar desktop lnk blend db c cpp cxx cc py rb dll 
+  so link network service ko list java
+  )
   # Rename files
   cd "${1}"
   mkdir -p ${ksToolsTempFolder}
@@ -102,7 +96,7 @@ listArchives() {
   # Scan audio files
   rm -rf ${dirTemp}/${listTemp}
   rm -rf ${dirTemp}/${listCompTemp}
-  for format in ${formatFiles} ; do
+  for format in "${formatFiles[@]}" ; do
     find "${1}"/*.${format} &> ${dirTemp}/${listCompTempTest}
     if (( $? != 0 )) ; then
       print "null" > /dev/null
@@ -362,8 +356,8 @@ recursive_checksum() {
 
 # Generate random codes 
 generate_codes() {
-  chars="abcdefghijklmnopqrstywxz1234567890ABCDEFHIJKLMNOPQRSTYWXZ@/"
-  long_code="${1}"
+  chars=("abcdefghijklmnopqrstywxz1234567890ABCDEFHIJKLMNOPQRSTYWXZ@/")
+  long_code=("${1}")
   for i in {1} ; do
     print -n "${chars:RANDOM%${#chars}:1}"
   done
@@ -372,7 +366,7 @@ generate_codes() {
 # Function to encrypt pass on config file
 # Syntax: encrypt_kstools <password>
 encrypt_kstools() {
-  raw_pass="${1}"
+  raw_pass=("${1}")
   characters_pass_raw=$(print ${raw_pass} | wc -m)
   characters_pass=$(expr ${characters_pass_raw} - 1)
   total_characters=0
@@ -386,39 +380,38 @@ encrypt_kstools() {
   characters_seq_raw=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null | wc -m)
   characters_seq=$(expr ${characters_seq_raw} - 1)
   total_characters=1
-  encrypted_pass=""
+  encrypted_pass=()
   while (( total_characters <= characters_pass )) ; do
     num_seq_read=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null | cut -c${total_characters})
     character=$(print ${raw_pass} | cut -c${total_characters})
     repeat_seq=0
     while (( repeat_seq < num_seq_read )) ; do
       code_gen=$(generate_codes)
-      encrypted_pass="${encrypted_pass}${code_gen}"
+      encrypted_pass=("${encrypted_pass}${code_gen}")
       repeat_seq=$(expr ${repeat_seq} + 1)
     done
-    encrypted_pass="${encrypted_pass}${character}"
+    encrypted_pass=("${encrypted_pass}${character}")
     total_characters=$(expr ${total_characters} + 1)
   done
   code_gen=$(generate_codes)
-  encrypted_pass="${encrypted_pass}${code_gen}"
+  encrypted_pass=("${encrypted_pass}${code_gen}")
   print ${encrypted_pass}
 }
 
 # Function to decrypt pass on config file
 # Syntax: decrypt_kstools <password>
 decrypt_kstools() {
-  raw_pass_encrypted="${1}"
+  raw_pass_encrypted=("${1}")
   total_characters=1
   codes_seq=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null)
   num_codes_seq=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null | wc -m)
-  pass_decrypt=""
-  total_characters=1
+  pass_decrypt=()  total_characters=1
   pos_codes_pass=0
   while (( total_characters < num_codes_seq )) ; do
     pos_codes=$(print ${codes_seq} | cut -c${total_characters})
     pos_codes_pass=$(expr ${pos_codes_pass} + ${pos_codes} + 1)
     pos_pass=$(expr ${raw_pass_encrypted} | cut -c${pos_codes_pass})
-    pass_decrypt="${pass_decrypt}${pos_pass}"
+    pass_decrypt=("${pass_decrypt}${pos_pass}")
     total_characters=$(expr ${total_characters} + 1)
   done
   print ${pass_decrypt}
@@ -426,8 +419,8 @@ decrypt_kstools() {
 
 # Function to generate certificate on remote machine
 gen_pem_ssh() {
-  userhost="${USER}"
-  name_host="${HOSTNAME}"
+  userhost=("${USER}")
+  name_host=("${HOSTNAME}")
   print "" && print "* Generating .pem file to connect to this machine (${userhost})."
   print "${userhost}\n\n\n" | ssh-keygen
   mv ${userhost} ${userhost}-${name_host}.pem
@@ -464,9 +457,9 @@ showConfig() {
     readPasswordDecrypted=$(decrypt_kstools "${readPasswordEncrypted}")
     readPasswordChars=$(print ${readPasswordDecrypted} | wc -m)
     totalchars=0
-    showPassword=""
+    showPassword=()
     while (( totalchars < readPasswordChars )) ; do
-      showPassword="${showPassword}*"
+      showPassword=("${showPassword}*")
       totalchars=$(expr ${totalchars} + 1)
     done
     print "\- Server Password/PEM: ${showPassword}"
@@ -514,9 +507,9 @@ editConfig() {
     readPasswordDecrypted=$(decrypt_kstools "${readPasswordEncrypted}")
     readPasswordChars=$(print ${readPasswordDecrypted} | wc -m)
     totalchars=0
-    editPassword=""
+    editPassword=()
     while (( totalchars < readPasswordChars )) ; do
-      editPassword="${editPassword}*"
+      editPassword=("${editPassword}*")
       totalchars=$(expr ${totalchars} + 1)
     done
     editServer=$(cat ${dirConfig}/ks-upload-server 2> /dev/null)
@@ -610,31 +603,31 @@ editConfig() {
       print "" 
       print -n "* [Default: scp] Type upload tool (Example: rsync-e): " ; read TOOL
       if [[ -z "${TOOL}" ]] ; then
-        upvTool="scp"
+        upvTool=("scp")
       elif [[ "${TOOL}" == "rsync" ]] ; then
-        upvTool="rsync"
+        upvTool=("rsync")
       elif [[ "${TOOL}" == "rsync-rsa" ]] ; then
-        upvTool="rsync-rsa"
+        upvTool=("rsync-rsa")
       elif [[ "${TOOL}" == "scp-rsa" ]] ; then
-        upvTool="scp-rsa"
+        upvTool=("scp-rsa")
       elif [[ "${TOOL}" == "scp-e" ]] ; then
-        upvTool="scp-e"
+        upvTool=("scp-e")
       elif [[ "${TOOL}" == "rsync-e" ]] ; then
-        upvTool="rsync-e"
+        upvTool=("rsync-e")
       elif [[ "${TOOL}" == "scp-pem" ]] ; then
-        upvTool="scp-pem"
+        upvTool=("scp-pem")
       elif [[ "${TOOL}" == "rsync-pem" ]] ; then
-        upvTool="rsync-pem"
+        upvTool=("rsync-pem")
       else  
-        upvTool="scp"
+        upvTool=("scp")
       fi
       print ${upvTool} > ${dirConfig}/ks-upload-tool
     elif [[ "${EDIT}" == "7" ]] ; then
       print -n "* [Default: 22] Type port connection: " ; read PORT
       if [[ -z "${PORT}" ]] ; then
-        upvPort="22"
+        upvPort=("22")
       else
-        upvPort="${PORT}"
+        upvPort=("${PORT}")
       fi
       print ${upvPort} > ${dirConfig}/ks-upload-port
     elif [[ "${EDIT}" == "8" ]] ; then
@@ -769,23 +762,23 @@ showHelp() {
 # Function to check if all the necessary tools
 # for the execution are installed.
 checkDependencies() {
-  path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
-  dependencies="sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan ssh-keygen"
-  dependencies_found=""
-  dependencies_not_found=""
-  for checkPath in ${path_check} ; do
-    for checkDependencies in ${dependencies} ; do
+  path_check=(/usr/bin /bin /usr/local/bin "${HOME}/.local/bin" "$(brew --prefix 2> /dev/null)/bin")
+  dependencies=(sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan ssh-keygen)
+  dependencies_found=()
+  dependencies_not_found=()
+  for checkPath in "${path_check[@]}" ; do
+    for checkDependencies in "${dependencies[@]}" ; do
       if [[ -f ${checkPath}/${checkDependencies} ]] ; then
-        dependencies_found="${dependencies_found} ${checkDependencies}"
+        dependencies_found=("${dependencies_found} ${checkDependencies}")
       fi
     done
   done
-  for notFound in ${dependencies} ; do
+  for notFound in "${dependencies[@]}" ; do
     check_found_one=$(print ${dependencies_found} | grep " ${notFound}")
     check_found_two=$(print ${dependencies_found} | grep "${notFound} ")
-    if_not_found="${check_found_one}${check_found_two}"
+    if_not_found=("${check_found_one}${check_found_two}")
     if [[ -z "${if_not_found}" ]] ; then
-      dependencies_not_found="${dependencies_not_found} ${notFound}"
+      dependencies_not_found=("${dependencies_not_found} ${notFound}")
     fi
   done
   print "* Checking necessary tools... "

@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-setopt SH_WORD_SPLIT NO_NOMATCH
+setopt NO_NOMATCH
 
 ###############################################################
 # ks-mp4k-wrapper (ks-tools) - Wrapper for ks-mp4k            #
@@ -8,29 +8,29 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 # Author: dmesg00                                             #
 # Contact: dmesg00@duck.com                                   #
 ###############################################################
-VERSION="9.5"
-M_DATE="250826"
+VERSION=("9.5")
+M_DATE=("250826")
 
 # Conversion parameters
-p_ffmpeg="ffmpeg -i"
-p_ffmpeg_patched="-max_muxing_queue_size 9999"
-rel_size="3840x2160"
+p_ffmpeg=(ffmpeg -i)
+p_ffmpeg_patched=(-max_muxing_queue_size 9999)
+rel_size=("3840x2160")
 configFolder=${HOME}/.ks-tools 
 configFile=${configFolder}/ks-mp4k
 source ${configFile}
 
 # Global parameters
-dirTemp="/tmp"
-listTemp="ks-tools.list"
-ksToolsTempFolder="/tmp/ks-tools"
+dirTemp=("/tmp")
+listTemp=("ks-tools.list")
+ksToolsTempFolder=("/tmp/ks-tools")
 
 # Check cygwin alias (for Windows)
 if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
   setopt ALIASES
-  cygwin="yes"
+  cygwin=("yes")
   source "/usr/bin/cygwin-alias.zsh"
 else
-  cygwin="no"
+  cygwin=("no")
 fi
 
 # Check if ffmpeg is installed
@@ -60,7 +60,7 @@ fi
 # Funcion to show the name of file/folder from full path
 # Syntax: extractFolderOrFile <full/path/file.txt>
 extractFolderOrFile() {
-  pathToExtract="${1}/"
+  pathToExtract=("${1}/")
   findFolder=0
   count=1
   nameFolder=$(print ${pathToExtract} | cut -d "/" -f ${count})
@@ -70,7 +70,7 @@ extractFolderOrFile() {
     if [[ -z "${nameFolderTemp}" ]] ; then
       findFolder=1
     else
-      nameFolder="${nameFolderTemp}"
+      nameFolder=("${nameFolderTemp}")
       count=$(expr $count + 1)
     fi
   done
@@ -81,7 +81,7 @@ extractFolderOrFile() {
 # Syntax: removeExtension "<text>"
 removeExtension() {
   wordToConvert=${1}
-  ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
+  ksToolsSedFile=("${ksToolsTempFolder}/ks-tools-${RANDOM}.txt")
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
   print "${wordToConvert}" > ${ksToolsSedFile}
   # Remove extensions
@@ -118,13 +118,13 @@ showInfo() {
   print "* Information of ${1}:"
   print ""
   print "+ Video Tracks:"
-  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+  "${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
   print ""
   print "+ Audio Tracks:"
-  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
+  "${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
   print ""
   print "+ Subtitle Tracks:"
-  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d "," -f 1
+  "${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d "," -f 1
   print ""
   exit
 }
@@ -133,15 +133,15 @@ showInfo() {
 # Syntax: showVideoDefault <video_file>
 showVideoDefault() {
   # Check de video track by default
-  video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+  video_default=$("${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [[ -z "${video_default}" ]] ; then
-    video_default="0:0"
+    video_default=("0:0")
   else
     video_default_patch=$(print ${video_default} | cut -c4)
     if [[ "${video_default_patch}" == ":" ]] ; then
       video_default=$(print ${video_default} | cut -c1-3)
     else
-      video_default="${video_default}"
+      video_default=("${video_default}")
     fi
   fi
   print "${video_default}"
@@ -151,17 +151,17 @@ showVideoDefault() {
 # Syntax: showAudioDefault <video_file>
 showAudioDefault() {
   # Check the audio track by default
-  audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+  audio_default=$("${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [[ -z "${audio_default}" ]] ; then
-    audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+    audio_default=$("${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
     if [[ -z "${audio_default}" ]] ; then
-      audio_default="0:1"
+      audio_default=("0:1")
     else
       audio_default_patch=$(print ${audio_default} | cut -c4)
       if [[ "${audio_default_patch}" == ":" ]] ; then
         audio_default=$(print ${audio_default} | cut -c1-3)
       else
-        audio_default="${audio_default}"
+        audio_default=("${audio_default}")
       fi
     fi
   else
@@ -169,7 +169,7 @@ showAudioDefault() {
     if [[ "${audio_default_patch}" == ":" ]] ; then
       audio_default=$(print ${audio_default} | cut -c1-3)
     else
-      audio_default="${audio_default}"
+      audio_default=("${audio_default}")
     fi
   fi
   print "${audio_default}"
@@ -179,19 +179,19 @@ showAudioDefault() {
 # Syntax: showSubtitleDefault <video_file>
 showSubtitleDefault() {
   # Check the subtitle track by default
-  subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+  subtitle_default=$("${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [[ -z "${subtitle_default}" ]] ; then
-    subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+    subtitle_default=$("${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
     if [[ -z "${subtitle_default}" ]] ; then
-      subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+      subtitle_default=$("${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
       if [[ -z "${subtitle_default}" ]] ; then
-        subtitle_default="0:3"
+        subtitle_default=("0:3")
       else
         subtitle_default_patch=$(print ${subtitle_default} | cut -c4)
         if [[ "${subtitle_default_patch}" == ":" ]] ; then
           subtitle_default=$(print ${subtitle_default} | cut -c1-3)
         else
-          subtitle_default="${subtitle_default}"
+          subtitle_default=("${subtitle_default}")
         fi
       fi
     else
@@ -199,7 +199,7 @@ showSubtitleDefault() {
       if [[ "${subtitle_default_patch}" == ":" ]] ; then
         subtitle_default=$(print ${subtitle_default} | cut -c1-3)
       else
-        subtitle_default="${subtitle_default}"
+        subtitle_default=("${subtitle_default}")
       fi
     fi
   else
@@ -207,7 +207,7 @@ showSubtitleDefault() {
     if [[ "${subtitle_default_patch}" == ":" ]] ; then
       subtitle_default=$(print ${subtitle_default} | cut -c1-3)
     else
-      subtitle_default="${subtitle_default}"
+      subtitle_default=("${subtitle_default}")
     fi
   fi
   print "${subtitle_default}"
@@ -230,7 +230,7 @@ showYearDefault() {
 # Syntax: showNameDefault <video_file>
 showNameDefault() {
   # Prepare name title by default
-  FullPath="${1}"
+  FullPath=("${1}")
   name_title_default=$(extractFolderOrFile "${FullPath}")
   name_title_default=$(removeExtension "${name_title_default}")
   name_title_default=$(showFileWithSpace "${name_title_default}")

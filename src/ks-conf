@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-setopt SH_WORD_SPLIT NO_NOMATCH
+setopt NO_NOMATCH
 
 #######################################################################
 # ks-conf (ks-tools) - Tool for create and modify configuration files #
@@ -8,8 +8,8 @@ setopt SH_WORD_SPLIT NO_NOMATCH
 # Author: dmesg00                                                     #
 # Contact: dmesg00@duck.com                                           #
 #######################################################################
-VERSION="9.5"
-M_DATE="250826"
+VERSION=("9.5")
+M_DATE=("250826")
 
 # Check cygwin alias (for Windows)
 if [[ -f "/usr/bin/cygwin-alias.zsh" ]] ; then
@@ -21,15 +21,15 @@ fi
 check_create_conf_ks_mp4() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-mp4
-  rel_size="1280x534"
-  vcodec="libx264"
-  b_vcodec="2200k"
-  v_preset="slow"
-  acodec="aac"
-  b_acodec="192k"
-  default_lang_audio="spa"
-  default_lang_subt="spa"
-  v_ext="mp4"
+  rel_size=("1280x534")
+  vcodec=("libx264")
+  b_vcodec=("2200k")
+  v_preset=("slow")
+  acodec=("aac")
+  b_acodec=("192k")
+  default_lang_audio=("spa")
+  default_lang_subt=("spa")
+  v_ext=("mp4")
   mkdir -p ${configFolder}
   if [[ -f ${configFile} ]] ; then
     exist_rel_size=$(cat ${configFile} | grep "rel_size=")
@@ -89,15 +89,15 @@ check_create_conf_ks_mp4() {
 check_create_conf_ks_mp4s() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-mp4s
-  rel_size="720x480"
-  vcodec="libx264"
-  b_vcodec="950k"
-  v_preset="slow"
-  acodec="aac"
-  b_acodec="128k"
-  default_lang_audio="spa"
-  default_lang_subt="spa"
-  v_ext="mp4"  
+  rel_size=("720x480")
+  vcodec=("libx264")
+  b_vcodec=("950k")
+  v_preset=("slow")
+  acodec=("aac")
+  b_acodec=("128k")
+  default_lang_audio=("spa")
+  default_lang_subt=("spa")
+  v_ext=("mp4")
   mkdir -p ${configFolder}
   if [[ -f ${configFile} ]] ; then
     exist_rel_size=$(cat ${configFile} | grep "rel_size=")
@@ -157,15 +157,15 @@ check_create_conf_ks_mp4s() {
 check_create_conf_ks_mp4k() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-mp4k
-  rel_size="3840x2160"
-  vcodec="libx264"
-  b_vcodec="6000k"
-  v_preset="medium"
-  acodec="aac"
-  b_acodec="320k"
-  default_lang_audio="spa"
-  default_lang_subt="spa"
-  v_ext="mp4" 
+  rel_size=("3840x2160")
+  vcodec=("libx264")
+  b_vcodec=("6000k")
+  v_preset=("medium")
+  acodec=("aac")
+  b_acodec=("320k")
+  default_lang_audio=("spa")
+  default_lang_subt=("spa")
+  v_ext=("mp4")
   mkdir -p ${configFolder}
   if [[ -f ${configFile} ]] ; then
     exist_rel_size=$(cat ${configFile} | grep "rel_size=")
@@ -225,15 +225,15 @@ check_create_conf_ks_mp4k() {
 check_create_conf_ks_avi() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-avi
-  rel_size="720x480"
-  vcodec="libxvid"
-  b_vcodec="3000k"
-  v_preset="slow"
-  acodec="libmp3lame"
-  b_acodec="192k"
-  default_lang_audio="spa"
-  default_lang_subt="spa"
-  v_ext="avi"
+  rel_size=("720x480")
+  vcodec=("libxvid")
+  b_vcodec=("3000k")
+  v_preset=("slow")
+  acodec=("libmp3lame")
+  b_acodec=("192k")
+  default_lang_audio=("spa")
+  default_lang_subt=("spa")
+  v_ext=("avi")
   mkdir -p ${configFolder}
   if [[ -f ${configFile} ]] ; then
     exist_rel_size=$(cat ${configFile} | grep "rel_size=")
@@ -293,15 +293,15 @@ check_create_conf_ks_avi() {
 check_create_conf_ks_av1() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-av1
-  rel_size="1280x534"
-  vcodec="libsvtav1"
-  b_vcodec="2000k"
-  v_preset="disabled"
-  acodec="libvorbis"
-  b_acodec="160k"
-  default_lang_audio="spa"
-  default_lang_subt="spa"
-  v_ext="webm"
+  rel_size=("1280x534")
+  vcodec=("libsvtav1")
+  b_vcodec=("2000k")
+  v_preset=("disabled")
+  acodec=("libvorbis")
+  b_acodec=("160k")
+  default_lang_audio=("spa")
+  default_lang_subt=("spa")
+  v_ext=("webm")
   mkdir -p ${configFolder}
   if [[ -f ${configFile} ]] ; then
     exist_rel_size=$(cat ${configFile} | grep "rel_size=")
@@ -361,15 +361,15 @@ check_create_conf_ks_av1() {
 check_create_conf_ks_av1s() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-av1s
-  rel_size="720x480"
-  vcodec="libsvtav1"
-  b_vcodec="850k"
-  v_preset="disabled"
-  acodec="libvorbis"
-  b_acodec="128k"
-  default_lang_audio="spa"
-  default_lang_subt="spa"
-  v_ext="webm"
+  rel_size=("720x480")
+  vcodec=("libsvtav1")
+  b_vcodec=("850k")
+  v_preset=("disabled")
+  acodec=("libvorbis")
+  b_acodec=("128k")
+  default_lang_audio=("spa")
+  default_lang_subt=("spa")
+  v_ext=("webm")
   mkdir -p ${configFolder}
   if [[ -f ${configFile} ]] ; then
     exist_rel_size=$(cat ${configFile} | grep "rel_size=")
@@ -429,10 +429,10 @@ check_create_conf_ks_av1s() {
 check_create_conf_ks_mp3() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-mp3
-  acodec="libmp3lame"
-  b_acodec="128k"
-  v_ext="mp3"
-  default_lang_audio="spa"
+  acodec=("libmp3lame")
+  b_acodec=("128k")
+  v_ext=("mp3")
+  default_lang_audio=("spa")
   mkdir -p ${configFolder}
   if [[ -f ${configFile} ]] ; then
     exist_acodec=$(cat ${configFile} | grep "acodec" | cut -c2 | cut -d "_" -f 1) 
@@ -467,10 +467,10 @@ check_create_conf_ks_mp3() {
 check_create_conf_ks_oga() {
   configFolder=${HOME}/.ks-tools 
   configFile=${configFolder}/ks-oga
-  acodec="libvorbis"
-  b_acodec="130k"
-  v_ext="oga"
-  default_lang_audio="spa"
+  acodec=("libvorbis")
+  b_acodec=("130k")
+  v_ext=("oga")
+  default_lang_audio=("spa")
   mkdir -p ${configFolder}
   if [[ -f ${configFile} ]] ; then
     exist_acodec=$(cat ${configFile} | grep "acodec" | cut -c2 | cut -d "_" -f 1) 
