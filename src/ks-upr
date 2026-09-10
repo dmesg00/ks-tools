@@ -429,7 +429,7 @@ gen_pem_ssh() {
   userhost="${USER}"
   name_host="${HOSTNAME}"
   print "" && print "* Generating .pem file to connect to this machine (${userhost})."
-  print -e "${userhost}\n\n\n" | ssh-keygen
+  print "${userhost}\n\n\n" | ssh-keygen
   mv ${userhost} ${userhost}-${name_host}.pem
   mkdir -p ~/.ssh
   chmod 700 ~/.ssh

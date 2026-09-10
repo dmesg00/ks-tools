@@ -361,9 +361,9 @@ elif [[ "${1}" == "--conv" ]] ; then
   # Check if file exist
   if [[ -f "${2}" ]] ; then
     if [[ "${10}" == "patch" ]] ; then
-      print -e "${4}\n${5}\nn\nn\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4s "${2}" "${3}"
+      print "${4}\n${5}\nn\nn\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4s "${2}" "${3}"
     else
-      print -e "${4}\n${5}\nn\nn\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4s "${2}" "${3}"
+      print "${4}\n${5}\nn\nn\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4s "${2}" "${3}"
     fi
   else
     print ""
@@ -375,9 +375,9 @@ elif [[ "${1}" == "--conv-widescreen" ]] ; then
   # Check if file exist
   if [[ -f "${2}" ]] ; then
     if [[ "${10}" == "patch" ]] ; then
-      print -e "${4}\n${5}\nn\ny\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4s "${2}" "${3}"
+      print "${4}\n${5}\nn\ny\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4s "${2}" "${3}"
     else
-      print -e "${4}\n${5}\nn\ny\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4s "${2}" "${3}"
+      print "${4}\n${5}\nn\ny\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4s "${2}" "${3}"
     fi
   else
     print ""
@@ -389,9 +389,9 @@ elif [[ "${1}" == "--conv-with-sub" ]] ; then
   # Check if file exist
   if [[ -f "${2}" ]] ; then
     if [[ "${11}" == "patch" ]] ; then
-      print -e "${4}\n${5}\ny\n${6}\nn\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4s "${2}" "${3}"
+      print "${4}\n${5}\ny\n${6}\nn\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4s "${2}" "${3}"
     else
-      print -e "${4}\n${5}\ny\n${6}\nn\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4s "${2}" "${3}"
+      print "${4}\n${5}\ny\n${6}\nn\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4s "${2}" "${3}"
     fi
   else
     print ""
@@ -403,9 +403,9 @@ elif [[ "${1}" == "--conv-with-sub-widescreen" ]] ; then
   # Check if file exist
   if [[ -f "${2}" ]] ; then
     if [[ "${11}" == "patch" ]] ; then
-      print -e "${4}\n${5}\ny\n${6}\ny\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4s "${2}" "${3}"
+      print "${4}\n${5}\ny\n${6}\ny\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4s "${2}" "${3}"
     else
-      print -e "${4}\n${5}\ny\n${6}\ny\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4s "${2}" "${3}"
+      print "${4}\n${5}\ny\n${6}\ny\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4s "${2}" "${3}"
     fi
   else
     print ""

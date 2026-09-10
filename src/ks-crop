@@ -146,7 +146,7 @@ show_menu() {
   print "    ks-crop -4:3-aspect /data/movies/Video.avi"
   print ""
   print " + Example with folder: "
-  print '    for i in $(ls -1 /<folder>/*) ; do print -e "\n\n\n\n\n" | ks-crop -16:9-crop $i; done'
+  print '    for i in $(ls -1 /<folder>/*) ; do echo -e "\n\n\n\n\n" | ks-crop -16:9-crop $i; done'
   print ""
   exit
 }
