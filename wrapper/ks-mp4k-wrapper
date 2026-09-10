@@ -37,11 +37,11 @@ fi
 ffmpeg_test=$(ffmpeg --help 2>&1)
 error_ffmpeg=$?
 if (( error_ffmpeg != 0 )) ; then
-  echo ""
-  echo "* ks-mp4k-wrapper (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "+ The 'ffmpeg' tool is not installed!"
-  echo ""
+  print ""
+  print "* ks-mp4k-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "+ The 'ffmpeg' tool is not installed!"
+  print ""
   exit
 fi
 
@@ -49,11 +49,11 @@ fi
 wrap_test=$(ks-mp4k &> /dev/null)
 error_wrap=$?
 if (( error_wrap != 0 )) ; then
-  echo ""
-  echo "* ks-mp4k-wrapper (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "+ The 'ks-mp4k' tool is not installed!"
-  echo ""
+  print ""
+  print "* ks-mp4k-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "+ The 'ks-mp4k' tool is not installed!"
+  print ""
   exit
 fi
 
@@ -63,10 +63,10 @@ extractFolderOrFile() {
   pathToExtract="${1}/"
   findFolder=0
   count=1
-  nameFolder=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+  nameFolder=$(print ${pathToExtract} | cut -d "/" -f ${count})
   count=$(expr $count + 1)
   while (( findFolder == 0 )) ; do
-    nameFolderTemp=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+    nameFolderTemp=$(print ${pathToExtract} | cut -d "/" -f ${count})
     if [[ -z "${nameFolderTemp}" ]] ; then
       findFolder=1
     else
@@ -74,7 +74,7 @@ extractFolderOrFile() {
       count=$(expr $count + 1)
     fi
   done
-  echo "${nameFolder}"
+  print "${nameFolder}"
 }
 
 # Function to remove extension from file
@@ -83,7 +83,7 @@ removeExtension() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
-  echo "${wordToConvert}" > ${ksToolsSedFile}
+  print "${wordToConvert}" > ${ksToolsSedFile}
   # Remove extensions
   sed -i 's/\.avi//g' "${ksToolsSedFile}" &> /dev/null
   sed -i 's/\.mp4//g' "${ksToolsSedFile}" &> /dev/null
@@ -98,34 +98,34 @@ removeExtension() {
   sed -i 's/\.flv//g' "${ksToolsSedFile}" &> /dev/null
   # Show file without extension
   wordToConvert=$(cat ${ksToolsSedFile})
-  echo ${wordToConvert}
+  print ${wordToConvert}
 }
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
 showFileWithSpace() {
-  echo "${1}" > ${dirTemp}/name.tmp
+  print "${1}" > ${dirTemp}/name.tmp
   sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
   rm -rf ${dirTemp}/name.tmp
-  echo ${DisplayName}
+  print ${DisplayName}
 }
 
 # Show info tracks of input video video file.
 # Syntax: showInfo <video_file>
 showInfo() {
-  echo ""
-  echo "* Information of ${1}:"
-  echo ""
-  echo "+ Video Tracks:"
+  print ""
+  print "* Information of ${1}:"
+  print ""
+  print "+ Video Tracks:"
   ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
-  echo ""
-  echo "+ Audio Tracks:"
+  print ""
+  print "+ Audio Tracks:"
   ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
-  echo ""
-  echo "+ Subtitle Tracks:"
+  print ""
+  print "+ Subtitle Tracks:"
   ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d "," -f 1
-  echo ""
+  print ""
   exit
 }
 
@@ -137,14 +137,14 @@ showVideoDefault() {
   if [[ -z "${video_default}" ]] ; then
     video_default="0:0"
   else
-    video_default_patch=$(echo ${video_default} | cut -c4)
+    video_default_patch=$(print ${video_default} | cut -c4)
     if [[ "${video_default_patch}" == ":" ]] ; then
-      video_default=$(echo ${video_default} | cut -c1-3)
+      video_default=$(print ${video_default} | cut -c1-3)
     else
       video_default="${video_default}"
     fi
   fi
-  echo "${video_default}"
+  print "${video_default}"
 }
 
 # Show the audio track default
@@ -157,22 +157,22 @@ showAudioDefault() {
     if [[ -z "${audio_default}" ]] ; then
       audio_default="0:1"
     else
-      audio_default_patch=$(echo ${audio_default} | cut -c4)
+      audio_default_patch=$(print ${audio_default} | cut -c4)
       if [[ "${audio_default_patch}" == ":" ]] ; then
-        audio_default=$(echo ${audio_default} | cut -c1-3)
+        audio_default=$(print ${audio_default} | cut -c1-3)
       else
         audio_default="${audio_default}"
       fi
     fi
   else
-    audio_default_patch=$(echo ${audio_default} | cut -c4)
+    audio_default_patch=$(print ${audio_default} | cut -c4)
     if [[ "${audio_default_patch}" == ":" ]] ; then
-      audio_default=$(echo ${audio_default} | cut -c1-3)
+      audio_default=$(print ${audio_default} | cut -c1-3)
     else
       audio_default="${audio_default}"
     fi
   fi
-  echo "${audio_default}"
+  print "${audio_default}"
 }
 
 # Show the subtitle track default
@@ -187,43 +187,43 @@ showSubtitleDefault() {
       if [[ -z "${subtitle_default}" ]] ; then
         subtitle_default="0:3"
       else
-        subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+        subtitle_default_patch=$(print ${subtitle_default} | cut -c4)
         if [[ "${subtitle_default_patch}" == ":" ]] ; then
-          subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+          subtitle_default=$(print ${subtitle_default} | cut -c1-3)
         else
           subtitle_default="${subtitle_default}"
         fi
       fi
     else
-      subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+      subtitle_default_patch=$(print ${subtitle_default} | cut -c4)
       if [[ "${subtitle_default_patch}" == ":" ]] ; then
-        subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+        subtitle_default=$(print ${subtitle_default} | cut -c1-3)
       else
         subtitle_default="${subtitle_default}"
       fi
     fi
   else
-    subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+    subtitle_default_patch=$(print ${subtitle_default} | cut -c4)
     if [[ "${subtitle_default_patch}" == ":" ]] ; then
-      subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+      subtitle_default=$(print ${subtitle_default} | cut -c1-3)
     else
       subtitle_default="${subtitle_default}"
     fi
   fi
-  echo "${subtitle_default}"
+  print "${subtitle_default}"
 }
 
 # Show default resolution
 # Syntax: showResolutionDefault
 showResolutionDefault() {
-  echo "${rel_size}"
+  print "${rel_size}"
 }
 
 # Show default year (METADATA)
 # Syntax: showResolutionDefault
 showYearDefault() {
   current_date=$(date +%Y)
-  echo "${current_date}"
+  print "${current_date}"
 }
 
 # Show the name title default (MEDATA)
@@ -234,67 +234,67 @@ showNameDefault() {
   name_title_default=$(extractFolderOrFile "${FullPath}")
   name_title_default=$(removeExtension "${name_title_default}")
   name_title_default=$(showFileWithSpace "${name_title_default}")
-  echo "${name_title_default}"
+  print "${name_title_default}"
 }
 
 # Show the genre default (MEDATA)
 # Syntax: showGenreDefault
 showGenreDefault() {
-  echo "Unknown"
+  print "Unknown"
 }
 
 # Show help
 showHelp() {
-  echo ""
-  echo "* ks-mp4k-wrapper (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "- Wrapper for ks-mp4k to create graphical interfaces"
-  echo ""
-  echo "+ Syntax:"
-  echo ""
-  echo " * TRACKS/CONFIG DETECT:"
-  echo ""
-  echo "  $ ks-mp4k-wrapper --show-info <video_file>"
-  echo "  $ ks-mp4k-wrapper --show-video-default <video_file>"
-  echo "  $ ks-mp4k-wrapper --show-audio-default <video_file>"
-  echo "  $ ks-mp4k-wrapper --show-subtitle-default <video_file>"
-  echo "  $ ks-mp4k-wrapper --show-resolution-default"
-  echo ""
-  echo " * METADATA DETECT:"
-  echo ""
-  echo "  $ ks-mp4k-wrapper --show-name-title-default <video_file>"
-  echo "  $ ks-mp4k-wrapper --show-year-default"
-  echo "  $ ks-mp4k-wrapper --show-genre-default"
-  echo ""
-  echo " * CONVERT:"
-  echo ""
-  echo " $ ks-mp4k-wrapper --conv </path/video_file> </path/output_prefix> <video-track> <audio-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
-  echo " $ ks-mp4k-wrapper --conv-with-sub </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
-  echo " $ ks-mp4k-wrapper --conv-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
-  echo " $ ks-mp4k-wrapper --conv-with-sub-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
-  echo ""
-  echo " * CONVERT WITH DEFAULT DETECTION (NOT RECOMMENDED):"
-  echo ""
-  echo " $ ks-mp4k-wrapper --conv </path/video_file> </path/output_prefix>"
-  echo " $ ks-mp4k-wrapper --conv-widescreen </path/video_file> </path/output_prefix>"
-  echo " $ ks-mp4k-wrapper --conv-with-sub </path/video_file> </path/output_prefix>"
-  echo " $ ks-mp4k-wrapper --conv-with-sub-widescreen </path/video_file> </path/output_prefix>"
-  echo ""
-  echo "* EXAMPLES:"
-  echo ""
-  echo " $ ks-mp4k-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 3840x2160 \"My video\" 2018 \"Comedy\""
-  echo " $ ks-mp4k-wrapper --conv-with-sub /tmp/video.mkv /tmp/output 0:0 0:1 0:3 3840x2160 \"My video\" 2018 \"Comedy\""
-  echo " $ ks-mp4k-wrapper --conv-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 3840x2160 \"My video\" 2018 \"Comedy\" patch"
-  echo " $ ks-mp4k-wrapper --conv-with-sub-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 0:3 3840x2160 \"My video\" 2018 \"Comedy\""
-  echo ""
-  echo "* Notes:"
-  echo ""
-  echo " + The option 'patch' apply the '-thread_queue_size 2048' patch to ffmpeg."
-  echo " + If you specify a path or file with spaces, you must use quotes."
+  print ""
+  print "* ks-mp4k-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "\- Wrapper for ks-mp4k to create graphical interfaces"
+  print ""
+  print "+ Syntax:"
+  print ""
+  print " * TRACKS/CONFIG DETECT:"
+  print ""
+  print "  $ ks-mp4k-wrapper --show-info <video_file>"
+  print "  $ ks-mp4k-wrapper --show-video-default <video_file>"
+  print "  $ ks-mp4k-wrapper --show-audio-default <video_file>"
+  print "  $ ks-mp4k-wrapper --show-subtitle-default <video_file>"
+  print "  $ ks-mp4k-wrapper --show-resolution-default"
+  print ""
+  print " * METADATA DETECT:"
+  print ""
+  print "  $ ks-mp4k-wrapper --show-name-title-default <video_file>"
+  print "  $ ks-mp4k-wrapper --show-year-default"
+  print "  $ ks-mp4k-wrapper --show-genre-default"
+  print ""
+  print " * CONVERT:"
+  print ""
+  print " $ ks-mp4k-wrapper --conv </path/video_file> </path/output_prefix> <video-track> <audio-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  print " $ ks-mp4k-wrapper --conv-with-sub </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  print " $ ks-mp4k-wrapper --conv-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  print " $ ks-mp4k-wrapper --conv-with-sub-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  print ""
+  print " * CONVERT WITH DEFAULT DETECTION (NOT RECOMMENDED):"
+  print ""
+  print " $ ks-mp4k-wrapper --conv </path/video_file> </path/output_prefix>"
+  print " $ ks-mp4k-wrapper --conv-widescreen </path/video_file> </path/output_prefix>"
+  print " $ ks-mp4k-wrapper --conv-with-sub </path/video_file> </path/output_prefix>"
+  print " $ ks-mp4k-wrapper --conv-with-sub-widescreen </path/video_file> </path/output_prefix>"
+  print ""
+  print "* EXAMPLES:"
+  print ""
+  print " $ ks-mp4k-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 3840x2160 \"My video\" 2018 \"Comedy\""
+  print " $ ks-mp4k-wrapper --conv-with-sub /tmp/video.mkv /tmp/output 0:0 0:1 0:3 3840x2160 \"My video\" 2018 \"Comedy\""
+  print " $ ks-mp4k-wrapper --conv-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 3840x2160 \"My video\" 2018 \"Comedy\" patch"
+  print " $ ks-mp4k-wrapper --conv-with-sub-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 0:3 3840x2160 \"My video\" 2018 \"Comedy\""
+  print ""
+  print "* Notes:"
+  print ""
+  print " + The option 'patch' apply the '-thread_queue_size 2048' patch to ffmpeg."
+  print " + If you specify a path or file with spaces, you must use quotes."
   if [[ "${cygwin}" == "yes" ]] ; then
-    echo " + In Cygwin, you should always use relative paths with this tool."
+    print " + In Cygwin, you should always use relative paths with this tool."
   fi
-  echo ""
+  print ""
   exit
 }
 
@@ -306,9 +306,9 @@ elif [[ "${1}" == "--show-info" ]] ; then
   if [[ -f "${2}" ]] ; then
     showInfo "${2}"
   else
-    echo ""
-    echo "* The file '${2}' does not exist!'"
-    echo ""
+    print ""
+    print "* The file '${2}' does not exist!'"
+    print ""
     exit
   fi
 elif [[ "${1}" == "--show-video-default" ]] ; then
@@ -316,9 +316,9 @@ elif [[ "${1}" == "--show-video-default" ]] ; then
   if [[ -f "${2}" ]] ; then
     showVideoDefault "${2}"
   else
-    echo ""
-    echo "* The file '${2}' does not exist!'"
-    echo ""
+    print ""
+    print "* The file '${2}' does not exist!'"
+    print ""
     exit
   fi
 elif [[ "${1}" == "--show-audio-default" ]] ; then
@@ -326,9 +326,9 @@ elif [[ "${1}" == "--show-audio-default" ]] ; then
   if [[ -f "${2}" ]] ; then
     showAudioDefault "${2}"
   else
-    echo ""
-    echo "* The file '${2}' does not exist!'"
-    echo ""
+    print ""
+    print "* The file '${2}' does not exist!'"
+    print ""
     exit
   fi
 elif [[ "${1}" == "--show-subtitle-default" ]] ; then
@@ -336,9 +336,9 @@ elif [[ "${1}" == "--show-subtitle-default" ]] ; then
   if [[ -f "${2}" ]] ; then
     showSubtitleDefault "${2}"
   else
-    echo ""
-    echo "* The file '${2}' does not exist!'"
-    echo ""
+    print ""
+    print "* The file '${2}' does not exist!'"
+    print ""
     exit
   fi
 elif [[ "${1}" == "--show-resolution-default" ]] ; then
@@ -348,9 +348,9 @@ elif [[ "${1}" == "--show-name-title-default" ]] ; then
   if [[ -f "${2}" ]] ; then
     showNameDefault "${2}"
   else
-    echo ""
-    echo "* The file '${2}' does not exist!'"
-    echo ""
+    print ""
+    print "* The file '${2}' does not exist!'"
+    print ""
     exit
   fi
 elif [[ "${1}" == "--show-year-default" ]] ; then
@@ -361,56 +361,56 @@ elif [[ "${1}" == "--conv" ]] ; then
   # Check if file exist
   if [[ -f "${2}" ]] ; then
     if [[ "${10}" == "patch" ]] ; then
-      echo -e "${4}\n${5}\nn\nn\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
+      print -e "${4}\n${5}\nn\nn\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
     else
-      echo -e "${4}\n${5}\nn\nn\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
+      print -e "${4}\n${5}\nn\nn\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
     fi
   else
-    echo ""
-    echo "* The file '${2}' does not exist!'"
-    echo ""
+    print ""
+    print "* The file '${2}' does not exist!'"
+    print ""
     exit
   fi
 elif [[ "${1}" == "--conv-widescreen" ]] ; then
   # Check if file exist
   if [[ -f "${2}" ]] ; then
     if [[ "${10}" == "patch" ]] ; then
-      echo -e "${4}\n${5}\nn\ny\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
+      print -e "${4}\n${5}\nn\ny\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
     else
-      echo -e "${4}\n${5}\nn\ny\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
+      print -e "${4}\n${5}\nn\ny\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
     fi
   else
-    echo ""
-    echo "* The file '${2}' does not exist!'"
-    echo ""
+    print ""
+    print "* The file '${2}' does not exist!'"
+    print ""
     exit
   fi
 elif [[ "${1}" == "--conv-with-sub" ]] ; then
   # Check if file exist
   if [[ -f "${2}" ]] ; then
     if [[ "${11}" == "patch" ]] ; then
-      echo -e "${4}\n${5}\ny\n${6}\nn\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
+      print -e "${4}\n${5}\ny\n${6}\nn\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
     else
-      echo -e "${4}\n${5}\ny\n${6}\nn\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
+      print -e "${4}\n${5}\ny\n${6}\nn\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
     fi
   else
-    echo ""
-    echo "* The file '${2}' does not exist!'"
-    echo ""
+    print ""
+    print "* The file '${2}' does not exist!'"
+    print ""
     exit
   fi
 elif [[ "${1}" == "--conv-with-sub-widescreen" ]] ; then
   # Check if file exist
   if [[ -f "${2}" ]] ; then
     if [[ "${11}" == "patch" ]] ; then
-      echo -e "${4}\n${5}\ny\n${6}\ny\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
+      print -e "${4}\n${5}\ny\n${6}\ny\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
     else
-      echo -e "${4}\n${5}\ny\n${6}\ny\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
+      print -e "${4}\n${5}\ny\n${6}\ny\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
     fi
   else
-    echo ""
-    echo "* The file '${2}' does not exist!'"
-    echo ""
+    print ""
+    print "* The file '${2}' does not exist!'"
+    print ""
     exit
   fi
 else

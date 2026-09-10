@@ -27,11 +27,11 @@ check_dependencies() {
   which_dependence=$(which ${1})
   error_dependence=$?
   if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
-    echo ""
-    echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
-    echo ""
-    echo "* Dependency not found: ${1}"
-    echo ""
+    print ""
+    print "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+    print ""
+    print "* Dependency not found: ${1}"
+    print ""
     exit 1
   fi 
 }
@@ -44,57 +44,57 @@ done
 
 # Show help when folder is empty
 if [[ -z "${1}" ]] ; then
-  echo ""
-  echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "- Convert videos from folder to AV1 (Codec) (Series)"
-  echo ""
-  echo "+ Syntax: "
-  echo ""
-  echo "  $ ks-av1s-folder </path/folder> [subs/widescreen/subs-widescreen]"
-  echo ""
-  echo " + Examples: "
-  echo "     $ ks-av1s-folder /data/Westworld"
-  echo "     $ ks-av1s-folder /data/Daredevil subs"
-  echo "     $ ks-av1s-folder /data/Daredevil widescreen"
-  echo "     $ ks-av1s-folder /data/Daredevil subs-widescreen"
-  echo ""
-  echo "* Notes:"
-  echo ""
-  echo " + The option 'subs' apply detection & rendering the forced subtitles."
-  echo " + You must not use spaces in folders and video files."
-  echo ""
+  print ""
+  print "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "\- Convert videos from folder to AV1 (Codec) (Series)"
+  print ""
+  print "+ Syntax: "
+  print ""
+  print "  $ ks-av1s-folder </path/folder> [subs/widescreen/subs-widescreen]"
+  print ""
+  print " + Examples: "
+  print "     $ ks-av1s-folder /data/Westworld"
+  print "     $ ks-av1s-folder /data/Daredevil subs"
+  print "     $ ks-av1s-folder /data/Daredevil widescreen"
+  print "     $ ks-av1s-folder /data/Daredevil subs-widescreen"
+  print ""
+  print "* Notes:"
+  print ""
+  print " + The option 'subs' apply detection & rendering the forced subtitles."
+  print " + You must not use spaces in folders and video files."
+  print ""
   exit
 fi
 
 # Check if folder exist
 if [[ -d "${1}" ]] ; then
-  echo null > /dev/null
+  print null > /dev/null
 else
-  echo ""
-  echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "+ The folder '${1}' does not exist!"
-  echo ""
+  print ""
+  print "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "+ The folder '${1}' does not exist!"
+  print ""
   exit
 fi
 
 # Scan videos files format
 clear
-echo ""
-echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
-echo ""
-echo "- Convert videos from folder to AV1 (Codec) (Series)"
-echo ""
-echo -n "* Scanning ${1} "
-echo ""
+print ""
+print "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+print ""
+print "\- Convert videos from folder to AV1 (Codec) (Series)"
+print ""
+print -n "* Scanning ${1} "
+print ""
 rm -rf ${tempFile} && touch ${tempFile}
 for format in ${formatFiles} ; do
   find "${1}"/*.${format} &> ${tempFileTest}
   if (( $? != 0 )) ; then
-    echo "null" > /dev/null
+    print "null" > /dev/null
   else
-    echo "+ Video file(s) in .${format} found!"
+    print "+ Video file(s) in .${format} found!"
     cd "${1}" && ls -1 *.${format} &> /tmp/tempFile.txt
     cat /tmp/tempFile.txt >> ${tempFile}
     rm -rf /tmp/tempFile.txt 2> /dev/null
@@ -105,13 +105,13 @@ done
 # Init the conversion files
 num_files=$(cat ${tempFile} | wc -l)
 if (( num_files == 0 )) ; then
-  echo ""
-  echo "+ No video file(s) found in folder '${1}'"
-  echo ""
+  print ""
+  print "+ No video file(s) found in folder '${1}'"
+  print ""
   exit
 else
-  echo ""
-  echo "* Files to convert (${1}):"
+  print ""
+  print "* Files to convert (${1}):"
   convert_files=1
   if [[ "${2}" == "subs" ]] ; then
     widescreen_enabled=0
@@ -132,14 +132,14 @@ else
   fi
   while (( convert_files <= num_files )) ; do
     show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
-    echo "  + ${show_file} (${subtitles_show})"
+    print "  + ${show_file} (${subtitles_show})"
     convert_files=$(expr ${convert_files} + 1)
   done
-  echo ""
-  echo "* The output folder will be '${1}/to-av1'"
+  print ""
+  print "* The output folder will be '${1}/to-av1'"
   # Execute commands for conversion
-  echo ""
-  echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+  print ""
+  print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
   if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
     exit
   else
@@ -149,18 +149,18 @@ else
       show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
       if (( subtitles_enabled == 1 )) ; then
         if (( widescreen_enabled == 1 )) ; then
-          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          fname=$(print "${show_file}" | cut -d "." -f 1)
           ks-av1s-wrapper --conv-with-sub-widescreen "${show_file}" "to-av1/${fname}"
         else
-          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          fname=$(print "${show_file}" | cut -d "." -f 1)
           ks-av1s-wrapper --conv-with-sub "${show_file}" "to-av1/${fname}"
         fi
       else
         if (( widescreen_enabled == 1 )) ; then
-          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          fname=$(print "${show_file}" | cut -d "." -f 1)
           ks-av1s-wrapper --conv-widescreen "${show_file}" "to-av1/${fname}"
         else
-          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          fname=$(print "${show_file}" | cut -d "." -f 1)
           ks-av1s-wrapper --conv "${show_file}" "to-av1/${fname}"
         fi
       fi

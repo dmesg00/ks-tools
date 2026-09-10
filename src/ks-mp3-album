@@ -45,25 +45,25 @@ if [[ -f ${configFile} ]] ; then
   exist_default_lang_audio=$(cat ${configFile} | grep "default_lang_audio=") 
   exist_v_ext=$(cat ${configFile} | grep "v_ext=")
   if [[ -z ${exist_acodec} ]] ; then
-    echo "acodec=${acodec}" >> ${configFile}
+    print "acodec=${acodec}" >> ${configFile}
   fi
   if [[ -z ${exist_b_acodec} ]] ; then
-    echo "b_acodec=${b_acodec}" >> ${configFile}
+    print "b_acodec=${b_acodec}" >> ${configFile}
   fi
   if [[ -z ${exist_default_lang_audio} ]] ; then
-    echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+    print "default_lang_audio=${default_lang_audio}" >> ${configFile}
   fi
   if [[ -z ${exist_v_ext} ]] ; then
-    echo "v_ext=${v_ext}" >> ${configFile}
+    print "v_ext=${v_ext}" >> ${configFile}
   fi
   source ${configFile}
 else
-  echo "#!/usr/bin/env zsh" > ${configFile}
-  echo "" >> ${configFile}
-  echo "acodec=${acodec}" >> ${configFile}
-  echo "b_acodec=${b_acodec}" >> ${configFile}
-  echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
-  echo "v_ext=${v_ext}" >> ${configFile}
+  print "#!/usr/bin/env zsh" > ${configFile}
+  print "" >> ${configFile}
+  print "acodec=${acodec}" >> ${configFile}
+  print "b_acodec=${b_acodec}" >> ${configFile}
+  print "default_lang_audio=${default_lang_audio}" >> ${configFile}
+  print "v_ext=${v_ext}" >> ${configFile}
   source ${configFile}
 fi
 
@@ -72,11 +72,11 @@ check_dependencies() {
   which_dependence=$(which ${1})
   error_dependence=$?
   if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
-    echo ""
-    echo "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
-    echo ""
-    echo "* Dependency not found: ${1}"
-    echo ""
+    print ""
+    print "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
+    print ""
+    print "* Dependency not found: ${1}"
+    print ""
     exit 1
   fi 
 }
@@ -93,10 +93,10 @@ extractFolderOrFile() {
   pathToExtract="${1}/"
   findFolder=0
   count=1
-  nameFolder=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+  nameFolder=$(print ${pathToExtract} | cut -d "/" -f ${count})
   count=$(expr $count + 1)
   while (( findFolder == 0 )) ; do
-    nameFolderTemp=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+    nameFolderTemp=$(print ${pathToExtract} | cut -d "/" -f ${count})
     if [[ -z "${nameFolderTemp}" ]] ; then
       findFolder=1
     else
@@ -104,31 +104,31 @@ extractFolderOrFile() {
       count=$(expr $count + 1)
     fi
   done
-  echo "${nameFolder}"
+  print "${nameFolder}"
 }
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
 showFileWithSpace() {
-  echo "${1}" > ${dirTemp}/name.tmp
+  print "${1}" > ${dirTemp}/name.tmp
   sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
   rm -rf ${dirTemp}/name.tmp
-  cutDisplayName=$(echo ${DisplayName} | cut -c1)
+  cutDisplayName=$(print ${DisplayName} | cut -c1)
   if [[ "${cutDisplayName}" == "-" ]] ; then
-    DisplayName=$(echo ${DisplayName} | cut -c2-100)
+    DisplayName=$(print ${DisplayName} | cut -c2-100)
   else
-    cutDisplayName=$(echo ${DisplayName} | cut -c2)
+    cutDisplayName=$(print ${DisplayName} | cut -c2)
     if [[ "${cutDisplayName}" == "-" ]] ; then
-      DisplayName=$(echo ${DisplayName} | cut -c3-100)
+      DisplayName=$(print ${DisplayName} | cut -c3-100)
     else
-      cutDisplayName=$(echo ${DisplayName} | cut -c3)
+      cutDisplayName=$(print ${DisplayName} | cut -c3)
       if [[ "${cutDisplayName}" == "-" ]] ; then
-        DisplayName=$(echo ${DisplayName} | cut -c4-100)
+        DisplayName=$(print ${DisplayName} | cut -c4-100)
       fi
     fi
   fi
-  echo ${DisplayName}
+  print ${DisplayName}
 }
 
 # Function to remove extension from file
@@ -137,7 +137,7 @@ removeExtension() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
-  echo "${wordToConvert}" > ${ksToolsSedFile}
+  print "${wordToConvert}" > ${ksToolsSedFile}
   # Remove extensions
   sed -i 's/\.avi//g' "${ksToolsSedFile}" &> /dev/null
   sed -i 's/\.mp4//g' "${ksToolsSedFile}" &> /dev/null
@@ -161,59 +161,59 @@ removeExtension() {
   sed -i 's/\.opus//g' "${ksToolsSedFile}" &> /dev/null
   # Show file without extension
   wordToConvert=$(cat ${ksToolsSedFile})
-  echo ${wordToConvert}
+  print ${wordToConvert}
 }
 
 # Syntax: ks-mp3-album </absolute/path/album/
 if [[ -z "${1}" ]] ; then
-  echo ""
-  echo "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "- Convert folder album to MP3 Audio Format"
-  echo ""
-  echo "+ Config: ${configFile}"
-  echo ""
-  echo " - Audio codec: ${acodec}"
-  echo " - Bitrate audio: ${b_acodec}"
-  echo " - Container: ${v_ext}"
-  echo ""
-  echo "+ Syntax: "
-  echo ""
-  echo "  $ ks-mp3-album </absolute/path/album>"
-  echo ""
-  echo " + Example: ks-mp3-album /data/albums/matrix-soundtrack"
-  echo ""
+  print ""
+  print "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "\- Convert folder album to MP3 Audio Format"
+  print ""
+  print "+ Config: ${configFile}"
+  print ""
+  print " - Audio codec: ${acodec}"
+  print " - Bitrate audio: ${b_acodec}"
+  print " - Container: ${v_ext}"
+  print ""
+  print "+ Syntax: "
+  print ""
+  print "  $ ks-mp3-album </absolute/path/album>"
+  print ""
+  print " + Example: ks-mp3-album /data/albums/matrix-soundtrack"
+  print ""
   exit
 fi
 
 # Check if folder exist
 if [[ -d "${1}" ]] ; then
-  echo null > /dev/null
+  print null > /dev/null
 else
-  echo ""
-  echo "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "+ The folder '${1}' does not exist!"
-  echo ""
+  print ""
+  print "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "+ The folder '${1}' does not exist!"
+  print ""
   exit
 fi
 
 # Scan videos/audio files format
 clear
-echo ""
-echo "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
-echo ""
-echo "- Convert folder album to MP3 Audio Format"
-echo ""
-echo -n "* Scanning ${1} "
-echo ""
+print ""
+print "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
+print ""
+print "\- Convert folder album to MP3 Audio Format"
+print ""
+print -n "* Scanning ${1} "
+print ""
 rm -rf ${tempFile} && touch ${tempFile}
 for format in ${formatFiles} ; do
   find "${1}"/*.${format} &> ${tempFileTest}
   if (( $? != 0 )) ; then
-    echo "null" > /dev/null
+    print "null" > /dev/null
   else
-    echo "+ Video file(s) in .${format} found!"
+    print "+ Video file(s) in .${format} found!"
     cd "${1}" && ls -1 *.${format} &> /tmp/tempFile.txt
     cat /tmp/tempFile.txt >> ${tempFile}
     rm -rf /tmp/tempFile.txt 2> /dev/null
@@ -223,22 +223,22 @@ done
 
 # Set the global metadata album
 current_date=$(date +%Y)
-echo ""
-echo "* Common METADATA configuration:"
-echo ""
-echo -n "* (Default: Album-Disc) Type name of album: " ; read album_file
+print ""
+print "* Common METADATA configuration:"
+print ""
+print -n "* (Default: Album-Disc) Type name of album: " ; read album_file
 if [[ -z "${album_file}" ]] ; then
   album_title="Album-Disc"
 else
   album_title="${album_file}"
 fi
-echo -n "* (Default: ${current_date}) Type the year of album: " ; read year_file
+print -n "* (Default: ${current_date}) Type the year of album: " ; read year_file
 if [[ -z "${year_file}" ]] ; then
   year_num="${current_date}"
 else
   year_num="${year_file}"
 fi
-echo -n "* (Default: Pop) Type the genre of album: " ; read genre_file
+print -n "* (Default: Pop) Type the genre of album: " ; read genre_file
 if [[ -z "${genre_file}" ]] ; then
   genre_file="Pop"
 else
@@ -249,24 +249,24 @@ fi
 convert_files=1
 num_files=$(cat ${tempFile} | wc -l)
 if (( num_files == 0 )) ; then
-  echo ""
-  echo "+ No video/audio file(s) found in folder '${1}"
-  echo ""
+  print ""
+  print "+ No video/audio file(s) found in folder '${1}"
+  print ""
   exit
 else
-  echo ""
-  echo "* List of files:"
-  echo ""
+  print ""
+  print "* List of files:"
+  print ""
   while (( convert_files <= num_files )) ; do
     show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
-    echo "  + ${show_file}"
+    print "  + ${show_file}"
     convert_files=$(expr ${convert_files} + 1)
   done
-  echo ""
-  echo "* The output folder will be '${1}/to-mp3'"
+  print ""
+  print "* The output folder will be '${1}/to-mp3'"
   # Execute commands for conversion
-  echo ""
-  echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+  print ""
+  print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
   if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
     exit
   else
@@ -274,22 +274,22 @@ else
     cd "${1}" && mkdir -p to-mp3 && rm -rf to-mp3/*
     while (( convert_files <= num_files )) ; do
       show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
-      fname=$(echo "${show_file}" | cut -d "." -f 1)
+      fname=$(print "${show_file}" | cut -d "." -f 1)
       name_title_default=$(removeExtension "${show_file}")
       name_title_default=$(showFileWithSpace "${name_title_default}")
-      echo ""
-      echo "* METADATA for '${show_file}'"
-      echo ""
-      echo " - Album: ${album_title}"
-      echo " - Year: ${year_num}"
-      echo " - Genre: ${genre_file}"
-      echo ""
-      echo "* Information of '${show_file}':"
-      echo ""
-      echo "+ Audio Tracks:"
-      echo ""
+      print ""
+      print "* METADATA for '${show_file}'"
+      print ""
+      print " - Album: ${album_title}"
+      print " - Year: ${year_num}"
+      print " - Genre: ${genre_file}"
+      print ""
+      print "* Information of '${show_file}':"
+      print ""
+      print "+ Audio Tracks:"
+      print ""
       ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
-      echo ""
+      print ""
       # Check the audio track by default
       audio_default=$(ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
       if [[ -z "${audio_default}" ]] ; then
@@ -297,41 +297,41 @@ else
         if [[ -z "${audio_default}" ]] ; then
           audio_default="0:1"
         else
-          audio_default_patch=$(echo ${audio_default} | cut -c4)
+          audio_default_patch=$(print ${audio_default} | cut -c4)
           if [[ "${audio_default_patch}" == ":" ]] ; then
-            audio_default=$(echo ${audio_default} | cut -c1-3)
+            audio_default=$(print ${audio_default} | cut -c1-3)
           else
             audio_default="${audio_default}"
           fi
         fi
       else
-        audio_default_patch=$(echo ${audio_default} | cut -c4)
+        audio_default_patch=$(print ${audio_default} | cut -c4)
         if [[ "${audio_default_patch}" == ":" ]] ; then
-          audio_default=$(echo ${audio_default} | cut -c1-3)
+          audio_default=$(print ${audio_default} | cut -c1-3)
         else
           audio_default="${audio_default}"
         fi
       fi
       # Ask for audio
-      echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+      print -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
       if [[ -z "${audio_track}" ]] ; then
         audio_track="${audio_default}"
       else
         audio_track="${audio_track}"
       fi
-      echo -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
+      print -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
       if [[ -z "${name_title}" ]] ; then
         name_title="${name_title_default}"
       else
         name_title="${name_title}"
       fi
-      echo -n "* (Default: ${track_init}) Type number of track: " ; read track_file
+      print -n "* (Default: ${track_init}) Type number of track: " ; read track_file
       if [[ -z "${track_file}" ]] ; then
         track_num="${track_init}"
       else
         track_num="${track_file}"
       fi
-      echo -n "* (Default: ${artist_init}) Type name of artist: " ; read artist_file
+      print -n "* (Default: ${artist_init}) Type name of artist: " ; read artist_file
       if [[ -z "${artist_file}" ]] ; then
         artist_title="${artist_init}"
       else

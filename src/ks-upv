@@ -39,7 +39,7 @@ convertText() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
-  echo "${wordToConvert}" > ${ksToolsSedFile}
+  print "${wordToConvert}" > ${ksToolsSedFile}
   # Borrar espacios
   sed -i 's/ /_/g' "${ksToolsSedFile}" &> /dev/null
   # Borrar simbolos
@@ -57,7 +57,7 @@ convertText() {
   sed -i 's/;/-/g' "${ksToolsSedFile}" &> /dev/null
   # Mostrar texto convertido
   wordToConvert=$(cat ${ksToolsSedFile})
-  echo ${wordToConvert}
+  print ${wordToConvert}
 }
 
 # Function to list the files of a directory.
@@ -76,7 +76,7 @@ listArchives() {
     fileToRename=$(cat ${ksToolsTempFolder}/rename-files.txt | head -${count} | tail -1)
     fileRenamed=$(convertText "${fileToRename}")
     if [[ "${fileRenamed}" == "${fileToRename}" ]] ; then
-      echo "null" > /dev/null
+      print "null" > /dev/null
     else
       mv "${fileToRename}" "${fileRenamed}"
     fi
@@ -88,11 +88,11 @@ listArchives() {
   for format in ${formatFiles} ; do
     find "${1}"/*.${format} &> ${dirTemp}/${listCompTempTest}
     if (( $? != 0 )) ; then
-      echo "null" > /dev/null
+      print "null" > /dev/null
     else
       find "${1}"/*.${format} &> ${dirTemp}/temp.tmp
       cat ${dirTemp}/temp.tmp >> ${dirTemp}/${listCompTemp}
-      echo "+ Video file(s) in .${format} found!"
+      print "+ Video file(s) in .${format} found!"
       cd "${1}" && ls -1 *.${format} &> ${dirTemp}/temp.tmp
       cat ${dirTemp}/temp.tmp >> ${dirTemp}/${listTemp}
       rm -rf ${dirTemp}/temp.tmp 2> /dev/null
@@ -100,44 +100,44 @@ listArchives() {
     fi
   done
   if (( fail == 1 )) ; then
-    echo "+ No video file(s) found!"
-    echo ""
+    print "+ No video file(s) found!"
+    print ""
     exit
   else
-    echo ""
+    print ""
   fi
 }
 
 # Function to count the found files.
 countArchives() {
   totalArchives=$(cat ${dirTemp}/${listCompTemp} | wc -l)
-  echo ${totalArchives}
+  print ${totalArchives}
 }
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
 showFileWithSpace() {
   FileName=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
-  FileNoExtension=$(echo $FileName | cut -d "." -f 1)
-  echo $FileNoExtension > ${dirTemp}/name.tmp
+  FileNoExtension=$(print $FileName | cut -d "." -f 1)
+  print $FileNoExtension > ${dirTemp}/name.tmp
   sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
   rm -rf ${dirTemp}/name.tmp
-  echo ${DisplayName}
+  print ${DisplayName}
 }
 
 # Function to show the name of the file.
 # Syntax: showFile <file number>
 showFile() {
   archive=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
-  echo ${archive}
+  print ${archive}
 }
 
 # Function to show full file path.
 # Syntax: showPathFile <file number>
 showPathFile() {
   pathFile=$(cat ${dirTemp}/${listCompTemp} | head -${1} | tail -1)
-  echo ${pathFile}
+  print ${pathFile}
 }
 
 # Function to send file to server.
@@ -278,8 +278,8 @@ EOF
       fi
     fi
     if (( ${OUTPUT} != 0 )) ; then
-      echo "Failure to send ${2}"
-      echo "Retrying..."
+      print "Failure to send ${2}"
+      print "Retrying..."
       sleep 5
       countSend=$(expr ${countSend} + 1)
       if (( countSend == 3 )) ; then
@@ -296,8 +296,8 @@ EOF
 checkChecksum() {
   correct=0
   countChecksum=0
-  echo -n "Checking checksum... " && sleep 4
-  echo ""
+  print -n "Checking checksum... " && sleep 4
+  print ""
   toolSelected=$(cat ${dirConfig}/ks-upload-tool | grep "rsa")
   selectedTool=$(cat ${dirConfig}/ks-upload-tool)
   portSelected=$(cat ${dirConfig}/ks-upload-port)
@@ -318,10 +318,10 @@ checkChecksum() {
           OUTPUT=$?
         fi
       elif [[ "${selectedTool}" == "rsync-e" ]] ; then
-        echo > /dev/null
+        print > /dev/null
         OUTPUT=0
       elif [[ "${selectedTool}" == "scp-e" ]] ; then
-        echo > /dev/null
+        print > /dev/null
         OUTPUT=0
       else
         checksumLocal=$(/usr/bin/md5sum ${2})
@@ -344,10 +344,10 @@ checkChecksum() {
           OUTPUT=$?
         fi
       elif [[ "${selectedTool}" == "rsync-e" ]] ; then
-        echo > /dev/null
+        print > /dev/null
         OUTPUT=0
       elif [[ "${selectedTool}" == "scp-e" ]] ; then
-        echo > /dev/null
+        print > /dev/null
         OUTPUT=0
       else
         checksumLocal=$(md5sum ${2})
@@ -356,8 +356,8 @@ checkChecksum() {
       fi
     fi
     if (( OUTPUT != 0 )) ; then
-      echo "Failed to get checksum for ${5}"
-      echo "Retrying..."
+      print "Failed to get checksum for ${5}"
+      print "Retrying..."
       sleep 5
       countChecksum=$(expr ${countChecksum} + 1)
       if (( countChecksum == 3 )) ; then
@@ -365,14 +365,14 @@ checkChecksum() {
       fi
     else
       if [[ "${selectedTool}" == "rsync-e" ]] ; then
-        echo > /dev/null
+        print > /dev/null
         correct=1
       elif [[ "${selectedTool}" == "scp-e" ]] ; then
-        echo > /dev/null
+        print > /dev/null
         correct=1
       else
-      echo "Local checksum: ${checksumLocal}"
-      echo "Server checksum: ${checksumServer}"
+      print "Local checksum: ${checksumLocal}"
+      print "Server checksum: ${checksumServer}"
       correct=1
       fi
     fi
@@ -384,7 +384,7 @@ generate_codes() {
   chars="abcdefghijklmnopqrstywxz1234567890ABCDEFHIJKLMNOPQRSTYWXZ@/"
   long_code="${1}"
   for i in {1} ; do
-    echo -n "${chars:RANDOM%${#chars}:1}"
+    print -n "${chars:RANDOM%${#chars}:1}"
   done
 }
 
@@ -392,14 +392,14 @@ generate_codes() {
 # Syntax: encrypt_kstools <password>
 encrypt_kstools() {
   raw_pass="${1}"
-  characters_pass_raw=$(echo ${raw_pass} | wc -m)
+  characters_pass_raw=$(print ${raw_pass} | wc -m)
   characters_pass=$(expr ${characters_pass_raw} - 1)
   total_characters=0
   mkdir -p ${HOME}/.ks-tools/
   rm -rf ${HOME}/.ks-tools/.seq-codes
   while (( total_characters <= characters_pass )) ; do
-    num_gen=$(echo -n ${RANDOM} | cut -c1)
-    echo -n ${num_gen} >> ${HOME}/.ks-tools/.seq-codes
+    num_gen=$(print -n ${RANDOM} | cut -c1)
+    print -n ${num_gen} >> ${HOME}/.ks-tools/.seq-codes
     total_characters=$(expr ${total_characters} + 1)
   done
   characters_seq_raw=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null | wc -m)
@@ -408,7 +408,7 @@ encrypt_kstools() {
   encrypted_pass=""
   while (( total_characters <= characters_pass )) ; do
     num_seq_read=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null | cut -c${total_characters})
-    character=$(echo ${raw_pass} | cut -c${total_characters})
+    character=$(print ${raw_pass} | cut -c${total_characters})
     repeat_seq=0
     while (( repeat_seq < num_seq_read )) ; do
       code_gen=$(generate_codes)
@@ -420,7 +420,7 @@ encrypt_kstools() {
   done
   code_gen=$(generate_codes)
   encrypted_pass="${encrypted_pass}${code_gen}"
-  echo ${encrypted_pass}
+  print ${encrypted_pass}
 }
 
 # Function to decrypt pass on config file
@@ -434,92 +434,92 @@ decrypt_kstools() {
   total_characters=1
   pos_codes_pass=0
   while (( total_characters < num_codes_seq )) ; do
-    pos_codes=$(echo ${codes_seq} | cut -c${total_characters})
+    pos_codes=$(print ${codes_seq} | cut -c${total_characters})
     pos_codes_pass=$(expr ${pos_codes_pass} + ${pos_codes} + 1)
     pos_pass=$(expr ${raw_pass_encrypted} | cut -c${pos_codes_pass})
     pass_decrypt="${pass_decrypt}${pos_pass}"
     total_characters=$(expr ${total_characters} + 1)
   done
-  echo ${pass_decrypt}
+  print ${pass_decrypt}
 }
 
 # Function to generate certificate on remote machine
 gen_pem_ssh() {
   userhost="${USER}"
   name_host="${HOSTNAME}"
-  echo "" && echo "* Generating .pem file to connect to this machine (${userhost})."
-  echo -e "${userhost}\n\n\n" | ssh-keygen
+  print "" && print "* Generating .pem file to connect to this machine (${userhost})."
+  print -e "${userhost}\n\n\n" | ssh-keygen
   mv ${userhost} ${userhost}-${name_host}.pem
   mkdir -p ~/.ssh
   chmod 700 ~/.ssh
   touch ~/.ssh/authorized_keys
   chmod 600  ~/.ssh/authorized_keys
-  echo "* Adding entry in the file ~/.ssh/authorized_keys"
+  print "* Adding entry in the file ~/.ssh/authorized_keys"
   cat ${userhost}.pub >> ~/.ssh/authorized_keys
   rm -rf ${userhost}.pub
-  echo ""
-  echo "+ Copy the ${userhost}-${name_host}.pem file to your computer to connect to this machine."
+  print ""
+  print "+ Copy the ${userhost}-${name_host}.pem file to your computer to connect to this machine."
   if [[ -f /usr/bin/puttygen ]] ; then
     puttygen ${userhost}-${name_host}.pem -o ${userhost}-${name_host}.ppk -O private
-    echo "+ Copy the ${userhost}-${name_host}.ppk file to your computer to connect to this machine."
+    print "+ Copy the ${userhost}-${name_host}.ppk file to your computer to connect to this machine."
   fi
-  echo "+ Connect: ssh -i ${userhost}-${name_host}.pem ${userhost}@${name_host}"
-  echo ""
+  print "+ Connect: ssh -i ${userhost}-${name_host}.pem ${userhost}@${name_host}"
+  print ""
 }
 
 # Function to show config
 showConfig() {
   configAvailable=0
-  echo ""
-  echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
+  print ""
+  print "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
   if [[ -f ${dirConfig}/ks-upload-user ]] ; then
     showUser=$(cat ${dirConfig}/ks-upload-user)
-    echo "- Server User: ${showUser}"
+    print "\- Server User: ${showUser}"
     configAvailable=1
   fi
   if [[ -f ${dirConfig}/ks-upload-pass ]] ; then
     readPasswordEncrypted=$(cat ${dirConfig}/ks-upload-pass)
     readPasswordDecrypted=$(decrypt_kstools "${readPasswordEncrypted}")
-    readPasswordChars=$(echo ${readPasswordDecrypted} | wc -m)
+    readPasswordChars=$(print ${readPasswordDecrypted} | wc -m)
     totalchars=0
     showPassword=""
     while (( totalchars < readPasswordChars )) ; do
       showPassword="${showPassword}*"
       totalchars=$(expr ${totalchars} + 1)
     done
-    echo "- Server Password/PEM: ${showPassword}"
+    print "\- Server Password/PEM: ${showPassword}"
     configAvailable=1
   fi
   if [[ -f ${dirConfig}/ks-upload-server ]] ; then
     showServer=$(cat ${dirConfig}/ks-upload-server)
-    echo "- URL (or IP) Server: ${showServer}"
+    print "\- URL (or IP) Server: ${showServer}"
     configAvailable=1
   fi
   if [[ -f ${dirConfig}/ks-upload-dirserver ]] ; then
     showDirServer=$(cat ${dirConfig}/ks-upload-dirserver)
-    echo "- Destination Path (Server): ${showDirServer}"
+    print "\- Destination Path (Server): ${showDirServer}"
     configAvailable=1
   fi
   if [[ -f ${dirConfig}/ks-upload-dirlocal ]] ; then
     showDirLocal=$(cat ${dirConfig}/ks-upload-dirlocal)
-    echo "- Scan Path (Local): ${showDirLocal}"
+    print "\- Scan Path (Local): ${showDirLocal}"
     configAvailable=1
   fi
   if [[ -f ${dirConfig}/ks-upload-tool ]] ; then
     showUpvTool=$(cat ${dirConfig}/ks-upload-tool)
-    echo "- Upload Tool: ${showUpvTool}"
+    print "\- Upload Tool: ${showUpvTool}"
     configAvailable=1
   fi
   if [[ -f ${dirConfig}/ks-upload-port ]] ; then
     showUpvPort=$(cat ${dirConfig}/ks-upload-port)
-    echo "- Port Connection: ${showUpvPort}"
+    print "\- Port Connection: ${showUpvPort}"
     configAvailable=1
   fi
   if (( configAvailable == 0 )) ; then
-    echo "* The configuration file does not exist!"
+    print "* The configuration file does not exist!"
   fi
-  echo ""
+  print ""
   exit
 }
 
@@ -531,7 +531,7 @@ editConfig() {
     editUser=$(cat ${dirConfig}/ks-upload-user 2> /dev/null)
     readPasswordEncrypted=$(cat ${dirConfig}/ks-upload-pass)
     readPasswordDecrypted=$(decrypt_kstools "${readPasswordEncrypted}")
-    readPasswordChars=$(echo ${readPasswordDecrypted} | wc -m)
+    readPasswordChars=$(print ${readPasswordDecrypted} | wc -m)
     totalchars=0
     editPassword=""
     while (( totalchars < readPasswordChars )) ; do
@@ -543,91 +543,91 @@ editConfig() {
     editDirLocal=$(cat ${dirConfig}/ks-upload-dirlocal 2> /dev/null)
     editUpvTool=$(cat ${dirConfig}/ks-upload-tool 2> /dev/null)
     editUpvPort=$(cat ${dirConfig}/ks-upload-port 2> /dev/null)
-    echo ""
-    echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
-    echo ""
-    echo "+ Config: ${dirConfig}/ks-upload-*"
-    echo ""
-    echo " 1 - Edit User (${editUser})"
-    echo " 2 - Edit Password/PEM (${editPassword})"
-    echo " 3 - Edit Server (${editServer})"
-    echo " 4 - Edit Dest. Path (${editDirServer})"
-    echo " 5 - Edit Local Path (${editDirLocal})"
-    echo " 6 - Edit Upload Tool (${editUpvTool})"
-    echo " 7 - Edit Port Connection (${editUpvPort})"
-    echo ""
-    echo " 8 - Exit"
-    echo ""
-    echo -n "* Choose an option: " ; read EDIT
-    echo ""
+    print ""
+    print "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+    print ""
+    print "+ Config: ${dirConfig}/ks-upload-*"
+    print ""
+    print " 1 - Edit User (${editUser})"
+    print " 2 - Edit Password/PEM (${editPassword})"
+    print " 3 - Edit Server (${editServer})"
+    print " 4 - Edit Dest. Path (${editDirServer})"
+    print " 5 - Edit Local Path (${editDirLocal})"
+    print " 6 - Edit Upload Tool (${editUpvTool})"
+    print " 7 - Edit Port Connection (${editUpvPort})"
+    print ""
+    print " 8 - Exit"
+    print ""
+    print -n "* Choose an option: " ; read EDIT
+    print ""
     if [[ "${EDIT}" == "1" ]] ; then
-      echo -n "* Enter the server user: " ; read USER
+      print -n "* Enter the server user: " ; read USER
       user=${USER}
-      echo ${user} > ${dirConfig}/ks-upload-user
+      print ${user} > ${dirConfig}/ks-upload-user
     elif [[ "${EDIT}" == "2" ]] ; then
-      echo -n "* Enter the server password (type 'pem' for use pem certificate): " ; read PASS
+      print -n "* Enter the server password (type 'pem' for use pem certificate): " ; read PASS
       if [[ "${PASS}" == "pem" ]] ; then
-        echo -n "+ Type the absolute path to the .pem file: " ; read pem_path
+        print -n "+ Type the absolute path to the .pem file: " ; read pem_path
       if [[ -f "${pem_path}" ]] ; then
         raw_password_enter=${PASS}
         encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
-        echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+        print ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
         cp -rf "${pem_path}" ${dirConfig}/connect.pem
         chmod 600 ${dirConfig}/connect.pem
         if [[ "${editUpvTool}" == "rsync" ]] ; then
-          echo "rsync-pem" > ${dirConfig}/ks-upload-tool
+          print "rsync-pem" > ${dirConfig}/ks-upload-tool
         elif [[ "${editUpvTool}" == "rsync-rsa" ]] ; then
-          echo "rsync-pem" > ${dirConfig}/ks-upload-tool
+          print "rsync-pem" > ${dirConfig}/ks-upload-tool
         elif [[ "${editUpvTool}" == "scp" ]] ; then
-          echo "scp-pem" > ${dirConfig}/ks-upload-tool
+          print "scp-pem" > ${dirConfig}/ks-upload-tool
         elif [[ "${editUpvTool}" == "scp-rsa" ]] ; then
-          echo "scp-pem" > ${dirConfig}/ks-upload-tool
+          print "scp-pem" > ${dirConfig}/ks-upload-tool
         fi
-        echo "* PEM file copied to ${dirConfig}/connect.pem"
+        print "* PEM file copied to ${dirConfig}/connect.pem"
       else
-        echo "+ File ${pem_path} does not exist"
-        echo ""
-        echo "+ Press ENTER to return menu " ; read continue
+        print "+ File ${pem_path} does not exist"
+        print ""
+        print "+ Press ENTER to return menu " ; read continue
       fi
       else
         raw_password_enter=${PASS}
         encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
-        echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+        print ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
         if [[ "${editUpvTool}" == "rsync-pem" ]] ; then
-          echo "rsync" > ${dirConfig}/ks-upload-tool
+          print "rsync" > ${dirConfig}/ks-upload-tool
         elif [[ "${editUpvTool}" == "scp-pem" ]] ; then
-          echo "scp" > ${dirConfig}/ks-upload-tool
+          print "scp" > ${dirConfig}/ks-upload-tool
         fi
       fi
     elif [[ "${EDIT}" == "3" ]] ; then
-      echo -n "* Enter the server URL: " ; read SERVER
+      print -n "* Enter the server URL: " ; read SERVER
       server=${SERVER}
-      echo ${server} > ${dirConfig}/ks-upload-server
+      print ${server} > ${dirConfig}/ks-upload-server
     elif [[ "${EDIT}" == "4" ]] ; then
-      echo -n "* Enter the path on the server: " ; read DIR_SERVER
+      print -n "* Enter the path on the server: " ; read DIR_SERVER
       dirServer=${DIR_SERVER}
-      echo ${dirServer} > ${dirConfig}/ks-upload-dirserver
+      print ${dirServer} > ${dirConfig}/ks-upload-dirserver
     elif [[ "${EDIT}" == "5" ]] ; then
-      echo -n "* Enter the local path to scan: " ; read DIR
+      print -n "* Enter the local path to scan: " ; read DIR
       dirLocal=${DIR}
-      echo ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
+      print ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
      elif [[ "${EDIT}" == "6" ]] ; then
-      echo ""
-      echo "* Available options:"
-      echo ""
-      echo "- scp"
-      echo "- rsync"
-      echo "- scp-rsa (legacy RSA algorithm)"
-      echo "- rsync-rsa (legacy RSA algorithm)"
-      echo "- scp-e"
-      echo "- rsync-e"
-      echo "- scp-pem"
-      echo "- rsync-pem"
-      echo ""
-      echo "* Note: 'scp-e' and 'rsync-e' use 'expect' instead of 'sshpass'."
-      echo "* Note: 'scp-pem' and 'rsync-pem' use ~/.ks-tools/connect.pem."
-      echo "" 
-      echo -n "* [Default: scp] Type upload tool (Example: rsync-e): " ; read TOOL
+      print ""
+      print "* Available options:"
+      print ""
+      print "\- scp"
+      print "\- rsync"
+      print "\- scp-rsa (legacy RSA algorithm)"
+      print "\- rsync-rsa (legacy RSA algorithm)"
+      print "\- scp-e"
+      print "\- rsync-e"
+      print "\- scp-pem"
+      print "\- rsync-pem"
+      print ""
+      print "* Note: 'scp-e' and 'rsync-e' use 'expect' instead of 'sshpass'."
+      print "* Note: 'scp-pem' and 'rsync-pem' use ~/.ks-tools/connect.pem."
+      print "" 
+      print -n "* [Default: scp] Type upload tool (Example: rsync-e): " ; read TOOL
       if [[ -z "${TOOL}" ]] ; then
         upvTool="scp"
       elif [[ "${TOOL}" == "rsync" ]] ; then
@@ -647,20 +647,20 @@ editConfig() {
       else  
         upvTool="scp"
       fi
-      echo ${upvTool} > ${dirConfig}/ks-upload-tool
+      print ${upvTool} > ${dirConfig}/ks-upload-tool
     elif [[ "${EDIT}" == "7" ]] ; then
-      echo -n "* [Default: 22] Type port connection: " ; read PORT
+      print -n "* [Default: 22] Type port connection: " ; read PORT
       if [[ -z "${PORT}" ]] ; then
         upvPort="22"
       else
         upvPort="${PORT}"
       fi
-      echo ${upvPort} > ${dirConfig}/ks-upload-port
+      print ${upvPort} > ${dirConfig}/ks-upload-port
     elif [[ "${EDIT}" == "8" ]] ; then
       editConfig=1
     else
-      echo "+ Invalid option!"
-      echo -n "- Press ENTER to continue " ; read CONTINUE
+      print "+ Invalid option!"
+      print -n "- Press ENTER to continue " ; read CONTINUE
     fi
   done
   exit
@@ -670,118 +670,118 @@ editConfig() {
 createConfig() {
 # Start script
   clear
-  echo ""
-  echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
+  print ""
+  print "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
   checkDependencies
   # Ask the user and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-user ]] ; then
-    echo "+ The USER configuration already exists (Use: 'ks-upv -e' for edit)"
+    print "+ The USER configuration already exists (Use: 'ks-upv -e' for edit)"
   else
-    echo -n "* Enter the server user: " ; read USER
+    print -n "* Enter the server user: " ; read USER
     user=${USER}
-    echo ${user} > ${dirConfig}/ks-upload-user
+    print ${user} > ${dirConfig}/ks-upload-user
   fi
   # Ask the password and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-pass ]] ; then
-    echo "+ The PASSWORD/PEM configuration already exists (Use: 'ks-upv -e' for edit)" 
+    print "+ The PASSWORD/PEM configuration already exists (Use: 'ks-upv -e' for edit)" 
   else
-    echo -n "* Enter the server password (type 'pem' for use pem certificate): " ; read PASS
+    print -n "* Enter the server password (type 'pem' for use pem certificate): " ; read PASS
     if [[ "${PASS}" == "pem" ]] ; then
-      echo -n "+ Type the absolute path to the .pem file: " ; read pem_path
+      print -n "+ Type the absolute path to the .pem file: " ; read pem_path
       if [[ -f "${pem_path}" ]] ; then
         raw_password_enter=${PASS}
         encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
-        echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+        print ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
         cp -rf "${pem_path}" ${dirConfig}/connect.pem
         chmod 600 ${dirConfig}/connect.pem
-        echo "scp-pem" > ${dirConfig}/ks-upload-tool
-        echo "* PEM file copied to ${dirConfig}/connect.pem"
+        print "scp-pem" > ${dirConfig}/ks-upload-tool
+        print "* PEM file copied to ${dirConfig}/connect.pem"
       else
-        echo "+ File ${pem_path} does not exist"
-        echo "+ The configuration is cancelled"
+        print "+ File ${pem_path} does not exist"
+        print "+ The configuration is cancelled"
         exit
       fi
     else
       raw_password_enter=${PASS}
       encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
-      echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+      print ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
     fi
   fi
   # Ask the server URL and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-server ]] ; then
-    echo "+ The SERVER configuration already exists (Use: 'ks-upv -e' for edit)"
+    print "+ The SERVER configuration already exists (Use: 'ks-upv -e' for edit)"
   else
-    echo -n "* Enter the server URL (or IP): " ; read SERVER
+    print -n "* Enter the server URL (or IP): " ; read SERVER
     server=${SERVER}
-    echo ${server} > ${dirConfig}/ks-upload-server
+    print ${server} > ${dirConfig}/ks-upload-server
   fi
   # Ask the path on the server and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-dirserver ]] ; then
-    echo "+ The SERVER PATH configuration already exists (Use: 'ks-upv -e' for edit)"
+    print "+ The SERVER PATH configuration already exists (Use: 'ks-upv -e' for edit)"
   else
-    echo -n "* Enter the path on the server: " ; read DIR_SERVER
+    print -n "* Enter the path on the server: " ; read DIR_SERVER
     dirServer=${DIR_SERVER}
-    echo ${dirServer} > ${dirConfig}/ks-upload-dirserver
+    print ${dirServer} > ${dirConfig}/ks-upload-dirserver
   fi
   # Ask the local path and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-dirlocal ]] ; then
-    echo "+ The LOCAL PATH configuration already exists (Use: 'ks-upv -e' for edit)"
+    print "+ The LOCAL PATH configuration already exists (Use: 'ks-upv -e' for edit)"
   else
-    echo -n "* Enter the local path to scan: " ; read DIR
+    print -n "* Enter the local path to scan: " ; read DIR
     dirLocal=${DIR}
-    echo ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
+    print ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
   fi
   # Configure upload tool by default
   if [[ -f ${dirConfig}/ks-upload-tool ]] ; then
-    echo "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upv -e' for edit)"
+    print "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upv -e' for edit)"
   else
     if [[ "${PASS}" == "pem" ]] ; then
-      echo "* Setting 'scp-pem' as the default tool"
-      echo "scp-pem" > ${dirConfig}/ks-upload-tool
+      print "* Setting 'scp-pem' as the default tool"
+      print "scp-pem" > ${dirConfig}/ks-upload-tool
     else
-      echo "* Setting 'scp' as the default tool"
-      echo "scp" > ${dirConfig}/ks-upload-tool
+      print "* Setting 'scp' as the default tool"
+      print "scp" > ${dirConfig}/ks-upload-tool
     fi
   fi
    # Configure port by default
   if [[ -f ${dirConfig}/ks-upload-port ]] ; then
-    echo "+ The PORT configuration already exists (Use: 'ks-upv -e' for edit)"
+    print "+ The PORT configuration already exists (Use: 'ks-upv -e' for edit)"
   else
-    echo "* Setting port 22 as the default port"
-    echo "22" > ${dirConfig}/ks-upload-port
+    print "* Setting port 22 as the default port"
+    print "22" > ${dirConfig}/ks-upload-port
   fi
-  echo ""
+  print ""
 }
 
 # Function to show version
 showVersion() {
-  echo ""
-  echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
+  print ""
+  print "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
   exit
 }
 
 # Function to show help
 showHelp() {
-  echo ""
-  echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "- Upload videos file(s) to server with scp or rsync"
-  echo ""
-  echo "+ Config: ${dirConfig}/ks-upload-*"
-  echo ""
-  echo "+ Syntax:"
-  echo ""
-  echo " $ ks-upv -i  - Start upload"
-  echo " $ ks-upv -g  - Create configuration"
-  echo " $ ks-upv -r  - Remove configuration"
-  echo " $ ks-upv -c  - Show configuration"
-  echo " $ ks-upv -e  - Edit configuration"
-  echo " $ ks-upv -p  - Generate certificate"
-  echo " $ ks-upv -v  - Show version"
-  echo " $ ks-upv -h  - Show help"
-  echo ""
+  print ""
+  print "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "\- Upload videos file(s) to server with scp or rsync"
+  print ""
+  print "+ Config: ${dirConfig}/ks-upload-*"
+  print ""
+  print "+ Syntax:"
+  print ""
+  print " $ ks-upv -i  - Start upload"
+  print " $ ks-upv -g  - Create configuration"
+  print " $ ks-upv -r  - Remove configuration"
+  print " $ ks-upv -c  - Show configuration"
+  print " $ ks-upv -e  - Edit configuration"
+  print " $ ks-upv -p  - Generate certificate"
+  print " $ ks-upv -v  - Show version"
+  print " $ ks-upv -h  - Show help"
+  print ""
   exit
 }
 
@@ -800,22 +800,22 @@ checkDependencies() {
     done
   done
   for notFound in ${dependencies} ; do
-    check_found_one=$(echo ${dependencies_found} | grep " ${notFound}")
-    check_found_two=$(echo ${dependencies_found} | grep "${notFound} ")
+    check_found_one=$(print ${dependencies_found} | grep " ${notFound}")
+    check_found_two=$(print ${dependencies_found} | grep "${notFound} ")
     if_not_found="${check_found_one}${check_found_two}"
     if [[ -z "${if_not_found}" ]] ; then
       dependencies_not_found="${dependencies_not_found} ${notFound}"
     fi
   done
-  echo "* Checking necessary tools... "
+  print "* Checking necessary tools... "
   # Show if all tools are installed
   if [[ -z "${dependencies_not_found}" ]] ; then
-    echo "* The necessary tools are installed"
-    echo ""
+    print "* The necessary tools are installed"
+    print ""
   else
-    echo "* Some required tools are not installed:${dependencies_not_found}"
-    echo "* The process has been stopped"
-    echo ""
+    print "* Some required tools are not installed:${dependencies_not_found}"
+    print "* The process has been stopped"
+    print ""
     exit
   fi
 }
@@ -823,12 +823,12 @@ checkDependencies() {
 # Function to migrate old configuration.
 if [[ -f ${dirConfig}/USER ]] ; then
   cat ${dirConfig}/USER > ${dirConfig}/ks-upload-user
-  echo "* Migrating ${dirConfig}/USER > ${dirConfig}/ks-upload-user"
+  print "* Migrating ${dirConfig}/USER > ${dirConfig}/ks-upload-user"
   rm -rf ${dirConfig}/USER
   sleep 1
 fi
 if [[ -f ${dirConfig}/PASS ]] ; then
-  echo "* Migrating ${dirConfig}/PASS > ${dirConfig}/ks-upload-pass"
+  print "* Migrating ${dirConfig}/PASS > ${dirConfig}/ks-upload-pass"
   current_pass=$(cat ${dirConfig}/PASS)
   encrypt_kstools "${current_pass}" > ${dirConfig}/ks-upload-pass
   rm -rf ${dirConfig}/PASS
@@ -836,58 +836,58 @@ if [[ -f ${dirConfig}/PASS ]] ; then
 fi
 if [[ -f ${dirConfig}/SERVER ]] ; then
   cat ${dirConfig}/SERVER > ${dirConfig}/ks-upload-server
-  echo "* Migrating ${dirConfig}/SERVER > ${dirConfig}/ks-upload-server"
+  print "* Migrating ${dirConfig}/SERVER > ${dirConfig}/ks-upload-server"
   rm -rf ${dirConfig}/SERVER
   sleep 1
 fi
 if [[ -f ${dirConfig}/DIR_SERVER ]] ; then
   cat ${dirConfig}/DIR_SERVER > ${dirConfig}/ks-upload-dirserver
-  echo "* Migrating ${dirConfig}/DIR_SERVER > ${dirConfig}/ks-upload-dirserver"
+  print "* Migrating ${dirConfig}/DIR_SERVER > ${dirConfig}/ks-upload-dirserver"
   rm -rf ${dirConfig}/DIR_SERVER
   sleep 1
 fi
 if [[ -f ${dirConfig}/DIR ]] ; then
   cat ${dirConfig}/DIR > ${dirConfig}/ks-upload-dirlocal
-  echo "* Migrating ${dirConfig}/DIR > ${dirConfig}/ks-upload-dirlocal"
+  print "* Migrating ${dirConfig}/DIR > ${dirConfig}/ks-upload-dirlocal"
   rm -rf ${dirConfig}/DIR
   sleep 1
 fi
 
 # Check if the configuration directory exists.
 if [[ -d ${dirConfig} ]] ; then
-  echo ${dirConfig} > /dev/null
+  print ${dirConfig} > /dev/null
 else
   mkdir -p ${dirConfig}
 fi
 
 # Delete the existing configuration.
 if [[ "${1}" == "-r" ]] ; then
-  echo ""
-  echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo -n "* [Default: n] Are you sure you want to delete the configuration? (y/n): " ; read confirm
+  print ""
+  print "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print -n "* [Default: n] Are you sure you want to delete the configuration? (y/n): " ; read confirm
   if [[ "${confirm}" == "y" ]] ; then
-    echo ""
-    echo "+ Removing USER file configuration..."
+    print ""
+    print "+ Removing USER file configuration..."
     rm -rf ${dirConfig}/ks-upload-user
-    echo "+ Removing PASSWORD/PEM file configuration..."
+    print "+ Removing PASSWORD/PEM file configuration..."
     rm -rf ${dirConfig}/ks-upload-pass
     rm -rf ${dirConfig}/connect.pem
-    echo "+ Removing SERVER file configuration..."
+    print "+ Removing SERVER file configuration..."
     rm -rf ${dirConfig}/ks-upload-server
-    echo "+ Removing SERVER PATH file configuration..."
+    print "+ Removing SERVER PATH file configuration..."
     rm -rf ${dirConfig}/ks-upload-dirserver
-    echo "+ Removing LOCAL PATH file configuration..."
+    print "+ Removing LOCAL PATH file configuration..."
     rm -rf ${dirConfig}/ks-upload-dirlocal
-    echo "* Removed all configuration"
+    print "* Removed all configuration"
     rm -rf ${dirConfig}/ks-upload-tool
     rm -rf ${dirConfig}/ks-upload-port 
-    echo ""
+    print ""
     exit
   else
-    echo ""
-    echo "+ Remove configuration canceled"
-    echo ""
+    print ""
+    print "+ Remove configuration canceled"
+    print ""
     exit
   fi
 fi
@@ -920,43 +920,43 @@ elif [[ "${1}" == "-i" ]] ; then
   dirServer=$(cat ${dirConfig}/ks-upload-dirserver)
   dirLocal=$(cat ${dirConfig}/ks-upload-dirlocal)
   # Call the functions to perform the whole process.
-  echo -n "* Scanning ${dirLocal} "
-  echo ""
+  print -n "* Scanning ${dirLocal} "
+  print ""
   if [[ -d ${dirLocal} ]] ; then
     listArchives "${dirLocal}"
     totalFiles=$(countArchives)
     count=1
-    echo "+ ${totalFiles} video file(s) found!"
-    echo ""
+    print "+ ${totalFiles} video file(s) found!"
+    print ""
     current_tool=$(cat ${dirConfig}/ks-upload-tool)
     if [[ "${current_tool}" == "scp" ]] ; then
-      echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
-      echo "* IMPORTANT: It's possible switch to 'rsync' or 'scp-e' if you wish (Command: ks-upv -e)"
-      echo ""
+      print "* NOTE: You are using 'scp' to upload files and no progress will be shown."
+      print "* IMPORTANT: It's possible switch to 'rsync' or 'scp-e' if you wish (Command: ks-upv -e)"
+      print ""
     fi
     if [[ "${current_tool}" == "scp-rsa" ]] ; then
-      echo "* NOTE: You are using 'scp-rsa' to upload files and no progress will be shown."
-      echo "* IMPORTANT: It's possible switch to 'rsync-rsa' if you wish (Command: ks-upv -e)"
-      echo ""
+      print "* NOTE: You are using 'scp-rsa' to upload files and no progress will be shown."
+      print "* IMPORTANT: It's possible switch to 'rsync-rsa' if you wish (Command: ks-upv -e)"
+      print ""
     fi
     while (( count <= totalFiles )) ; do
       fullNameFile=$(showFile ${count})
       fullPathFile=$(showPathFile ${count})
-      echo "Uploading '${fullNameFile}' "
+      print "Uploading '${fullNameFile}' "
       sendFile ${password} ${fullPathFile} ${user} ${server} ${dirServer} ${fullNameFile}
       if [[ "${current_tool}" == "scp-e" ]] ; then
-        echo > /dev/null
+        print > /dev/null
       elif [[ "${current_tool}" == "rsync-e" ]] ; then
-        echo > /dev/null
+        print > /dev/null
       else
         checkChecksum ${password} ${fullPathFile} ${user} ${server} ${dirServer}/${fullNameFile}
       fi
-      echo ""
+      print ""
       count=$(expr ${count} + 1)
     done
   else
-    echo "* Directory ${dirLocal} does not exist!"
-    echo ""
+    print "* Directory ${dirLocal} does not exist!"
+    print ""
     exit
   fi
   # Show help

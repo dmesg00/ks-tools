@@ -11,15 +11,15 @@ rootperm=$?
 if (( $rootperm == 0 )) ; then
   rm -rf /etc/root
 else
-  echo "Root permission is required to run this script"
+  print "Root permission is required to run this script"
   exit
 fi
 
 install_ffmpeg_gen(){
-  echo "Downloading ffmpeg"
+  print "Downloading ffmpeg"
   rm -rf /tmp/ffmpeg.zip
   wget -q --show-progress -c "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip" -O /tmp/ffmpeg.zip
-  echo "Installing ffmpeg"
+  print "Installing ffmpeg"
   cd /tmp/
   unzip -q -o ffmpeg.zip
   if [[ -f /tmp/ffmpeg-master-latest-win64-gpl/bin/ffmpeg.exe ]] ; then
@@ -39,20 +39,20 @@ install_ffmpeg_gen(){
   fi
   rm -rf /tmp/ffmpeg.zip
   rm -rf /tmp/ffmpeg-master-latest-win64-gpl
-  echo "Installation ffmpeg done"
+  print "Installation ffmpeg done"
 }
 
-echo "Checking ffmpeg version"
+print "Checking ffmpeg version"
 touch /etc/ffmpeg_version.conf
 version_ffmpeg=$(curl "https://github.com/BtbN/FFmpeg-Builds/releases/tag/latest" 2> /dev/null | grep "<title>" | cut -d ">" -f 2 | cut -d "<" -f 1)
 version_ffmpeg_current=$(cat /etc/ffmpeg_version.conf)
 if [[ "${version_ffmpeg}" != "${version_ffmpeg_current}" ]] ; then
-  echo "New ffmpeg version detected"
+  print "New ffmpeg version detected"
   install_ffmpeg_gen
   error_install=$?
   if (( ${error_install} == 0 )) ; then
-    echo "${version_ffmpeg}" > /etc/ffmpeg_version.conf
+    print "${version_ffmpeg}" > /etc/ffmpeg_version.conf
   fi
 else
-  echo "No updates for ffmpeg"
+  print "No updates for ffmpeg"
 fi

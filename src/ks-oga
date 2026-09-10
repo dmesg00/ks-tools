@@ -41,25 +41,25 @@ if [[ -f ${configFile} ]] ; then
   exist_default_lang_audio=$(cat ${configFile} | grep "default_lang_audio=") 
   exist_v_ext=$(cat ${configFile} | grep "v_ext=")
   if [[ -z ${exist_acodec} ]] ; then
-    echo "acodec=${acodec}" >> ${configFile}
+    print "acodec=${acodec}" >> ${configFile}
   fi
   if [[ -z ${exist_b_acodec} ]] ; then
-    echo "b_acodec=${b_acodec}" >> ${configFile}
+    print "b_acodec=${b_acodec}" >> ${configFile}
   fi
   if [[ -z ${exist_default_lang_audio} ]] ; then
-    echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+    print "default_lang_audio=${default_lang_audio}" >> ${configFile}
   fi
   if [[ -z ${exist_v_ext} ]] ; then
-    echo "v_ext=${v_ext}" >> ${configFile}
+    print "v_ext=${v_ext}" >> ${configFile}
   fi
   source ${configFile}
 else
-  echo "#!/usr/bin/env zsh" > ${configFile}
-  echo "" >> ${configFile}
-  echo "acodec=${acodec}" >> ${configFile}
-  echo "b_acodec=${b_acodec}" >> ${configFile}
-  echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
-  echo "v_ext=${v_ext}" >> ${configFile}
+  print "#!/usr/bin/env zsh" > ${configFile}
+  print "" >> ${configFile}
+  print "acodec=${acodec}" >> ${configFile}
+  print "b_acodec=${b_acodec}" >> ${configFile}
+  print "default_lang_audio=${default_lang_audio}" >> ${configFile}
+  print "v_ext=${v_ext}" >> ${configFile}
   source ${configFile}
 fi
 
@@ -68,11 +68,11 @@ check_dependencies() {
   which_dependence=$(which ${1})
   error_dependence=$?
   if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
-    echo ""
-    echo "* ks-oga (ks-tools) v${VERSION} (${M_DATE})"
-    echo ""
-    echo "* Dependency not found: ${1}"
-    echo ""
+    print ""
+    print "* ks-oga (ks-tools) v${VERSION} (${M_DATE})"
+    print ""
+    print "* Dependency not found: ${1}"
+    print ""
     exit 1
   fi 
 }
@@ -89,10 +89,10 @@ extractFolderOrFile() {
   pathToExtract="${1}/"
   findFolder=0
   count=1
-  nameFolder=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+  nameFolder=$(print ${pathToExtract} | cut -d "/" -f ${count})
   count=$(expr $count + 1)
   while (( findFolder == 0 )) ; do
-    nameFolderTemp=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+    nameFolderTemp=$(print ${pathToExtract} | cut -d "/" -f ${count})
     if [[ -z "${nameFolderTemp}" ]] ; then
       findFolder=1
     else
@@ -100,7 +100,7 @@ extractFolderOrFile() {
       count=$(expr $count + 1)
     fi
   done
-  echo "${nameFolder}"
+  print "${nameFolder}"
 }
 
 # Function to remove extension from file
@@ -109,7 +109,7 @@ removeExtension() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
-  echo "${wordToConvert}" > ${ksToolsSedFile}
+  print "${wordToConvert}" > ${ksToolsSedFile}
   # Remove extensions
   sed -i 's/\.avi//g' "${ksToolsSedFile}" &> /dev/null
   sed -i 's/\.mp4//g' "${ksToolsSedFile}" &> /dev/null
@@ -133,71 +133,71 @@ removeExtension() {
   sed -i 's/\.opus//g' "${ksToolsSedFile}" &> /dev/null
   # Show file without extension
   wordToConvert=$(cat ${ksToolsSedFile})
-  echo ${wordToConvert}
+  print ${wordToConvert}
 }
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
 showFileWithSpace() {
-  echo "${1}" > ${dirTemp}/name.tmp
+  print "${1}" > ${dirTemp}/name.tmp
   sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
   rm -rf ${dirTemp}/name.tmp
-  cutDisplayName=$(echo ${DisplayName} | cut -c1)
+  cutDisplayName=$(print ${DisplayName} | cut -c1)
   if [[ "${cutDisplayName}" == "-" ]] ; then
-    DisplayName=$(echo ${DisplayName} | cut -c2-100)
+    DisplayName=$(print ${DisplayName} | cut -c2-100)
   else
-    cutDisplayName=$(echo ${DisplayName} | cut -c2)
+    cutDisplayName=$(print ${DisplayName} | cut -c2)
     if [[ "${cutDisplayName}" == "-" ]] ; then
-      DisplayName=$(echo ${DisplayName} | cut -c3-100)
+      DisplayName=$(print ${DisplayName} | cut -c3-100)
     else
-      cutDisplayName=$(echo ${DisplayName} | cut -c3)
+      cutDisplayName=$(print ${DisplayName} | cut -c3)
       if [[ "${cutDisplayName}" == "-" ]] ; then
-        DisplayName=$(echo ${DisplayName} | cut -c4-100)
+        DisplayName=$(print ${DisplayName} | cut -c4-100)
       fi
     fi
   fi
-  echo ${DisplayName}
+  print ${DisplayName}
 }
 
 # Syntax: ks-oga </absolute/path/song.mp3> </path/prefix_name>
 if [[ -z "${1}" ]] ; then
-  echo ""
-  echo "* ks-oga (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "- Convert video/audio file(s) to OGA (OGG Audio) Format"
-  echo ""
-  echo "+ Config: ${configFile}"
-  echo ""
-  echo " - Audio codec: ${acodec}"
-  echo " - Bitrate audio: ${b_acodec}"
-  echo " - Container: ${v_ext}"
-  echo ""
-  echo "+ Syntax: "
-  echo ""
+  print ""
+  print "* ks-oga (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "\- Convert video/audio file(s) to OGA (OGG Audio) Format"
+  print ""
+  print "+ Config: ${configFile}"
+  print ""
+  print " - Audio codec: ${acodec}"
+  print " - Bitrate audio: ${b_acodec}"
+  print " - Container: ${v_ext}"
+  print ""
+  print "+ Syntax: "
+  print ""
   if [[ "${cygwin}" == "yes" ]] ; then
-    echo "  $ ks-oga <relative/path/song.mp3> <path/prefix_name>"
-    echo ""
-    echo " + Example: ks-oga songs/Example.mp3 converted/Example"
-    echo ""
-    echo "* Note: In Cygwin, you must use relative paths with this tool"
-    echo ""
+    print "  $ ks-oga <relative/path/song.mp3> <path/prefix_name>"
+    print ""
+    print " + Example: ks-oga songs/Example.mp3 converted/Example"
+    print ""
+    print "* Note: In Cygwin, you must use relative paths with this tool"
+    print ""
   else
-    echo "  $ ks-oga </absolute/path/song.mp3> </path/prefix_name>"
-    echo ""
-    echo " + Example: ks-oga /data/songs/Example.mp3 /data/converted/Example"
-    echo ""
+    print "  $ ks-oga </absolute/path/song.mp3> </path/prefix_name>"
+    print ""
+    print " + Example: ks-oga /data/songs/Example.mp3 /data/converted/Example"
+    print ""
   fi
   exit
 fi
 if [[ -f "${1}" ]] ; then
-  echo "detected" > /dev/null
+  print "detected" > /dev/null
 else
-  echo ""
-  echo "* ks-oga (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "* The file '${1}' does not exist!"
-  echo ""
+  print ""
+  print "* ks-oga (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "* The file '${1}' does not exist!"
+  print ""
   exit
 fi
 
@@ -207,40 +207,40 @@ p_ffmpeg="ffmpeg -i"
 # Init conversion file
 current_date=$(date +%Y)
 if [[ -z "${2}" ]] ; then
-  echo ""
-  echo "* ks-oga (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "- Convert video/audio file(s) to OGA (OGG Audio) Format"
-  echo ""
-  echo "+ Config:"
-  echo ""
-  echo " - Audio codec: ${acodec}"
-  echo " - Bitrate audio: ${b_acodec}"
-  echo " - Container: ${v_ext}"
-  echo ""
-  echo "+ Syntax: "
-  echo ""
+  print ""
+  print "* ks-oga (ks-tools) v${VERSION} (${M_DATE})"
+  print ""
+  print "\- Convert video/audio file(s) to OGA (OGG Audio) Format"
+  print ""
+  print "+ Config:"
+  print ""
+  print " - Audio codec: ${acodec}"
+  print " - Bitrate audio: ${b_acodec}"
+  print " - Container: ${v_ext}"
+  print ""
+  print "+ Syntax: "
+  print ""
   if [[ "${cygwin}" == "yes" ]] ; then
-    echo "  $ ks-oga <relative/path/song.mp3> <path/prefix_name>"
-    echo ""
-    echo " + Example: ks-oga songs/Example.mp3 converted/Example"
-    echo ""
-    echo "* Note: In Cygwin, you must use relative paths with this tool"
-    echo ""
+    print "  $ ks-oga <relative/path/song.mp3> <path/prefix_name>"
+    print ""
+    print " + Example: ks-oga songs/Example.mp3 converted/Example"
+    print ""
+    print "* Note: In Cygwin, you must use relative paths with this tool"
+    print ""
   else
-    echo "  $ ks-oga </absolute/path/song.mp3> </path/prefix_name>"
-    echo ""
-    echo " + Example: ks-oga /data/songs/Example.mp3 /data/converted/Example"
-    echo ""
+    print "  $ ks-oga </absolute/path/song.mp3> </path/prefix_name>"
+    print ""
+    print " + Example: ks-oga /data/songs/Example.mp3 /data/converted/Example"
+    print ""
   fi
   exit
 else
-  echo ""
-  echo "* Information of ${1}:"
-  echo ""
-  echo "+ Audio Tracks:"
+  print ""
+  print "* Information of ${1}:"
+  print ""
+  print "+ Audio Tracks:"
   ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
-  echo ""
+  print ""
 
   # Check the audio track by default
   audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
@@ -249,23 +249,23 @@ else
     if [[ -z "${audio_default}" ]] ; then
       audio_default="0:1"
     else
-      audio_default_patch=$(echo ${audio_default} | cut -c4)
+      audio_default_patch=$(print ${audio_default} | cut -c4)
       if [[ "${audio_default_patch}" == ":" ]] ; then
-        audio_default=$(echo ${audio_default} | cut -c1-3)
+        audio_default=$(print ${audio_default} | cut -c1-3)
       else
         audio_default="${audio_default}"
       fi
     fi
   else
-    audio_default_patch=$(echo ${audio_default} | cut -c4)
+    audio_default_patch=$(print ${audio_default} | cut -c4)
     if [[ "${audio_default_patch}" == ":" ]] ; then
-      audio_default=$(echo ${audio_default} | cut -c1-3)
+      audio_default=$(print ${audio_default} | cut -c1-3)
     else
       audio_default="${audio_default}"
     fi
   fi
   # Ask for audio
-  echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+  print -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
   if [[ -z "${audio_track}" ]] ; then
     audio_track="${audio_default}"
   else
@@ -273,46 +273,46 @@ else
   fi
 
   # Ask for METADATA
-  echo ""
-  echo "* METADATA configuration:"
-  echo ""
+  print ""
+  print "* METADATA configuration:"
+  print ""
   # Prepare name title by default
   FullPath="${1}"
   name_title_default=$(extractFolderOrFile "${FullPath}")
   name_title_default=$(removeExtension "${name_title_default}")
   name_title_default=$(showFileWithSpace "${name_title_default}")
   # Ask name title, year and genre
-  echo -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
+  print -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
   if [[ -z "${name_title}" ]] ; then
     name_title="${name_title_default}"
   else
     name_title="${name_title}"
   fi
-  echo -n "* (Default: Album-Disc) Type name of album: " ; read album_file
+  print -n "* (Default: Album-Disc) Type name of album: " ; read album_file
   if [[ -z "${album_file}" ]] ; then
     album_title="Album-Disc"
   else
     album_title="${album_file}"
   fi
-  echo -n "* (Default: 01) Type number of track: " ; read track_file
+  print -n "* (Default: 01) Type number of track: " ; read track_file
   if [[ -z "${track_file}" ]] ; then
     track_num="01"
   else
     track_num="${track_file}"
   fi
-  echo -n "* (Default: Artist) Type name of artist: " ; read artist_file
+  print -n "* (Default: Artist) Type name of artist: " ; read artist_file
   if [[ -z "${artist_file}" ]] ; then
     artist_title="Artist"
   else
     artist_title="${artist_file}"
   fi
-  echo -n "* (Default: ${current_date}) Type the year: " ; read year_file
+  print -n "* (Default: ${current_date}) Type the year: " ; read year_file
   if [[ -z "${year_file}" ]] ; then
     year_num="${current_date}"
   else
     year_num="${year_file}"
   fi
-  echo -n "* (Default: Pop) Type the genre: " ; read genre_file
+  print -n "* (Default: Pop) Type the genre: " ; read genre_file
   if [[ -z "${genre_file}" ]] ; then
     genre_file="Pop"
   else
@@ -330,15 +330,15 @@ else
   fi
 
   # Show commands for conversion
-  echo ""
-  echo "* COMMANDS THAT WILL BE EXECUTED:"
-  echo ""
-  echo "  # Convert the file '${1}' to OGG Audio"
-  echo "  ${p_ffmpeg} \"${1}\" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_num}\" -metadata genre=\"${genre_file}\" -metadata album=\"${album_title}\" -metadata artist=\"${artist_title}\" -metadata track=\"${track_num}\" \"${2}.${v_ext}\""
+  print ""
+  print "* COMMANDS THAT WILL BE EXECUTED:"
+  print ""
+  print "  # Convert the file '${1}' to OGG Audio"
+  print "  ${p_ffmpeg} \"${1}\" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_num}\" -metadata genre=\"${genre_file}\" -metadata album=\"${album_title}\" -metadata artist=\"${artist_title}\" -metadata track=\"${track_num}\" \"${2}.${v_ext}\""
 
   # Execute commands for conversion
-  echo ""
-  echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+  print ""
+  print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
   if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
     exit
   else
