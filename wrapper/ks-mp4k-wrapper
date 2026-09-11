@@ -289,7 +289,7 @@ showHelp() {
   print ""
   print "* Notes:"
   print ""
-  print " + The option 'patch' apply the '-thread_queue_size 2048' patch to ffmpeg."
+  print " + The option 'patch' apply the '-max_muxing_queue_size 9999' patch to ffmpeg."
   print " + If you specify a path or file with spaces, you must use quotes."
   if [[ "${cygwin}" == "yes" ]] ; then
     print " + In Cygwin, you should always use relative paths with this tool."
