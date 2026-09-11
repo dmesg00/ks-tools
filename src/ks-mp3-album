@@ -73,9 +73,9 @@ check_dependencies() {
   error_dependence=$?
   if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
     print ""
-    print "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
+    print -P "* %Bks-mp3-album%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
     print ""
-    print "* Dependency not found: ${1}"
+    print -P "* %BDependency not found%b: %U${1}%u"
     print ""
     exit 1
   fi 
@@ -167,21 +167,21 @@ removeExtension() {
 # Syntax: ks-mp3-album </absolute/path/album/
 if [[ -z "${1}" ]] ; then
   print ""
-  print "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-mp3-album%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "\- Convert folder album to MP3 Audio Format"
   print ""
-  print "+ Config: ${configFile}"
+  print -P "+ %UConfig%u: %B${configFile}%b"
   print ""
-  print " - Audio codec: ${acodec}"
-  print " - Bitrate audio: ${b_acodec}"
-  print " - Container: ${v_ext}"
+  print -P " - Audio codec: %B${acodec}%b"
+  print -P " - Bitrate audio: %B${b_acodec}%b"
+  print -P " - Container: %B${v_ext}%b"
   print ""
-  print "+ Syntax: "
+  print -P "+ %USyntax%u: "
   print ""
-  print "  $ ks-mp3-album </absolute/path/album>"
+  print -P "  $ %Bks-mp3-album%b </absolute/path/album>"
   print ""
-  print " + Example: ks-mp3-album /data/albums/matrix-soundtrack"
+  print -P " + %UExample%u: %Bks-mp3-album%b /data/albums/matrix-soundtrack"
   print ""
   exit
 fi
@@ -191,9 +191,9 @@ if [[ -d "${1}" ]] ; then
   print null > /dev/null
 else
   print ""
-  print "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-mp3-album%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
-  print "+ The folder '${1}' does not exist!"
+  print -P "* The folder %U${1}%u does not exist!"
   print ""
   exit
 fi
@@ -201,11 +201,11 @@ fi
 # Scan videos/audio files format
 clear
 print ""
-print "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
+print -P "* %Bks-mp3-album%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
 print ""
 print "\- Convert folder album to MP3 Audio Format"
 print ""
-print -n "* Scanning ${1} "
+print -P -n "* Scanning %U${1}%u"
 print ""
 rm -rf ${tempFile} && touch ${tempFile}
 for format in "${formatFiles[@]}" ; do
@@ -224,21 +224,21 @@ done
 # Set the global metadata album
 current_date=$(date +%Y)
 print ""
-print "* Common METADATA configuration:"
+print -P "* %UCommon METADATA configuration%u:"
 print ""
-print -n "* (Default: Album-Disc) Type name of album: " ; read album_file
+print -P -n "* (Default: %BAlbum-Disc%b) Type name of album: " ; read album_file
 if [[ -z "${album_file}" ]] ; then
   album_title=("Album-Disc")
 else
   album_title=("${album_file}")
 fi
-print -n "* (Default: ${current_date}) Type the year of album: " ; read year_file
+print -P -n "* (Default: %B${current_date}%b) Type the year of album: " ; read year_file
 if [[ -z "${year_file}" ]] ; then
   year_num=("${current_date}")
 else
   year_num=("${year_file}")
 fi
-print -n "* (Default: Pop) Type the genre of album: " ; read genre_file
+print -P -n "* (Default: %BPop%b) Type the genre of album: " ; read genre_file
 if [[ -z "${genre_file}" ]] ; then
   genre_file=("Pop")
 else
@@ -250,12 +250,12 @@ convert_files=1
 num_files=$(cat ${tempFile} | wc -l)
 if (( num_files == 0 )) ; then
   print ""
-  print "+ No video/audio file(s) found in folder '${1}"
+  print -P "+ No video/audio file(s) found in folder %U${1}%u"
   print ""
   exit
 else
   print ""
-  print "* List of files:"
+  print -P "* %UList of files%u:"
   print ""
   while (( convert_files <= num_files )) ; do
     show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
@@ -263,10 +263,10 @@ else
     convert_files=$(expr ${convert_files} + 1)
   done
   print ""
-  print "* The output folder will be '${1}/to-mp3'"
+  print -P "* The output folder will be %U${1}/to-mp3%u"
   # Execute commands for conversion
   print ""
-  print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+  print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
   if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
     exit
   else
@@ -278,15 +278,15 @@ else
       name_title_default=$(removeExtension "${show_file}")
       name_title_default=$(showFileWithSpace "${name_title_default}")
       print ""
-      print "* METADATA for '${show_file}'"
+      print -P "* METADATA for %U${show_file}%u"
       print ""
-      print " - Album: ${album_title}"
-      print " - Year: ${year_num}"
-      print " - Genre: ${genre_file}"
+      print -P " - Album: %B${album_title}%b"
+      print -P " - Year: %B${year_num}%b"
+      print -P " - Genre: %B${genre_file}%b"
+      print -P ""
+      print -P "* Information of %U${show_file}%u:"
       print ""
-      print "* Information of '${show_file}':"
-      print ""
-      print "+ Audio Tracks:"
+      print -P "+ %BAudio Tracks:%b"
       print ""
       ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
       print ""
@@ -313,25 +313,25 @@ else
         fi
       fi
       # Ask for audio
-      print -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+      print -P -n "* (Default: %B${audio_default}%b) Type the number of audio track: " ; read audio_track
       if [[ -z "${audio_track}" ]] ; then
         audio_track=("${audio_default}")
       else
         audio_track=("${audio_track}")
       fi
-      print -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
+      print -P -n "* (Default: %B${name_title_default}%b) Type name of title: " ; read name_title
       if [[ -z "${name_title}" ]] ; then
         name_title=("${name_title_default}")
       else
         name_title=("${name_title}")
       fi
-      print -n "* (Default: ${track_init}) Type number of track: " ; read track_file
+      print -P -n "* (Default: %B${track_init}%b) Type number of track: " ; read track_file
       if [[ -z "${track_file}" ]] ; then
         track_num=("${track_init}")
       else
         track_num=("${track_file}")
       fi
-      print -n "* (Default: ${artist_init}) Type name of artist: " ; read artist_file
+      print -P -n "* (Default: %B${artist_init}%b) Type name of artist: " ; read artist_file
       if [[ -z "${artist_file}" ]] ; then
         artist_title=("${artist_init}")
       else

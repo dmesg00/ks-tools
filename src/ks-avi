@@ -150,9 +150,9 @@ check_dependencies() {
   error_dependence=$?
   if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
     print ""
-    print "* ks-avi (ks-tools) v${VERSION} (${M_DATE})"
+    print -P "* %Bks-avi%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
     print ""
-    print "* Dependency not found: ${1}"
+    print -P "* %BDependency not found%b: %U${1}%u"
     print ""
     exit 1
   fi 
@@ -221,35 +221,35 @@ showFileWithSpace() {
 # Syntax: ks-avi </absolute/path/video.mkv> </path/prefix_name>
 if [[ -z "${1}" ]] ; then
   print ""
-  print "* ks-avi (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-avi%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "\- Convert video file(s) to compact and efficient AVI"
   print ""
-  print "+ Config: ${configFile}"
+  print -P "+ %UConfig%u: %B${configFile}%b"
   print ""
-  print " - Resolution: ${rel_size}"
-  print " - Video codec: ${vcodec}"
-  print " - Bitrate video: ${b_vcodec}"
-  print " - Preset: ${v_preset}"
-  print " - Audio codec: ${acodec} (stereo)"
-  print " - Bitrate audio: ${b_acodec}"
-  print " - Default Audio: ${default_lang_audio}"
-  print " - Default Subtitle: ${default_lang_subt} (forced)"
-  print " - Container: ${v_ext}"
+  print -P " - Resolution: %B${rel_size}%b"
+  print -P " - Video codec: %B${vcodec}%b"
+  print -P " - Bitrate video: %B${b_vcodec}%b"
+  print -P " - Preset: %B${v_preset}%b"
+  print -P " - Audio codec: %B${acodec} (stereo)%b"
+  print -P " - Bitrate audio: %B${b_acodec}%b"
+  print -P " - Default Audio: %B${default_lang_audio}%b"
+  print -P " - Default Subtitle: %B${default_lang_subt} (forced)%b"
+  print -P " - Container: %B${v_ext}%b"
   print ""
-  print "+ Syntax: "
+  print -P "+ %USyntax%u: "
   print ""
   if [[ "${cygwin}" == "yes" ]] ; then
-    print "  $ ks-avi <relative/path/video.mkv> <path/prefix_name>"
+    print -P "  $ %Bks-avi%b <relative/path/video.mkv> <path/prefix_name>"
     print ""
-    print " + Example: ks-avi movies/Example.mkv converted/Example"
+    print -P " + Example: %Bks-avi%b movies/Example.mkv converted/Example"
     print ""
-    print "* Note: In Cygwin, you must use relative paths with this tool"
+    print -P "* %UNote%u: %BIn Cygwin, you must use relative paths with this tool%b"
     print ""
   else
-    print "  $ ks-avi </absolute/path/video.mkv> </path/prefix_name>"
+    print -P "  $ %Bks-avi%b </absolute/path/video.mkv> </path/prefix_name>"
     print ""
-    print " + Example: ks-avi /data/movies/Example.mkv /data/converted/Example"
+    print -P " + Example: %Bks-avi%b /data/movies/Example.mkv /data/converted/Example"
     print ""
   fi
   exit
@@ -258,9 +258,9 @@ if [[ -f "${1}" ]] ; then
   print "detected" > /dev/null
 else
   print ""
-  print "* ks-avi (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-avi%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
-  print "* The file '${1}' does not exist!"
+  print -P "* The file %U${1}%u does not exist!"
   print ""
   exit
 fi
@@ -292,49 +292,49 @@ fi
 current_date=$(date +%Y)
 if [[ -z "${2}" ]] ; then
   print ""
-  print "* ks-avi (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-avi%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "\- Convert video file(s) to compact and efficient AVI"
   print ""
-  print "+ Config:"
+  print -P "+ %UConfig%u: %B${configFile}%b"
   print ""
-  print " - Resolution: ${rel_size}"
-  print " - Video codec: ${vcodec}"
-  print " - Bitrate video: ${b_vcodec}"
-  print " - Preset: ${v_preset}"
-  print " - Audio codec: ${acodec} (stereo)"
-  print " - Bitrate audio: ${b_acodec}"
-  print " - Default Audio: ${default_lang_audio}"
-  print " - Default Subtitle: ${default_lang_subt} (forced)"
-  print " - Container: ${v_ext}"
+  print -P " - Resolution: %B${rel_size}%b"
+  print -P " - Video codec: %B${vcodec}%b"
+  print -P " - Bitrate video: %B${b_vcodec}%b"
+  print -P " - Preset: %B${v_preset}%b"
+  print -P " - Audio codec: %B${acodec} (stereo)%b"
+  print -P " - Bitrate audio: %B${b_acodec}%b"
+  print -P " - Default Audio: %B${default_lang_audio}%b"
+  print -P " - Default Subtitle: %B${default_lang_subt} (forced)%b"
+  print -P " - Container: %B${v_ext}%b"
   print ""
-  print "+ Syntax: "
+  print -P "+ %USyntax%u: "
   print ""
   if [[ "${cygwin}" == "yes" ]] ; then
-    print "  $ ks-avi <relative/path/video.mkv> <path/prefix_name>"
+    print -P "  $ %Bks-avi%b <relative/path/video.mkv> <path/prefix_name>"
     print ""
-    print " + Example: ks-avi movies/Example.mkv converted/Example"
+    print -P " + Example: %Bks-avi%b movies/Example.mkv converted/Example"
     print ""
-    print "* Note: In Cygwin, you must use relative paths with this tool"
+    print -P "* %UNote%u: %BIn Cygwin, you must use relative paths with this tool%b"
     print ""
   else
-    print "  $ ks-avi </absolute/path/video.mkv> </path/prefix_name>"
+    print -P "  $ %Bks-avi%b </absolute/path/video.mkv> </path/prefix_name>"
     print ""
-    print " + Example: ks-avi /data/movies/Example.mkv /data/converted/Example"
+    print -P " + Example: %Bks-avi%b /data/movies/Example.mkv /data/converted/Example"
     print ""
   fi
   exit
 else
   print ""
-  print "* Information of ${1}:"
+  print -P "* Information of %U${1}%u:"
   print ""
-  print "+ Video Tracks:"
+  print -P "+ %BVideo Tracks:%b"
   "${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
   print ""
-  print "+ Audio Tracks:"
+  print -P "+ %BAudio Tracks:%b"
   "${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
   print ""
-  print "+ Subtitle Tracks:"
+  print -P "+ %BSubtitle Tracks:%b"
   "${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d "," -f 1
   print ""
   # Check de video track by default
@@ -350,7 +350,7 @@ else
     fi
   fi
   # Ask for video
-  print -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
+  print -P -n "* (Default: %B${video_default}%b) Type the number of video track: " ; read video_track
   if [[ -z "${video_track}" ]] ; then
     video_track=("${video_default}")
   else
@@ -379,7 +379,7 @@ else
     fi
   fi
   # Ask for audio
-  print -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+  print -P -n "* (Default: %B${audio_default}%b) Type the number of audio track: " ; read audio_track
   if [[ -z "${audio_track}" ]] ; then
     audio_track=("${audio_default}")
   else
@@ -418,16 +418,16 @@ else
     fi
   fi
   # Ask for subtitle
-  print -n "* (Default: n) Do you want include subtitles? (y/n): " ; read subtitles_y_n
+  print -P -n "* (Default: %Bn%b) Do you want include subtitles? (y/n): " ; read subtitles_y_n
   if [[ "${subtitles_y_n}" == "y" ]] ; then
-    print -n "* (Default: ${subtitle_default}) Type the number of subtitle track: " ; read subtitle_track
+    print -P -n "* (Default: %B${subtitle_default}%b) Type the number of subtitle track: " ; read subtitle_track
     if [[ -z "${subtitle_track}" ]] ; then
       subtitle_track=("${subtitle_default}")
     else
       subtitle_track=("${subtitle_track}")
     fi
   fi
-  print -n "* (Default: ${rel_size}) Type the resolution: " ; read resolution
+  print -P -n "* (Default: %B${rel_size}%b) Type the resolution: " ; read resolution
   if [[ -z "${resolution}" ]] ; then
     resolution=("${rel_size}")
   else
@@ -438,14 +438,14 @@ else
       p_conversion=(-s ${rel_size} -c:v ${vcodec} -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec})
     fi
   fi
-  print -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
+  print -P -n "* (Default: %Bn%b) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
   if [[ "${patch_thread}" == "y" ]] ; then
     patch_thread=("y")
   else
     patch_thread=("n")
   fi
   print ""
-  print "* METADATA configuration:"
+  print -P "* %UMETADATA configuration%u:"
   print ""
   # Prepare name title by default
   FullPath=("${1}")
@@ -453,19 +453,19 @@ else
   name_title_default=$(removeExtension "${name_title_default}")
   name_title_default=$(showFileWithSpace "${name_title_default}")
   # Ask name title, year and genre
-  print -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
+  print -P -n "* (Default: %B${name_title_default}%b) Type name of title: " ; read name_title
   if [[ -z "${name_title}" ]] ; then
     name_title=("${name_title_default}")
   else
     name_title=("${name_title}")
   fi
-  print -n "* (Default: ${current_date}) Type the year: " ; read year_file
+  print -P -n "* (Default: %B${current_date}%b) Type the year: " ; read year_file
   if [[ -z "${year_file}" ]] ; then
     year_file=("${current_date}")
   else
     year_file=("${year_file}")
   fi
-  print -n "* (Default: Unknown) Type the genre: " ; read genre_file
+  print -P -n "* (Default: %BUnknown%b) Type the genre: " ; read genre_file
   if [[ -z "${genre_file}" ]] ; then
     genre_file=("Unknown")
   else
@@ -483,7 +483,7 @@ else
   fi
   # Show commands for conversion
   print ""
-  print "* COMMANDS THAT WILL BE EXECUTED:"
+  print -P "* %UCOMMANDS THAT WILL BE EXECUTED%u:"
   print ""
   if [[ "${subtitles_y_n}" == "y" ]] ; then
     print "  # Extract subtitles from file ${1}"
@@ -520,7 +520,7 @@ else
   fi
   # Execute commands for conversion
   print ""
-  print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+  print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
   if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
     exit
   else

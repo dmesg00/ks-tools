@@ -38,7 +38,7 @@ ffmpeg_test=$(ffmpeg --help 2>&1)
 error_ffmpeg=$?
 if (( error_ffmpeg != 0 )) ; then
   print ""
-  print "* ks-av1-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  print "* ks-av1-wrapper (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "+ The 'ffmpeg' tool is not installed!"
   print ""
@@ -50,7 +50,7 @@ wrap_test=$(ks-av1 &> /dev/null)
 error_wrap=$?
 if (( error_wrap != 0 )) ; then
   print ""
-  print "* ks-av1-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  print "* ks-av1-wrapper (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "+ The 'ks-av1' tool is not installed!"
   print ""
@@ -115,15 +115,15 @@ showFileWithSpace() {
 # Syntax: showInfo <video_file>
 showInfo() {
   print ""
-  print "* Information of ${1}:"
+  print -P "* Information of %U${1}%u:"
   print ""
-  print "+ Video Tracks:"
+  print -P "+ %BVideo Tracks:%b"
   "${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
   print ""
-  print "+ Audio Tracks:"
+  print -P "+ %BAudio Tracks:%b"
   "${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
   print ""
-  print "+ Subtitle Tracks:"
+  print -P "+ %BSubtitle Tracks:%b"
   "${p_ffmpeg[@]}" "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d "," -f 1
   print ""
   exit
@@ -246,53 +246,53 @@ showGenreDefault() {
 # Show help
 showHelp() {
   print ""
-  print "* ks-av1-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-av1-wrapper%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "\- Wrapper for ks-av1 to create graphical interfaces"
   print ""
-  print "+ Syntax:"
+  print -P "+ %USyntax%u:"
   print ""
-  print " * TRACKS/CONFIG DETECT:"
+  print -P " * %UTRACKS/CONFIG DETECT%u:"
   print ""
-  print "  $ ks-av1-wrapper --show-info <video_file>"
-  print "  $ ks-av1-wrapper --show-video-default <video_file>"
-  print "  $ ks-av1-wrapper --show-audio-default <video_file>"
-  print "  $ ks-av1-wrapper --show-subtitle-default <video_file>"
-  print "  $ ks-av1-wrapper --show-resolution-default"
+  print -P "  $ %Bks-av1-wrapper%b --show-info <video_file>"
+  print -P "  $ %Bks-av1-wrapper%b --show-video-default <video_file>"
+  print -P "  $ %Bks-av1-wrapper%b --show-audio-default <video_file>"
+  print -P "  $ %Bks-av1-wrapper%b --show-subtitle-default <video_file>"
+  print -P "  $ %Bks-av1-wrapper%b --show-resolution-default"
   print ""
-  print " * METADATA DETECT:"
+  print -P " * %UMETADATA DETECT%u:"
   print ""
-  print "  $ ks-av1-wrapper --show-name-title-default <video_file>"
-  print "  $ ks-av1-wrapper --show-year-default"
-  print "  $ ks-av1-wrapper --show-genre-default"
+  print -P "  $ %Bks-av1-wrapper%b --show-name-title-default <video_file>"
+  print -P "  $ %Bks-av1-wrapper%b --show-year-default"
+  print -P "  $ %Bks-av1-wrapper%b --show-genre-default"
   print ""
-  print " * CONVERT:"
+  print -P " * %UCONVERT%u:"
   print ""
-  print " $ ks-av1-wrapper --conv </path/video_file> </path/output_prefix> <video-track> <audio-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
-  print " $ ks-av1-wrapper --conv-with-sub </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
-  print " $ ks-av1-wrapper --conv-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
-  print " $ ks-av1-wrapper --conv-with-sub-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  print -P " $ %Bks-av1-wrapper%b --conv </path/video_file> </path/output_prefix> <video-track> <audio-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  print -P " $ %Bks-av1-wrapper%b --conv-with-sub </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  print -P " $ %Bks-av1-wrapper%b --conv-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  print -P " $ %Bks-av1-wrapper%b --conv-with-sub-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
   print ""
-  print " * CONVERT WITH DEFAULT DETECTION (NOT RECOMMENDED):"
+  print -P " * %UCONVERT WITH DEFAULT DETECTION (NOT RECOMMENDED)%u:"
   print ""
-  print " $ ks-av1-wrapper --conv </path/video_file> </path/output_prefix>"
-  print " $ ks-av1-wrapper --conv-widescreen </path/video_file> </path/output_prefix>"
-  print " $ ks-av1-wrapper --conv-with-sub </path/video_file> </path/output_prefix>"
-  print " $ ks-av1-wrapper --conv-with-sub-widescreen </path/video_file> </path/output_prefix>"
+  print -P " $ %Bks-av1-wrapper%b --conv </path/video_file> </path/output_prefix>"
+  print -P " $ %Bks-av1-wrapper%b --conv-widescreen </path/video_file> </path/output_prefix>"
+  print -P " $ %Bks-av1-wrapper%b --conv-with-sub </path/video_file> </path/output_prefix>"
+  print -P " $ %Bks-av1-wrapper%b --conv-with-sub-widescreen </path/video_file> </path/output_prefix>"
   print ""
-  print "* EXAMPLES:"
+  print -P "* %UEXAMPLES%u:"
   print ""
-  print " $ ks-av1-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 1280x534 \"My video\" 2018 \"Comedy\""
-  print " $ ks-av1-wrapper --conv-with-sub /tmp/video.mkv /tmp/output 0:0 0:1 0:3 1280x720 \"My video\" 2018 \"Comedy\""
-  print " $ ks-av1-wrapper --conv-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 1280x720 \"My video\" 2018 \"Comedy\" patch"
-  print " $ ks-av1-wrapper --conv-with-sub-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 0:3 1280x720 \"My video\" 2018 \"Comedy\""
+  print -P " $ %Bks-av1-wrapper%b --conv /tmp/video.mkv /tmp/output 0:0 0:1 1280x534 \"My video\" 2018 \"Comedy\""
+  print -P " $ %Bks-av1-wrapper%b --conv-with-sub /tmp/video.mkv /tmp/output 0:0 0:1 0:3 1280x720 \"My video\" 2018 \"Comedy\""
+  print -P " $ %Bks-av1-wrapper%b --conv-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 1280x720 \"My video\" 2018 \"Comedy\" patch"
+  print -P " $ %Bks-av1-wrapper%b --conv-with-sub-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 0:3 1280x720 \"My video\" 2018 \"Comedy\""
   print ""
-  print "* Notes:"
+  print -P "* %UNotes%u:"
   print ""
-  print " + The option 'patch' apply the '-max_muxing_queue_size 9999' patch to ffmpeg."
+  print -P " + The option %Upatch%u apply the %U-max_muxing_queue_size 9999%u patch to ffmpeg."
   print " + If you specify a path or file with spaces, you must use quotes."
   if [[ "${cygwin}" == "yes" ]] ; then
-    print " + In Cygwin, you should always use relative paths with this tool."
+    print -P " + %BIn Cygwin, you should always use relative paths with this tool.%b"
   fi
   print ""
   exit
@@ -307,7 +307,7 @@ elif [[ "${1}" == "--show-info" ]] ; then
     showInfo "${2}"
   else
     print ""
-    print "* The file '${2}' does not exist!'"
+    print -P "* The file %U${2}%u does not exist!'"
     print ""
     exit
   fi
@@ -317,7 +317,7 @@ elif [[ "${1}" == "--show-video-default" ]] ; then
     showVideoDefault "${2}"
   else
     print ""
-    print "* The file '${2}' does not exist!'"
+    print -P "* The file %U${2}%u does not exist!'"
     print ""
     exit
   fi
@@ -327,7 +327,7 @@ elif [[ "${1}" == "--show-audio-default" ]] ; then
     showAudioDefault "${2}"
   else
     print ""
-    print "* The file '${2}' does not exist!'"
+    print -P "* The file %U${2}%u does not exist!'"
     print ""
     exit
   fi
@@ -337,7 +337,7 @@ elif [[ "${1}" == "--show-subtitle-default" ]] ; then
     showSubtitleDefault "${2}"
   else
     print ""
-    print "* The file '${2}' does not exist!'"
+    print -P "* The file %U${2}%u does not exist!'"
     print ""
     exit
   fi
@@ -349,7 +349,7 @@ elif [[ "${1}" == "--show-name-title-default" ]] ; then
     showNameDefault "${2}"
   else
     print ""
-    print "* The file '${2}' does not exist!'"
+    print -P "* The file %U${2}%u does not exist!'"
     print ""
     exit
   fi
@@ -367,7 +367,7 @@ elif [[ "${1}" == "--conv" ]] ; then
     fi
   else
     print ""
-    print "* The file '${2}' does not exist!'"
+    print -P "* The file %U${2}%u does not exist!'"
     print ""
     exit
   fi
@@ -381,7 +381,7 @@ elif [[ "${1}" == "--conv-widescreen" ]] ; then
     fi
   else
     print ""
-    print "* The file '${2}' does not exist!'"
+    print -P "* The file %U${2}%u does not exist!'"
     print ""
     exit
   fi
@@ -395,7 +395,7 @@ elif [[ "${1}" == "--conv-with-sub" ]] ; then
     fi
   else
     print ""
-    print "* The file '${2}' does not exist!'"
+    print -P "* The file %U${2}%u does not exist!'"
     print ""
     exit
   fi
@@ -409,7 +409,7 @@ elif [[ "${1}" == "--conv-with-sub-widescreen" ]] ; then
     fi
   else
     print ""
-    print "* The file '${2}' does not exist!'"
+    print -P "* The file %U${2}%u does not exist!'"
     print ""
     exit
   fi

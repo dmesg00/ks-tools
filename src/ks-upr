@@ -152,7 +152,7 @@ sendFile() {
   if [[ "${cygwin}" == "yes" ]] ; then
     if [[ "${toolSelected}" == "rsync" ]] ; then
       print ""
-      print "+ Syncing folder ${2} to ${5} (${4})"
+      print -P "+ Syncing folder %U${2}%u to %U${5}%u (%B${4}%b)"
       /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [[ "${toolSelected}" == "rsync-e" ]] ; then
@@ -181,32 +181,32 @@ EOF
         OUTPUT=$?
     elif [[ "${toolSelected}" == "rsync-rsa" ]] ; then
       print ""
-      print "+ Syncing folder ${2} to ${5} (${4})"
+      print -P "+ Syncing folder %U${2}%u to %U${5}%u (%B${4}%b)"
       /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [[ "${toolSelected}" == "scp-rsa" ]] ; then
       print ""
-      print "+ Sending files from ${2} to ${5} (${4})"
+      print -P "+ Sending files from %U${2}%u to %U${5}%u (%B${4}%b)"
       /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     elif [[ "${toolSelected}" == "rsync-pem" ]] ; then
       print ""
-      print "+ Syncing folder ${2} to ${5} (${4})"
+      print -P "+ Syncing folder %U${2}%u to %U${5}%u (%B${4}%b)"
       /usr/bin/rsync --progress -azL --rsh="/usr/bin/ssh -i ${dirConfig}/connect.pem -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       /usr/bin/ssh -i ${dirConfig}/connect.pem -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [[ "${toolSelected}" == "scp-pem" ]] ; then
       print ""
-      print "+ Sending files from ${2} to ${5} (${4})"
+      print -P "+ Sending files from %U${2}%u to %U${5}%u (%B${4}%b)"
       scp -i ${dirConfig}/connect.pem -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     else
       print ""
-      print "+ Sending files from ${2} to ${5} (${4})"
+      print -P "+ Sending files from %U${2}%u to %U${5}%u (%B${4}%b)"
       /usr/bin/sshpass -p ${1} /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     fi
   # Run command for upload on Unix systems
   else
     if [[ "${toolSelected}" == "rsync" ]] ; then
       print ""
-      print "+ Syncing folder ${2} to ${5} (${4})"
+      print -P "+ Syncing folder %U${2}%u to %U${5}%u (%B${4}%b)"
       rsync --progress -azL --rsh="sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [[ "${toolSelected}" == "rsync-e" ]] ; then
@@ -235,25 +235,25 @@ EOF
         OUTPUT=$?
     elif [[ "${toolSelected}" == "rsync-rsa" ]] ; then
       print ""
-      print "+ Syncing folder ${2} to ${5} (${4})"
+      print -P "+ Syncing folder %U${2}%u to %U${5}%u (%B${4}%b)"
       rsync --progress -azL --rsh="sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [[ "${toolSelected}" == "scp-rsa" ]] ; then
       print ""
-      print "+ Sending files from ${2} to ${5} (${4})"
+      print -P "+ Sending files from %U${2}%u to %U${5}%u (%B${4}%b)"
       sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     elif [[ "${toolSelected}" == "rsync-pem" ]] ; then
       print ""
-      print "+ Syncing folder ${2} to ${5} (${4})"
+      print -P "+ Syncing folder %U${2}%u to %U${5}%u (%B${4}%b)"
       rsync --progress -azL --rsh="ssh -i ${dirConfig}/connect.pem -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       ssh -i ${dirConfig}/connect.pem -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [[ "${toolSelected}" == "scp-pem" ]] ; then
       print ""
-      print "+ Sending files from ${2} to ${5} (${4})"
+      print -P "+ Sending files from %U${2}%u to %U${5}%u (%B${4}%b)"
       scp -i ${dirConfig}/connect.pem -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     else
       print ""
-      print "+ Sending files from ${2} to ${5} (${4})"
+      print -P "+ Sending files from %U${2}%u to %U${5}%u (%B${4}%b)"
       sshpass -p ${1} scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     fi
   fi
@@ -264,42 +264,42 @@ EOF
 recursive_checksum() {
   toolSelected=$(cat ${dirConfig}/ks-upload-tool)
   portSelected=$(cat ${dirConfig}/ks-upload-port)
-  print "# Generating checksum for files on ${dirLocal} directory"
+  print -P "# Generating checksum for files on %U${dirLocal}%u directory"
   cd ${2}
   find . -type f -exec md5sum {} > ${dirConfig}/ks-tools_checksum.md5 \;
   if [[ "${cygwin}" == "yes" ]] ; then
     if [[ "${toolSelected}" == "rsync" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       /usr/bin/sshpass -p ${1} /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "scp" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       /usr/bin/sshpass -p ${1} /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "rsync-rsa" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "scp-rsa" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "rsync-pem" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       /usr/bin/scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       /usr/bin/ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       /usr/bin/ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "scp-pem" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       /usr/bin/scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       /usr/bin/ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
@@ -311,37 +311,37 @@ recursive_checksum() {
     fi
   else
     if [[ "${toolSelected}" == "rsync" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       sshpass -p ${1} scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "scp" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       sshpass -p ${1} scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "rsync-rsa" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "scp-rsa" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "rsync-pem" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
       ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && rm -rf ks-tools_checksum.md5"
     elif [[ "${toolSelected}" == "scp-pem" ]] ; then
-      print "# Copying checksum file to ${4}"
+      print -P "# Copying checksum file to %B${4}%b"
       scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${dirConfig}/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
       print "# Running checksum test"
       ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5"
@@ -445,7 +445,7 @@ gen_pem_ssh() {
 showConfig() {
   configAvailable=0
   print ""
-  print "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-upr%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   if [[ -f ${dirConfig}/ks-upload-user ]] ; then
     showUser=$(cat ${dirConfig}/ks-upload-user)
@@ -518,17 +518,17 @@ editConfig() {
     editUpvTool=$(cat ${dirConfig}/ks-upload-tool 2> /dev/null)
     editUpvPort=$(cat ${dirConfig}/ks-upload-port 2> /dev/null)
     print ""
-    print "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+    print -P "* %Bks-upr%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
     print ""
-    print "+ Config: ${dirConfig}/ks-upload-*"
+    print -P "+ %UConfig%u: %B${dirConfig}/ks-upload-*%b"
     print ""
-    print " 1 - Edit User (${editUser})"
-    print " 2 - Edit Password/PEM (${editPassword})"
-    print " 3 - Edit Server (${editServer})"
-    print " 4 - Edit Dest. Path (${editDirServer})"
-    print " 5 - Edit Local Path (${editDirLocal})"
-    print " 6 - Edit Upload Tool (${editUpvTool})"
-    print " 7 - Edit Port Connection (${editUpvPort})"
+    print -P " 1 - Edit User (%B${editUser}%b)"
+    print -P " 2 - Edit Password/PEM (%B${editPassword}%b)"
+    print -P " 3 - Edit Server (%B${editServer}%b)"
+    print -P " 4 - Edit Dest. Path (%B${editDirServer}%b)"
+    print -P " 5 - Edit Local Path (%B${editDirLocal}%b)"
+    print -P " 6 - Edit Upload Tool (%B${editUpvTool}%b)"
+    print -P " 7 - Edit Port Connection (%B${editUpvPort}%b)"
     print ""
     print " 8 - Exit"
     print ""
@@ -539,7 +539,7 @@ editConfig() {
       user=${USER}
       print ${user} > ${dirConfig}/ks-upload-user
     elif [[ "${EDIT}" == "2" ]] ; then
-      print -n "* Enter the server password (type 'pem' for use pem certificate): " ; read PASS
+      print -P -n "* Enter the server password (type %Upem%u for use pem certificate): " ; read PASS
       if [[ "${PASS}" == "pem" ]] ; then
         print -n "+ Type the absolute path to the .pem file: " ; read pem_path
       if [[ -f "${pem_path}" ]] ; then
@@ -557,11 +557,11 @@ editConfig() {
         elif [[ "${editUpvTool}" == "scp-rsa" ]] ; then
           print "scp-pem" > ${dirConfig}/ks-upload-tool
         fi
-        print "* PEM file copied to ${dirConfig}/connect.pem"
+        print -P "* PEM file copied to %U${dirConfig}/connect.pem%u"
       else
-        print "+ File ${pem_path} does not exist"
+        print -P "+ File %U${pem_path}%u does not exist"
         print ""
-        print "+ Press ENTER to return menu " ; read continue
+        print -P "+ Press %UENTER%u to return menu " ; read continue
       fi
       else
         raw_password_enter=${PASS}
@@ -587,7 +587,7 @@ editConfig() {
       print ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
      elif [[ "${EDIT}" == "6" ]] ; then
       print ""
-      print "* Available options:"
+      print -P "* %UAvailable options%u:"
       print ""
       print "\- scp"
       print "\- rsync"
@@ -598,8 +598,8 @@ editConfig() {
       print "\- scp-pem"
       print "\- rsync-pem"
       print ""
-      print "* Note: 'scp-e' and 'rsync-e' use 'expect' instead of 'sshpass'."
-      print "* Note: 'scp-pem' and 'rsync-pem' use ~/.ks-tools/connect.pem."
+      print -P "* %UNote%u: 'scp-e' and 'rsync-e' use 'expect' instead of 'sshpass'."
+      print -P "* %UNote%u: 'scp-pem' and 'rsync-pem' use ~/.ks-tools/connect.pem."
       print "" 
       print -n "* [Default: scp] Type upload tool (Example: rsync-e): " ; read TOOL
       if [[ -z "${TOOL}" ]] ; then
@@ -645,12 +645,12 @@ createConfig() {
 # Start script
   clear
   print ""
-  print "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-upr%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   checkDependencies
   # Ask the user and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-user ]] ; then
-    print "+ The USER configuration already exists (Use: 'ks-upr -e' for edit)"
+    print -P "+ The %BUSER%b configuration already exists (Use: %Uks-upr -e%u for edit)"
   else
     print -n "* Enter the server user: " ; read USER
     user=${USER}
@@ -658,9 +658,9 @@ createConfig() {
   fi
   # Ask the password and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-pass ]] ; then
-    print "+ The PASSWORD/PEM configuration already exists (Use: 'ks-upr -e' for edit)" 
+    print -P "+ The %BPASSWORD/PEM%b configuration already exists (Use: %Uks-upr -e%u for edit)" 
   else
-    print -n "* Enter the server password (type 'pem' for use pem certificate): " ; read PASS
+    print -P -n "* Enter the server password (type %Upem%u for use pem certificate): " ; read PASS
     if [[ "${PASS}" == "pem" ]] ; then
       print -n "+ Type the absolute path to the .pem file: " ; read pem_path
       if [[ -f "${pem_path}" ]] ; then
@@ -670,9 +670,9 @@ createConfig() {
         cp -rf "${pem_path}" ${dirConfig}/connect.pem
         chmod 600 ${dirConfig}/connect.pem
         print "scp-pem" > ${dirConfig}/ks-upload-tool
-        print "* PEM file copied to ${dirConfig}/connect.pem"
+        print -P "* PEM file copied to %U${dirConfig}/connect.pem%u"
       else
-        print "+ File ${pem_path} does not exist"
+        print -P "+ File %U${pem_path}%u does not exist"
         print "+ The configuration is cancelled"
         exit
       fi
@@ -684,7 +684,7 @@ createConfig() {
   fi
   # Ask the server URL and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-server ]] ; then
-    print "+ The SERVER configuration already exists (Use: 'ks-upr -e' for edit)"
+    print -P "+ The %BSERVER%b configuration already exists (Use: %Uks-upr -e%u for edit)"
   else
     print -n "* Enter the server URL (or IP): " ; read SERVER
     server=${SERVER}
@@ -692,7 +692,7 @@ createConfig() {
   fi
   # Ask the path on the server and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-dirserver ]] ; then
-    print "+ The SERVER PATH configuration already exists (Use: 'ks-upr -e' for edit)"
+    print -P "+ The %BSERVER PATH%b configuration already exists (Use: %Uks-upr -e%u for edit)"
   else
     print -n "* Enter the path on the server: " ; read DIR_SERVER
     dirServer=${DIR_SERVER}
@@ -700,7 +700,7 @@ createConfig() {
   fi
   # Ask the local path and if it exists, read it from the config.
   if [[ -f ${dirConfig}/ks-upload-dirlocal ]] ; then
-    print "+ The LOCAL PATH configuration already exists (Use: 'ks-upr -e' for edit)"
+    print -P "+ The %BLOCAL PATH%b configuration already exists (Use: %Uks-upr -e%u for edit)"
   else
     print -n "* Enter the local path to scan: " ; read DIR
     dirLocal=${DIR}
@@ -708,7 +708,7 @@ createConfig() {
   fi
   # Configure upload tool by default
   if [[ -f ${dirConfig}/ks-upload-tool ]] ; then
-    print "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upr -e' for edit)"
+    print -P "+ The %BUPLOAD TOOL%b configuration already exists (Use: %Uks-upr -e%u for edit)"
   else
     if [[ "${PASS}" == "pem" ]] ; then
       print "* Setting 'scp-pem' as the default tool"
@@ -720,7 +720,7 @@ createConfig() {
   fi
    # Configure port by default
   if [[ -f ${dirConfig}/ks-upload-port ]] ; then
-    print "+ The PORT configuration already exists (Use: 'ks-upr -e' for edit)"
+    print -P "+ The %BPORT%b configuration already exists (Use: %Uks-upr -e%u for edit)"
   else
     print "* Setting port 22 as the default port"
     print "22" > ${dirConfig}/ks-upload-port
@@ -731,7 +731,7 @@ createConfig() {
 # Function to show version
 showVersion() {
   print ""
-  print "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-upr%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   exit
 }
@@ -739,59 +739,47 @@ showVersion() {
 # Function to show help
 showHelp() {
   print ""
-  print "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-upr%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "\- Upload recursively file(s) to server with scp or rsync"
   print ""
-  print "+ Config: ${dirConfig}/ks-upload-*"
+  print -P "+ %UConfig%u: %B${dirConfig}/ks-upload-*%b"
   print ""
-  print "+ Syntax:"
+  print -P "+ %USyntax%u:"
   print ""
-  print " $ ks-upr -i  - Start upload"
-  print " $ ks-upr -g  - Create configuration" 
-  print " $ ks-upr -r  - Remove configuration"
-  print " $ ks-upr -c  - Show configuration"
-  print " $ ks-upr -e  - Edit configuration"
-  print " $ ks-upr -p  - Generate certificate"
-  print " $ ks-upr -v  - Show version"
-  print " $ ks-upr -h  - Show help"
+  print -P " $ %Bks-upr%b -i  - Start upload"
+  print -P " $ %Bks-upr%b -g  - Create configuration" 
+  print -P " $ %Bks-upr%b -r  - Remove configuration"
+  print -P " $ %Bks-upr%b -c  - Show configuration"
+  print -P " $ %Bks-upr%b -e  - Edit configuration"
+  print -P " $ %Bks-upr%b -p  - Generate certificate"
+  print -P " $ %Bks-upr%b -v  - Show version"
+  print -P " $ %Bks-upr%b -h  - Show help"
   print ""
   exit
 }
 
-# Function to check if all the necessary tools
-# for the execution are installed.
-checkDependencies() {
-  path_check=(/usr/bin /bin /usr/local/bin "${HOME}/.local/bin" "$(brew --prefix 2> /dev/null)/bin")
-  dependencies=(sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan ssh-keygen)
-  dependencies_found=()
-  dependencies_not_found=()
-  for checkPath in "${path_check[@]}" ; do
-    for checkDependencies in "${dependencies[@]}" ; do
-      if [[ -f ${checkPath}/${checkDependencies} ]] ; then
-        dependencies_found=("${dependencies_found} ${checkDependencies}")
-      fi
-    done
-  done
-  for notFound in "${dependencies[@]}" ; do
-    check_found_one=$(print ${dependencies_found} | grep " ${notFound}")
-    check_found_two=$(print ${dependencies_found} | grep "${notFound} ")
-    if_not_found=("${check_found_one}${check_found_two}")
-    if [[ -z "${if_not_found}" ]] ; then
-      dependencies_not_found=("${dependencies_not_found} ${notFound}")
-    fi
-  done
-  print "* Checking necessary tools... "
-  # Show if all tools are installed
-  if [[ -z "${dependencies_not_found}" ]] ; then
-    print "* The necessary tools are installed"
+# Function for check dependencies
+check_dependencies() {
+  which_dependence=$(which ${1})
+  error_dependence=$?
+  if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
     print ""
-  else
-    print "* Some required tools are not installed:${dependencies_not_found}"
+    print -P "* Some required tools are not installed: %U${1}%u"
     print "* The process has been stopped"
     print ""
-    exit
-  fi
+    exit 1
+  fi 
+}
+
+# Check dependencies
+checkDependencies() {
+  print "* Checking necessary tools... "
+  dependencies=(sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan ssh-keygen)
+  for scan_dependency in "${dependencies[@]}" ; do
+    check_dependencies "${scan_dependency}"
+  done
+  print "* The necessary tools are installed"
 }
 
 # Function to migrate old configuration.
@@ -837,21 +825,21 @@ fi
 # Delete the existing configuration.
 if [[ "${1}" == "-r" ]] ; then
   print ""
-  print "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-upr%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print -n "* [Default: n] Are you sure you want to delete the configuration? (y/n): " ; read confirm
   if [[ "${confirm}" == "y" ]] ; then
     print ""
-    print "+ Removing USER file configuration..."
+    print -P "+ Removing %BUSER%b file configuration..."
     rm -rf ${dirConfig}/ks-upload-user
-    print "+ Removing PASSWORD/PEM file configuration..."
+    print -P "+ Removing %BPASSWORD/PEM%b file configuration..."
     rm -rf ${dirConfig}/ks-upload-pass
     rm -rf ${dirConfig}/connect.pem
-    print "+ Removing SERVER file configuration..."
+    print -P "+ Removing %BSERVER%b file configuration..."
     rm -rf ${dirConfig}/ks-upload-server
-    print "+ Removing SERVER PATH file configuration..."
+    print -P "+ Removing %BSERVER PATH%b file configuration..."
     rm -rf ${dirConfig}/ks-upload-dirserver
-    print "+ Removing LOCAL PATH file configuration..."
+    print -P "+ Removing %BLOCAL PATH%b file configuration..."
     rm -rf ${dirConfig}/ks-upload-dirlocal
     print "* Removed all configuration"
     rm -rf ${dirConfig}/ks-upload-tool
@@ -893,7 +881,7 @@ elif [[ "${1}" == "-i" ]] ; then
   dirServer=$(cat ${dirConfig}/ks-upload-dirserver)
   dirLocal=$(cat ${dirConfig}/ks-upload-dirlocal)
   # Call the functions to perform the whole process.
-  print -n "* Scanning ${dirLocal} "
+  print -P -n "* Scanning %U${dirLocal}%u "
   print ""
   current_tool=$(cat ${dirConfig}/ks-upload-tool)
   if [[ "${current_tool}" == "scp" ]] ; then

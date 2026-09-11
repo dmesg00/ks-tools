@@ -28,16 +28,16 @@ check_dependencies() {
   error_dependence=$?
   if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
     print ""
-    print "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+    print -P "* %Bks-av1s-folder%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
     print ""
-    print "* Dependency not found: ${1}"
+    print -P "* %BDependency not found%b: %U${1}%u"
     print ""
     exit 1
   fi 
 }
 
 # Check dependencies
-dependencies=(ffmpeg grep find grep cut head tail cat ks-utfs)
+dependencies=(ffmpeg grep find grep cut head tail cat ks-utfs ks-av1s-wrapper)
 for scan_dependency in "${dependencies[@]}" ; do
   check_dependencies "${scan_dependency}"
 done
@@ -45,21 +45,21 @@ done
 # Show help when folder is empty
 if [[ -z "${1}" ]] ; then
   print ""
-  print "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-av1s-folder%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "\- Convert videos from folder to AV1 (Codec) (Series)"
   print ""
-  print "+ Syntax: "
+  print -P "+ %USyntax%u: "
   print ""
-  print "  $ ks-av1s-folder </path/folder> [subs/widescreen/subs-widescreen]"
+  print -P "  $ %Bks-av1s-folder%b </path/folder> [subs/widescreen/subs-widescreen]"
   print ""
-  print " + Examples: "
-  print "     $ ks-av1s-folder /data/Westworld"
-  print "     $ ks-av1s-folder /data/Daredevil subs"
-  print "     $ ks-av1s-folder /data/Daredevil widescreen"
-  print "     $ ks-av1s-folder /data/Daredevil subs-widescreen"
+  print -P " + %UExamples%u: "
+  print -P "     $ %Bks-av1s-folder%b /data/Westworld"
+  print -P "     $ %Bks-av1s-folder%b /data/Daredevil subs"
+  print -P "     $ %Bks-av1s-folder%b /data/Daredevil widescreen"
+  print -P "     $ %Bks-av1s-folder%b /data/Daredevil subs-widescreen"
   print ""
-  print "* Notes:"
+  print -P "* %UNotes%u:"
   print ""
   print " + The option 'subs' apply detection & rendering the forced subtitles."
   print " + You must not use spaces in folders and video files."
@@ -72,9 +72,9 @@ if [[ -d "${1}" ]] ; then
   print null > /dev/null
 else
   print ""
-  print "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-av1s-folder%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
-  print "+ The folder '${1}' does not exist!"
+  print -P "* The folder %U${1}%u does not exist!"
   print ""
   exit
 fi
@@ -82,11 +82,11 @@ fi
 # Scan videos files format
 clear
 print ""
-print "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+print -P "* %Bks-av1s-folder%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
 print ""
 print "\- Convert videos from folder to AV1 (Codec) (Series)"
 print ""
-print -n "* Scanning ${1} "
+print -P -n "* Scanning %U${1}%u "
 print ""
 rm -rf ${tempFile} && touch ${tempFile}
 for format in "${formatFiles[@]}" ; do
@@ -106,12 +106,12 @@ done
 num_files=$(cat ${tempFile} | wc -l)
 if (( num_files == 0 )) ; then
   print ""
-  print "+ No video file(s) found in folder '${1}'"
+  print -P "+ No video file(s) found in folder %U${1}%u"
   print ""
   exit
 else
   print ""
-  print "* Files to convert (${1}):"
+  print -P "* Files to convert:"
   convert_files=1
   if [[ "${2}" == "subs" ]] ; then
     widescreen_enabled=0
@@ -132,14 +132,14 @@ else
   fi
   while (( convert_files <= num_files )) ; do
     show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
-    print "  + ${show_file} (${subtitles_show})"
+    print -P "  + ${show_file} (%B${subtitles_show}%b)"
     convert_files=$(expr ${convert_files} + 1)
   done
   print ""
-  print "* The output folder will be '${1}/to-av1'"
+  print -P "* The output folder will be %U${1}/to-av1%u"
   # Execute commands for conversion
   print ""
-  print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+  print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
   if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
     exit
   else

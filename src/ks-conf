@@ -524,18 +524,18 @@ edit_video_config() {
     source ${HOME}/.ks-tools/${name_file}
     clear
     print ""
-    print "* ks-conf (ks-tools) v${VERSION} (${M_DATE})" 
+    print -P "* %Bks-conf%b (ks-tools) %Bv${VERSION}%b (${M_DATE})" 
     print ""
-    print "* Editing ${HOME}/.ks-tools/${name_file}"
+    print -P "* Editing %U${HOME}/.ks-tools/${name_file}%u"
     print ""
-    print " r - Edit resolution (${rel_size})"
-    print " v - Edit video codec (${vcodec})"
-    print " b - Edit video bitrate (${b_vcodec})"
-    print " p - Edit video preset (${v_preset})"
-    print " a - Edit audio codec (${acodec})"
-    print " i - Edit audio bitrate (${b_acodec})"
-    print " l - Edit preferred language (${default_lang_audio})"
-    print " s - Edit preferred subtitles (${default_lang_subt})"
+    print -P " r - Edit resolution (%B${rel_size}%b)"
+    print -P " v - Edit video codec (%B${vcodec}%b)"
+    print -P " b - Edit video bitrate (%B${b_vcodec}%b)"
+    print -P " p - Edit video preset (%B${v_preset}%b)"
+    print -P " a - Edit audio codec (%B${acodec}%b)"
+    print -P " i - Edit audio bitrate (%B${b_acodec}%b)"
+    print -P " l - Edit preferred language (%B${default_lang_audio}%b)"
+    print -P " s - Edit preferred subtitles (%B${default_lang_subt}%b)"
     print ""
     print " c - Reset configuration file"
     print " q - Exit to main menu"
@@ -544,9 +544,9 @@ edit_video_config() {
     if [[ "${option}" == "r" ]] ; then
       # Set resolution
       print ""
-      print "* Recommended: 720x480 / 1280x534 / 1280x720 / 1920x1080 / 3840x2160"
+      print -P "* %URecommended%u: 720x480 / 1280x534 / 1280x720 / 1920x1080 / 3840x2160"
       print ""
-      print -n "* [Current: ${rel_size}] Type the resolution: " ; read resolution
+      print -P -n "* [Current: %B${rel_size}%b] Type the resolution: " ; read resolution
       if [[ -z ${resolution} ]] ; then
         print > /dev/null
       else
@@ -566,22 +566,22 @@ edit_video_config() {
       # Set video codec
       if [[ "$v_ext" == "mp4" ]] ; then
        print ""
-       print "* Recommended: mpeg4 / libxvid / libx264 / libx265 / libaom-av1"
+       print -P "* %URecommended%u: mpeg4 / libxvid / libx264 / libx265 / libaom-av1"
       fi
       if [[ "$v_ext" == "avi" ]] ; then
        print ""
-       print "* Recommended: mpeg4 / libxvid"
+       print -P "* %URecommended%u: mpeg4 / libxvid"
       fi
       if [[ "$v_ext" == "webm" ]] ; then
        print ""
-       print "* Recommended: libvpx-vp9 / libsvtav1 / libaom-av1"
+       print -P "* %URecommended%u: libvpx-vp9 / libsvtav1 / libaom-av1"
       fi
       if [[ "$v_ext" == "mkv" ]] ; then
        print ""
-       print "* Recommended: libx264 / libx265 / libsvtav1 / libaom-av1"
+       print -P "* %URecommended%u: libx264 / libx265 / libsvtav1 / libaom-av1"
       fi
       print ""
-      print -n "* [Current: ${vcodec}] Type the video codec: " ; read videocodec
+      print -P -n "* [Current: %B${vcodec}%b] Type the video codec: " ; read videocodec
       if [[ -z ${videocodec} ]] ; then
         print > /dev/null
       else
@@ -600,9 +600,9 @@ edit_video_config() {
     elif [[ "${option}" == "b" ]] ; then
       # Set bitrate for video
       print ""
-      print "* Recommended: 850k / 950k / 2000k / 2200k / 3000k / 6000k / 10000k"
+      print -P "* %URecommended%u: 850k / 950k / 2000k / 2200k / 3000k / 6000k / 10000k"
       print ""
-      print -n "* [Current: ${b_vcodec}] Type bitrate for video: " ; read videobitrate
+      print -P -n "* [Current: %B${b_vcodec}%b] Type bitrate for video: " ; read videobitrate
       if [[ -z ${videobitrate} ]] ; then
         print > /dev/null
       else
@@ -621,10 +621,10 @@ edit_video_config() {
     elif [[ "${option}" == "p" ]] ; then
       # Set video preset
       print ""
-      print "* Presets: ultrafast / superfast / veryfast / faster / fast"
+      print -P "* %UPresets%u: ultrafast / superfast / veryfast / faster / fast"
       print "           medium / slow / slower / veryslow"
       print ""
-      print -n "* [Current: ${v_preset}] Type the preset: " ; read videopreset
+      print -P -n "* [Current: %B${v_preset}%b] Type the preset: " ; read videopreset
       if [[ -z ${videopreset} ]] ; then
         print > /dev/null
       else
@@ -644,22 +644,22 @@ edit_video_config() {
       # Set audio codec
       if [[ "$v_ext" == "mp4" ]] ; then
        print ""
-       print "* Recommended: aac / libmp3lame / ac3 / libopus / mp2"
+       print -P "* %URecommended%u: aac / libmp3lame / ac3 / libopus / mp2"
       fi
       if [[ "$v_ext" == "avi" ]] ; then
        print ""
-       print "* Recommended: ac3 / libmp3lame / mp2"
+       print -P "* %URecommended%u: ac3 / libmp3lame / mp2"
       fi
       if [[ "$v_ext" == "webm" ]] ; then
        print ""
-       print "* Recommended: libvorbis / libopus"
+       print -P "* %URecommended%u: libvorbis / libopus"
       fi
       if [[ "$v_ext" == "mkv" ]] ; then
        print ""
-       print "* Recommended: aac / libvorbis / libopus / ac3 / libmp3lame"
+       print -P "* %URecommended%u: aac / libvorbis / libopus / ac3 / libmp3lame"
       fi
       print ""
-      print -n "* [Current: ${acodec}] Type the audio codec: " ; read audiocodec
+      print -P -n "* [Current: %B${acodec}%b] Type the audio codec: " ; read audiocodec
       if [[ -z ${audiocodec} ]] ; then
         print > /dev/null
       else
@@ -678,9 +678,9 @@ edit_video_config() {
     elif [[ "${option}" == "i" ]] ; then
       # Set bitrate for audio
       print ""
-      print "* Recommended: 92k / 128k / 160k / 192k / 256k / 320k / 640k"
+      print -P "* %URecommended%u: 92k / 128k / 160k / 192k / 256k / 320k / 640k"
       print ""
-      print -n "* [Current: ${b_acodec}] Type bitrate for audio: " ; read audiobitrate
+      print -P -n "* [Current: %B${b_acodec}%b] Type bitrate for audio: " ; read audiobitrate
       if [[ -z ${audiobitrate} ]] ; then
         print > /dev/null
       else
@@ -699,7 +699,7 @@ edit_video_config() {
     elif [[ "${option}" == "l" ]] ; then
       # Set default audio language
       print ""
-      print "* Examples: "
+      print -P "* %UExamples%u: "
       print "   English --> eng"
       print "   Spanish --> spa"
       print "   Italian --> ita"
@@ -707,7 +707,7 @@ edit_video_config() {
       print ""
       print "* Complete 639-2 codes: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes"
       print ""
-      print -n "* [Current: ${default_lang_audio}] Type the preferred audio language: " ; read audiolanguage
+      print -P -n "* [Current: %B${default_lang_audio}%b] Type the preferred audio language: " ; read audiolanguage
       if [[ -z ${audiolanguage} ]] ; then
         print > /dev/null
       else
@@ -726,7 +726,7 @@ edit_video_config() {
     elif [[ "${option}" == "s" ]] ; then
       # Set default audio language
       print ""
-      print "* Examples: "
+      print -P "* %UExamples%u: "
       print "   English --> eng"
       print "   Spanish --> spa"
       print "   Italian --> ita"
@@ -734,7 +734,7 @@ edit_video_config() {
       print ""
       print "* Complete 639-2 codes: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes"
       print ""
-      print -n "* [Current: ${default_lang_subt}] Type the preferred subtitles language: " ; read subtitlelanguage
+      print -P -n "* [Current: %B${default_lang_subt}%b] Type the preferred subtitles language: " ; read subtitlelanguage
       if [[ -z ${subtitlelanguage} ]] ; then
         print > /dev/null
       else
@@ -763,7 +763,7 @@ edit_video_config() {
     else
       print ""
       print "+ Invalid option"
-      print -n "* Press ENTER to return menu " ; read return
+      print -P -n "* Press %UENTER%u to return menu " ; read return
     fi
   done
 }
@@ -779,12 +779,12 @@ edit_audio_config() {
     source ${HOME}/.ks-tools/${name_file}
     clear
     print ""
-    print "* ks-conf (ks-tools) v${VERSION} (${M_DATE})" 
+    print -P "* %Bks-conf%b (ks-tools) %Bv${VERSION}%b (${M_DATE})" 
     print ""
-    print "* Editing ${HOME}/.ks-tools/${name_file}"
+    print -P "* Editing %U${HOME}/.ks-tools/${name_file}%u"
     print ""
-    print " a - Edit audio bitrate (${b_acodec})"
-    print " l - Edit preferred language (${default_lang_audio})"
+    print -P " a - Edit audio bitrate (%B${b_acodec}%b)"
+    print -P " l - Edit preferred language (%B${default_lang_audio}%b)"
     print ""
     print " c - Reset configuration file"
     print " q - Exit to main menu"
@@ -794,14 +794,14 @@ edit_audio_config() {
     # Set bitrate for audio
       if [[ "$v_ext" == "mp3" ]] ; then
        print ""
-       print "* Recommended: 92k / 128k / 192k / 256k / 320k / 640k"
+       print -P "* %URecommended%u: 92k / 128k / 192k / 256k / 320k / 640k"
       fi
       if [[ "$v_ext" == "oga" ]] ; then
        print ""
-       print "* Recommended: 96k / 112k / 130k / 160k / 224k / 256k / 320k"
+       print -P "* %URecommended%u: 96k / 112k / 130k / 160k / 224k / 256k / 320k"
       fi
       print ""
-      print -n "* [Current: ${b_acodec}] Type bitrate for audio: " ; read audiobitrate
+      print -P -n "* [Current: %B${b_acodec}%b] Type bitrate for audio: " ; read audiobitrate
       if [[ -z ${audiobitrate} ]] ; then
         print > /dev/null
       else
@@ -815,7 +815,7 @@ edit_audio_config() {
     elif [[ "${option}" == "l" ]] ; then
       # Set default audio language
       print ""
-      print "* Examples: "
+      print -P "* %UExamples%u: "
       print "   English --> eng"
       print "   Spanish --> spa"
       print "   Italian --> ita"
@@ -823,7 +823,7 @@ edit_audio_config() {
       print ""
       print "* Complete 639-2 codes: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes"
       print ""
-      print -n "* [Current: ${default_lang_audio}] Type the preferred audio language: " ; read audiolanguage
+      print -P -n "* [Current: %B${default_lang_audio}%b] Type the preferred audio language: " ; read audiolanguage
       if [[ -z ${audiolanguage} ]] ; then
         print > /dev/null
       else
@@ -843,7 +843,7 @@ edit_audio_config() {
     else
       print ""
       print "+ Invalid option"
-      print -n "* Press ENTER to return menu " ; read return
+      print -P -n "* Press %UENTER%u to return menu " ; read return
     fi
   done
 }
@@ -863,32 +863,32 @@ show_menu=0
 while (( show_menu == 0 )) ; do
   clear
   print ""
-  print "* ks-conf (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-conf%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "\- Tool for create and modify all configuration files"
   print ""
   source ${HOME}/.ks-tools/ks-mp4
-  print " m - Edit ks-mp4 config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
+  print -P " m - Edit %Uks-mp4%u config (%B${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio}%b)"
   source ${HOME}/.ks-tools/ks-mp4k
-  print " k - Edit ks-mp4k config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
+  print -P " k - Edit %Uks-mp4k%u config (%B${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio}%b)"
   source ${HOME}/.ks-tools/ks-mp4s
-  print " s - Edit ks-mp4s config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
+  print -P " s - Edit %Uks-mp4s%u config (%B${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio}%b)"
   source ${HOME}/.ks-tools/ks-avi
-  print " a - Edit ks-avi config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
+  print -P " a - Edit %Uks-avi%u config (%B${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio}%b)"
   source ${HOME}/.ks-tools/ks-av1
-  print " v - Edit ks-av1 config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
+  print -P " v - Edit %Uks-av1%u config (%B${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio}%b)"
   source ${HOME}/.ks-tools/ks-av1s
-  print " c - Edit ks-av1s config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
+  print -P " c - Edit %Uks-av1s%u config (%B${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio}%b)"
   print ""
   source ${HOME}/.ks-tools/ks-mp3
-  print " p - Edit ks-mp3/ks-mp3-album config (${acodec}/${b_acodec}/${default_lang_audio})"
+  print -P " p - Edit %Uks-mp3/ks-mp3-album%u config (%B${acodec}/${b_acodec}/${default_lang_audio}%b)"
   source ${HOME}/.ks-tools/ks-oga
-  print " o - Edit ks-oga/ks-oga-album config (${acodec}/${b_acodec}/${default_lang_audio})"
+  print -P " o - Edit %Uks-oga/ks-oga-album%u config (%B${acodec}/${b_acodec}/${default_lang_audio}%b)"
   print ""
   user_config=$(cat ${HOME}/.ks-tools/ks-upload-user 2> /dev/null)
   server_config=$(cat ${HOME}/.ks-tools/ks-upload-server 2> /dev/null)
   tool_config=$(cat ${HOME}/.ks-tools/ks-upload-tool 2> /dev/null)
-  print " u - Edit ks-upv/ks-upa/ks-upf/ks-upr config (${user_config}/${server_config}/${tool_config})"
+  print -P " u - Edit %Uks-upv/ks-upa/ks-upf/ks-upr%u config (%B${user_config}/${server_config}/${tool_config}%b)"
   print ""
   print " q - Exit"
   print ""
@@ -917,6 +917,6 @@ while (( show_menu == 0 )) ; do
   else
     print ""
     print "+ Invalid option"
-    print -n "* Press ENTER to return menu " ; read return
+    print -P -n "* Press %UENTER%u to return menu " ; read return
   fi
 done

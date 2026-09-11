@@ -26,9 +26,9 @@ check_dependencies() {
   error_dependence=$?
   if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
     print ""
-    print "* ks-utfs (ks-tools) v${VERSION} (${M_DATE})"
+    print -P "* %Bks-utfs%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
     print ""
-    print "* Dependency not found: ${1}"
+    print -P "* %BDependency not found%b: %U${1}%u"
     print ""
     exit 1
   fi 
@@ -43,23 +43,23 @@ done
 # Show help
 show_help() {
   print ""
-  print "* ks-utfs (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-utfs%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "\- Patch UTF-8 subtitles file(s) replacing bad characters"
   print ""
-  print "+ Syntax: "
+  print -P "+ %USyntax%u: "
   print ""
   if [[ "${cygwin}" == "yes" ]] ; then
-    print "  $ ks-utfs <relative/path/subtitle.srt>"
+    print -P "  $ %Bks-utfs%b <relative/path/subtitle.srt>"
     print ""
-    print " + Example: ks-utfs movies/Spiderman.srt"
+    print -P " + Example: %Bks-utfs%b movies/Spiderman.srt"
     print ""
-    print "* Note: In Cygwin, you must use relative paths with this tool"
+    print -P "* %UNote%u: %BIn Cygwin, you must use relative paths with this tool%b"
     print ""
   else
-    print "  $ ks-utfs </absolute/path/subtitle.srt>"
+    print -P "  $ %Bks-utfs%b </absolute/path/subtitle.srt>"
     print ""
-    print " + Example: ks-utfs /data/movies/Spiderman.srt"
+    print -P " + Example: %Bks-utfs%b /data/movies/Spiderman.srt"
     print ""
   fi
   exit
@@ -125,6 +125,10 @@ else
     sed -i 's/<font size="[0-9]\+">//g' "${1}"
     sed -i 's/<\/font>//g' "${1}"
   else
-    print "* The file '${1}' does not exist!"
+    print ""
+    print -P "* %Bks-utfs%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
+    print ""
+    print -P "* The file %U${1}%u does not exist!"
+    print ""
   fi
 fi

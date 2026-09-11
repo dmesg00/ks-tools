@@ -59,9 +59,9 @@ check_dependencies() {
   error_dependence=$?
   if [[ -z "${which_dependence}" ]] || (( ${error_dependence} > 0 )); then
     print ""
-    print "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
+    print -P "* %Bks-crop%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
     print ""
-    print "* Dependency not found: ${1}"
+    print -P "* %BDependency not found%b: %U${1}%u"
     print ""
     exit 1
   fi 
@@ -110,40 +110,40 @@ showFileWithSpace() {
 # Function to show menu again when syntax is wrong
 show_menu() {
   print ""
-  print "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-crop%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
   print "\- Crop or change aspect ratio of a video"
   print ""
-  print "+ Config:"
+  print -P "+ %UConfig%u:"
   print ""
   print " - Resolutions: "
   print "    + ${to4_3} (4:3)"
   print "    + ${to16_9} (16:9)"
   print "    + ${to5_4} (5:4)"
   print "    + ${toImax} (IMAX)"
-  print " - Video codec: ${vcodec}"
-  print " - Bitrate video: ${b_vcodec}"
-  print " - Preset: ${v_preset}"
-  print " - Audio codec: ${acodec}"
-  print " - Default Audio: ${default_lang_audio}"
-  print " - Container: ${v_ext}"
+  print -P " - Video codec: %B${vcodec}%b"
+  print -P " - Bitrate video: %B${b_vcodec}%b"
+  print -P " - Preset: %B${v_preset}%b"
+  print -P " - Audio codec: %B${acodec}%b"
+  print -P " - Default Audio: %B${default_lang_audio}%b"
+  print -P " - Container: %B${v_ext}%b"
   print ""
-  print "+ Syntax: "
+  print -P "+ %USyntax%u: "
   print ""
-  print "  $ ks-crop -16:9-crop <video-file>   --> Crop from 4:3/IMAX to 16:9 (1.77:1)"
-  print "  $ ks-crop -4:3-crop <video-file>    --> Crop from 16:9 to 4:3 (1.33:1)"
-  print "  $ ks-crop -5:4-crop <video-file>    --> Crop from 16:9 to 5:4 (1.25:1)"
-  print "  $ ks-crop -imax-crop <video-file>   --> Crop from 16:9 to IMAX (1.43:1)"
+  print -P "  $ %Bks-crop%b -16:9-crop <video-file>   --> Crop from 4:3/IMAX to 16:9 (1.77:1)"
+  print -P "  $ %Bks-crop%b -4:3-crop <video-file>    --> Crop from 16:9 to 4:3 (1.33:1)"
+  print -P "  $ %Bks-crop%b -5:4-crop <video-file>    --> Crop from 16:9 to 5:4 (1.25:1)"
+  print -P "  $ %Bks-crop%b -imax-crop <video-file>   --> Crop from 16:9 to IMAX (1.43:1)"
   print ""
-  print "  $ ks-crop -16:9-aspect <video-file> --> Change aspect to 16:9 (stretched)"
-  print "  $ ks-crop -4:3-aspect <video-file>  --> Change aspect to 4:3 (stretched)"
-  print "  $ ks-crop -5:4-aspect <video-file>  --> Change aspect to 5:4 (stretched)"
+  print -P "  $ %Bks-crop%b -16:9-aspect <video-file> --> Change aspect to 16:9 (stretched)"
+  print -P "  $ %Bks-crop%b -4:3-aspect <video-file>  --> Change aspect to 4:3 (stretched)"
+  print -P "  $ %Bks-crop%b -5:4-aspect <video-file>  --> Change aspect to 5:4 (stretched)"
+  print -P ""
+  print -P " + %UExamples%u: "
+  print -P "    %Bks-crop%b -16:9-crop /data/movies/Example.mkv"
+  print -P "    %Bks-crop%b -4:3-aspect /data/movies/Video.avi"
   print ""
-  print " + Examples: "
-  print "    ks-crop -16:9-crop /data/movies/Example.mkv"
-  print "    ks-crop -4:3-aspect /data/movies/Video.avi"
-  print ""
-  print " + Example with folder: "
+  print -P " + %UExample with folder%u: "
   print '    for i in $(ls -1 /<folder>/*) ; do echo -e "\\n\\n\\n\\n\\n" | ks-crop -16:9-crop $i; done'
   print ""
   exit
@@ -153,9 +153,9 @@ show_menu() {
 # Syntax: errorReadingFile <file>
 errorReadingFile() {
   print ""
-  print "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
+  print -P "* %Bks-crop%b (ks-tools) %Bv${VERSION}%b (${M_DATE})"
   print ""
-  print "* The file '${1}' does not exist!"
+  print -P "* The file %U${1}%u does not exist!"
   print ""
   exit
 }
@@ -228,12 +228,12 @@ fi
 # Function to crop videos
 crop_video() {
   print ""
-  print "* Information of ${inputFile}:"
+  print -P "* Information of %U${inputFile}%u:"
   print ""
-  print "+ Video Tracks:"
+  print -P "+ %BVideo Tracks:%b"
   "${p_ffmpeg[@]}" "${inputFile}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
   print ""
-  print "+ Audio Tracks:"
+  print -P "+ %BAudio Tracks:%b"
   "${p_ffmpeg[@]}" "${inputFile}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
   print ""
   # Check de video track by default
@@ -249,7 +249,7 @@ crop_video() {
     fi
   fi
   # Ask for video
-  print -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
+  print -P -n "* (Default: %B${video_default}%b) Type the number of video track: " ; read video_track
   if [[ -z "${video_track}" ]] ; then
     video_track=("${video_default}")
   else
@@ -278,7 +278,7 @@ crop_video() {
     fi
   fi
   # Ask for audio
-  print -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+  print -P -n "* (Default: %B${audio_default}%b) Type the number of audio track: " ; read audio_track
   if [[ -z "${audio_track}" ]] ; then
     audio_track=("${audio_default}")
   else
@@ -286,7 +286,7 @@ crop_video() {
   fi
   # Ask for bitrate video
   bitrate_default=("${b_vcodec}")
-  print -n "* (Default: ${b_vcodec}) Type the bitrate (${vcodec}): " ; read bitrate_video
+  print -P -n "* (Default: %B${b_vcodec}%b) Type the bitrate (${vcodec}): " ; read bitrate_video
   if [[ -z "${bitrate_video}" ]] ; then
     b_vcodec=("${bitrate_default}")
   else
@@ -304,7 +304,7 @@ crop_video() {
     fi
   fi
   # Ask for patched
-  print -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
+  print -P -n "* (Default: %Bn%b) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
   if [[ "${patch_thread}" == "y" ]] ; then
     patch_thread=("y")
   else
@@ -316,7 +316,7 @@ crop_video() {
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     print ""
-    print "* COMMAND THAT WILL BE EXECUTED:"
+    print -P "* %UCOMMAND THAT WILL BE EXECUTED%u:"
     print ""
     inputFileSave=("${inputFile}")
     ih_sizeSave=("${ih_size}")
@@ -345,7 +345,7 @@ crop_video() {
     fi
     # Execute commands for conversion
     print ""
-    print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+    print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
     if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
@@ -373,7 +373,7 @@ crop_video() {
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     print ""
-    print "* COMMAND THAT WILL BE EXECUTED:"
+    print -P "* %UCOMMAND THAT WILL BE EXECUTED%u:"
     print ""
     print "  # File detected with resolution" ${resolution_detected}
     print "  # Crop '${inputFile}' from 16:9 to 4:3 (1.33:1)"
@@ -384,7 +384,7 @@ crop_video() {
     fi
     # Execute commands for conversion
     print ""
-    print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+    print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
     if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
@@ -398,7 +398,7 @@ crop_video() {
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     print ""
-    print "* COMMAND THAT WILL BE EXECUTED:"
+    print -P "* %UCOMMAND THAT WILL BE EXECUTED%u:"
     print ""
     print "  # File detected with resolution" ${resolution_detected}
     print "  # Crop '${inputFile}' from 16:9 to 5:4 (1.25:1)"
@@ -409,7 +409,7 @@ crop_video() {
     fi
     # Execute commands for conversion
     print ""
-    print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+    print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
     if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
@@ -423,7 +423,7 @@ crop_video() {
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     print ""
-    print "* COMMAND THAT WILL BE EXECUTED:"
+    print -P "* %UCOMMAND THAT WILL BE EXECUTED%u:"
     print ""
     print "  # File detected with resolution" ${resolution_detected}
     print "  # Crop '${inputFile}' from 16:9 to IMAX (1.43:1)"
@@ -434,7 +434,7 @@ crop_video() {
     fi
     # Execute commands for conversion
     print ""
-    print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+    print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
     if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
@@ -448,7 +448,7 @@ crop_video() {
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     print ""
-    print "* COMMAND THAT WILL BE EXECUTED:"
+    print -P "* %UCOMMAND THAT WILL BE EXECUTED%u:"
     print ""
     print "  # File detected with resolution" ${resolution_detected}
     print "  # Change '${inputFile}' aspect to 16:9 (stretched)"
@@ -459,7 +459,7 @@ crop_video() {
     fi
     # Execute commands for conversion
     print ""
-    print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+    print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
     if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
@@ -473,7 +473,7 @@ crop_video() {
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     print ""
-    print "* COMMAND THAT WILL BE EXECUTED:"
+    print -P "* %UCOMMAND THAT WILL BE EXECUTED%u:"
     print ""
     print "  # File detected with resolution" ${resolution_detected}
     print "  # Change '${inputFile}' aspect to 4:3 (stretched)"
@@ -484,7 +484,7 @@ crop_video() {
     fi
     # Execute commands for conversion
     print ""
-    print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+    print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
     if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
@@ -498,7 +498,7 @@ crop_video() {
     inputFileOut=$(removeExtension ${inputFile})
     # Show commands for conversion
     print ""
-    print "* COMMAND THAT WILL BE EXECUTED:"
+    print -P "* %UCOMMAND THAT WILL BE EXECUTED%u:"
     print ""
     print "  # File detected with resolution" ${resolution_detected}
     print "  # Change '${inputFile}' aspect to 5:4 (stretched)"
@@ -509,7 +509,7 @@ crop_video() {
     fi
     # Execute commands for conversion
     print ""
-    print -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+    print -P -n "* (Default: %By%b) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
     if [[ "${run_commands_ffmpeg}" == "n" ]] ; then
       exit
     else
