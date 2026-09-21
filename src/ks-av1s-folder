@@ -131,7 +131,7 @@ else
     subtitles_show=("without subtitles")
   fi
   while (( convert_files <= num_files )) ; do
-    show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
+    show_file=$(cat ${tempFile} | head -n 1 ${convert_files} | tail -n 1)
     print -P "  + ${show_file} (%B${subtitles_show}%b)"
     convert_files=$(expr ${convert_files} + 1)
   done
@@ -146,7 +146,7 @@ else
     convert_files=1
     cd "${1}" && mkdir -p to-av1 && rm -rf to-av1/*
     while (( convert_files <= num_files )) ; do
-      show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
+      show_file=$(cat ${tempFile} | head -n 1 ${convert_files} | tail -n 1)
       if (( subtitles_enabled == 1 )) ; then
         if (( widescreen_enabled == 1 )) ; then
           fname=$(print "${show_file}" | cut -d "." -f 1)

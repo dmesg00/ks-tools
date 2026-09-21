@@ -33,6 +33,15 @@ if [[ -f ${dirConfig}/connect.pem ]] ; then
   chmod 600 ${dirConfig}/connect.pem
 fi
 
+# Detect sed for Linux or MacOS
+sed_i() {
+  if [[ "$OSTYPE" == darwin* ]]; then
+    sed -i '' "$@"
+  else
+    sed -i "$@"
+  fi
+}
+
 # Function to remove spaces and symbols
 # Syntax: convertText "<text>"
 convertText() {
@@ -41,23 +50,23 @@ convertText() {
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
   print "${wordToConvert}" > ${ksToolsSedFile}
   # Borrar espacios
-  sed -i 's/ /_/g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/ /_/g' "${ksToolsSedFile}" &> /dev/null
   # Borrar simbolos
   symbolsList=(
   "[" "]" "@" "{" "}" "|" "\\" "/" "~" "#" "$" 
   "%" "&" "?" "¿" "=" "(" ")" "<" ">" "!" "¡"
   )
   for findSymbol in "${symbolsList[@]}" ; do
-    sed -i "s/${findSymbol}//g" "${ksToolsSedFile}" &> /dev/null
+    sed_i "s/${findSymbol}//g" "${ksToolsSedFile}" &> /dev/null
   done
   # Borrar el resto de simbolos
-  sed -i 's/*//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/"//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i "s/^//g" "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/*//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/"//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i "s/^//g" "${ksToolsSedFile}" &> /dev/null
   # Cambiar algunos simbolos
-  sed -i 's/+/_/g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/:/-/g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/;/-/g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/+/_/g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/:/-/g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/;/-/g' "${ksToolsSedFile}" &> /dev/null
   # Mostrar texto convertido
   wordToConvert=$(cat ${ksToolsSedFile})
   print ${wordToConvert}
@@ -79,7 +88,7 @@ listArchives() {
   count=1
   sizeFile=$(cat ${ksToolsTempFolder}/rename-files.txt | wc -l)
   while (( count <= sizeFile )) ; do
-    fileToRename=$(cat ${ksToolsTempFolder}/rename-files.txt | head -${count} | tail -1)
+    fileToRename=$(cat ${ksToolsTempFolder}/rename-files.txt | head -n 1 ${count} | tail -n 1)
     fileRenamed=$(convertText "${fileToRename}")
     if [[ "${fileRenamed}" == "${fileToRename}" ]] ; then
       print "null" > /dev/null
@@ -123,10 +132,10 @@ countArchives() {
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
 showFileWithSpace() {
-  FileName=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
+  FileName=$(cat ${dirTemp}/${listTemp} | head -n 1 ${1} | tail -n 1)
   FileNoExtension=$(print $FileName | cut -d "." -f 1)
   print $FileNoExtension > ${dirTemp}/name.tmp
-  sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
+  sed_i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
   rm -rf ${dirTemp}/name.tmp
   print ${DisplayName}
@@ -135,14 +144,14 @@ showFileWithSpace() {
 # Function to show the name of the file.
 # Syntax: showFile <file number>
 showFile() {
-  archive=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
+  archive=$(cat ${dirTemp}/${listTemp} | head -n 1 ${1} | tail -n 1)
   print ${archive}
 }
 
 # Function to show full file path.
 # Syntax: showPathFile <file number>
 showPathFile() {
-  pathFile=$(cat ${dirTemp}/${listCompTemp} | head -${1} | tail -1)
+  pathFile=$(cat ${dirTemp}/${listCompTemp} | head -n 1 ${1} | tail -n 1)
   print ${pathFile}
 }
 

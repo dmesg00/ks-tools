@@ -87,6 +87,15 @@ for scan_dependency in "${dependencies[@]}" ; do
   check_dependencies "${scan_dependency}"
 done
 
+# Detect sed for Linux or MacOS
+sed_i() {
+  if [[ "$OSTYPE" == darwin* ]]; then
+    sed -i '' "$@"
+  else
+    sed -i "$@"
+  fi
+}
+
 # Funcion to show the name of file/folder from full path
 # Syntax: extractFolderOrFile <full/path/file.txt>
 extractFolderOrFile() {
@@ -111,7 +120,7 @@ extractFolderOrFile() {
 # Syntax: showFileWithSpace <file number>
 showFileWithSpace() {
   print "${1}" > ${dirTemp}/name.tmp
-  sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
+  sed_i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
   rm -rf ${dirTemp}/name.tmp
   cutDisplayName=$(print ${DisplayName} | cut -c1)
@@ -139,26 +148,26 @@ removeExtension() {
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
   print "${wordToConvert}" > ${ksToolsSedFile}
   # Remove extensions
-  sed -i 's/\.avi//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.mp4//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.mkv//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.mov//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.vob//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.mpg//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.mpeg//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.wmv//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.ogv//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.webm//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.flv//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.mp3//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.mp2//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.oga//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.ogg//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.ac3//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.aac//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.flac//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.wav//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/\.opus//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.avi//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.mp4//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.mkv//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.mov//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.vob//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.mpg//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.mpeg//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.wmv//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.ogv//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.webm//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.flv//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.mp3//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.mp2//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.oga//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.ogg//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.ac3//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.aac//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.flac//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.wav//g' "${ksToolsSedFile}" &> /dev/null
+  sed_i 's/\.opus//g' "${ksToolsSedFile}" &> /dev/null
   # Show file without extension
   wordToConvert=$(cat ${ksToolsSedFile})
   print ${wordToConvert}
@@ -258,7 +267,7 @@ else
   print -P "* %UList of files%u:"
   print ""
   while (( convert_files <= num_files )) ; do
-    show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
+    show_file=$(cat ${tempFile} | head -n 1 ${convert_files} | tail -n 1)
     print "  + ${show_file}"
     convert_files=$(expr ${convert_files} + 1)
   done
@@ -273,7 +282,7 @@ else
     convert_files=1
     cd "${1}" && mkdir -p to-oga && rm -rf to-oga/*
     while (( convert_files <= num_files )) ; do
-      show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
+      show_file=$(cat ${tempFile} | head -n 1 ${convert_files} | tail -n 1)
       fname=$(print "${show_file}" | cut -d "." -f 1)
       name_title_default=$(removeExtension "${show_file}")
       name_title_default=$(showFileWithSpace "${name_title_default}")
@@ -291,9 +300,9 @@ else
       ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
       print ""
       # Check the audio track by default
-      audio_default=$(ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+      audio_default=$(ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -n 1)
       if [[ -z "${audio_default}" ]] ; then
-        audio_default=$(ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+        audio_default=$(ffmpeg -i "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -n 1)
         if [[ -z "${audio_default}" ]] ; then
           audio_default=("0:1")
         else
