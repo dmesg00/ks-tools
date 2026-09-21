@@ -159,7 +159,7 @@ check_dependencies() {
 }
 
 # Check dependencies
-dependencies=(ffmpeg grep sed grep cut head tail tr cat bc ks-utfs)
+dependencies=(ffmpeg grep sed cut head tail tr cat bc ks-utfs)
 for scan_dependency in "${dependencies[@]}" ; do
   check_dependencies "${scan_dependency}"
 done

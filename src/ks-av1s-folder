@@ -37,7 +37,7 @@ check_dependencies() {
 }
 
 # Check dependencies
-dependencies=(ffmpeg grep find grep cut head tail cat ks-utfs ks-av1s-wrapper)
+dependencies=(ffmpeg grep find cut head tail cat ks-utfs ks-av1s-wrapper)
 for scan_dependency in "${dependencies[@]}" ; do
   check_dependencies "${scan_dependency}"
 done
