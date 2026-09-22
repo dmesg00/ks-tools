@@ -267,7 +267,7 @@ else
   print -P "* %UList of files%u:"
   print ""
   while (( convert_files <= num_files )) ; do
-    show_file=$(cat ${tempFile} | head -n 1 ${convert_files} | tail -n 1)
+    show_file=$(cat ${tempFile} | head -n ${convert_files} | tail -n 1)
     print "  + ${show_file}"
     convert_files=$(expr ${convert_files} + 1)
   done
@@ -282,7 +282,7 @@ else
     convert_files=1
     cd "${1}" && mkdir -p to-mp3 && rm -rf to-mp3/*
     while (( convert_files <= num_files )) ; do
-      show_file=$(cat ${tempFile} | head -n 1 ${convert_files} | tail -n 1)
+      show_file=$(cat ${tempFile} | head -n ${convert_files} | tail -n 1)
       fname=$(print "${show_file}" | cut -d "." -f 1)
       name_title_default=$(removeExtension "${show_file}")
       name_title_default=$(showFileWithSpace "${name_title_default}")

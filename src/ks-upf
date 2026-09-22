@@ -103,7 +103,7 @@ listArchives() {
   count=1
   sizeFile=$(cat ${ksToolsTempFolder}/rename-files.txt | wc -l)
   while (( count <= sizeFile )) ; do
-    fileToRename=$(cat ${ksToolsTempFolder}/rename-files.txt | head -n 1 ${count} | tail -n 1)
+    fileToRename=$(cat ${ksToolsTempFolder}/rename-files.txt | head -n ${count} | tail -n 1)
     fileRenamed=$(convertText "${fileToRename}")
     if [[ "${fileRenamed}" == "${fileToRename}" ]] ; then
       print "null" > /dev/null
@@ -147,7 +147,7 @@ countArchives() {
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
 showFileWithSpace() {
-  FileName=$(cat ${dirTemp}/${listTemp} | head -n 1 ${1} | tail -n 1)
+  FileName=$(cat ${dirTemp}/${listTemp} | head -n ${1} | tail -n 1)
   FileNoExtension=$(print $FileName | cut -d "." -f 1)
   print $FileNoExtension > ${dirTemp}/name.tmp
   sed_i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
@@ -159,14 +159,14 @@ showFileWithSpace() {
 # Function to show the name of the file.
 # Syntax: showFile <file number>
 showFile() {
-  archive=$(cat ${dirTemp}/${listTemp} | head -n 1 ${1} | tail -n 1)
+  archive=$(cat ${dirTemp}/${listTemp} | head -n ${1} | tail -n 1)
   print ${archive}
 }
 
 # Function to show full file path.
 # Syntax: showPathFile <file number>
 showPathFile() {
-  pathFile=$(cat ${dirTemp}/${listCompTemp} | head -n 1 ${1} | tail -n 1)
+  pathFile=$(cat ${dirTemp}/${listCompTemp} | head -n ${1} | tail -n 1)
   print ${pathFile}
 }
 
