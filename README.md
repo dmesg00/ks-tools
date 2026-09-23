@@ -53,7 +53,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
 
     * Install dependencies **(for Ubuntu/Debian)**:
     
-          sudo apt install git zsh make expect rsync openssh-client openssh-server sshpass grep binutils bc
+          sudo apt install git zsh make expect rsync openssh-client sshpass grep coreutils binutils bc
       
     * Install dependencies **(for Fedora)**:
     
@@ -61,7 +61,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
 
     * Install dependencies **(for Linux Homebrew)**:
 
-          brew install git zsh make expect rsync openssh grep binutils ffmpeg bc sshpass
+          brew install git zsh make expect rsync openssh grep coreutils binutils ffmpeg bc sshpass
   
     * Install ffmpeg using this script (use [BtbN Builds](https://github.com/BtbN/FFmpeg-Builds)):
     
@@ -96,7 +96,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies:
     
-          sudo apt install git zsh make expect rsync openssh-client openssh-server sshpass grep binutils bc wgt curl tar
+          sudo apt install git zsh make expect rsync openssh-client sshpass grep coreutils binutils bc wgt curl tar
           curl -L "https://dmesg00.yougeek.dev/ffmpeg/scripts/update-ffmpeg-wsl.zsh" | sudo zsh
       
     * Install ks-tools cloning the repository:
@@ -109,7 +109,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies:
     
-          brew install git zsh make expect rsync openssh grep binutils ffmpeg bc sshpass
+          brew install git zsh make expect rsync openssh grep coreutils binutils ffmpeg bc sshpass
       
     * Install ks-tools cloning the repository **(for MacOS Intel)**:
     
