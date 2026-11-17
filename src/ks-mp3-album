@@ -352,9 +352,9 @@ else
       audio_5_7_1_2=$("${p_ffmpeg[@]}" "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")
       audio_5_7_1=("${audio_5_7_1}${audio_5_7_1_2}")
       if [[ -z "${audio_5_7_1}" ]] ; then
-        stereo_params=(-ac 2)
+        stereo_params=(-ac 2 -af aresample=async=1,acompressor=threshold=0.1:ratio=3:attack=10:release=250,alimiter=limit=0.95)
       else
-        stereo_params=(-ac 2 -clev 3dB -slev -6dB)
+        stereo_params=(-ac 2 -clev 3dB -slev -6dB -af aresample=async=1,acompressor=threshold=0.1:ratio=4:attack=10:release=250,alimiter=limit=0.95)
       fi
       ffmpeg -i "${show_file}" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} "${stereo_params[@]}" -metadata title="${name_title}" -metadata date="${year_num}" -metadata genre="${genre_file}" -metadata album="${album_title}" -metadata artist="${artist_title}" -metadata track="${track_num}" "to-mp3/${fname}.${v_ext}"
       # Increment variables
