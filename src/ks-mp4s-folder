@@ -4,12 +4,12 @@ setopt NO_NOMATCH
 
 #################################################################################
 # ks-mp4s-folder (ks-tools) - Convert videos from folder to MP4 format (Series) #
-# Date: 24-09-2025                                                              #
+# Date: 21-11-2026                                                              #
 # Author: dmesg00                                                               #
 # Contact: dmesg00@duck.com                                                     #
 #################################################################################
-VERSION=("9.5")
-M_DATE=("240925")
+VERSION=("9.6")
+M_DATE=("211126")
 
 # Variables
 tempFile=("/tmp/ks-mp4s-folder.txt")

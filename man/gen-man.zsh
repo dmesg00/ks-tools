@@ -6,8 +6,8 @@ setopt NO_NOMATCH
 # Require: pandoc
 
 # Variables
-date_name="Aug 14, 2026"
-date_number="2026-08-14"
+date_name="Nov 21, 2026"
+date_number="2026-11-21"
 
 # Detect sed for Linux or MacOS
 sed_i() {

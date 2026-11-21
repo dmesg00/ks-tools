@@ -4,12 +4,12 @@ setopt NO_NOMATCH
 
 ###################################################################################
 # ks-av1s-folder (ks-tools) - Convert videos from folder to AV1 (Codec)  (Series) #
-# Date: 26-09-2025                                                                #
+# Date: 21-11-2026                                                                #
 # Author: dmesg00                                                                 #
 # Contact: dmesg00@duck.com                                                       #
 ###################################################################################
-VERSION=("9.5")
-M_DATE=("250826")
+VERSION=("9.6")
+M_DATE=("211126")
 
 # Variables
 tempFile=("/tmp/ks-av1s-folder.txt")

@@ -4,12 +4,12 @@ setopt NO_NOMATCH
 
 ###############################################################
 # ks-mp4-wrapper (ks-tools) - Wrapper for ks-mp4              #
-# Date: 25-08-2026                                            #
+# Date: 21-11-2026                                            #
 # Author: dmesg00                                             #
 # Contact: dmesg00@duck.com                                   #
 ###############################################################
-VERSION=("9.5")
-M_DATE=("250826")
+VERSION=("9.6")
+M_DATE=("211126")
 
 # Conversion parameters
 p_ffmpeg=(ffmpeg -i)
